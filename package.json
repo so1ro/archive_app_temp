@@ -8,7 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.12",
     "contentful": "^8.2.0",
+    "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "next": "10.0.5",
     "react": "17.0.1",

@@ -9,7 +9,12 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.12",
+    "@chakra-ui/react": "^1.4.1",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
     "contentful": "^8.2.0",
+    "date-fns": "^2.19.0",
+    "framer-motion": "^4.0.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "next": "10.0.5",

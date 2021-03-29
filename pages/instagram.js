@@ -1,20 +1,17 @@
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
 
-import { fetchContentful } from '@/hook/contentful'
-import { query_allArchives } from '@/hook/contentful-queries'
+import { fetchInstagram } from '@/hook/instagram'
 
 import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from '@emotion/react'
 
-const Archive = ({ allArchives }) => {
-    console.log('allArchives:', allArchives)
+const Archive = ({ instagramData }) => {
+    console.log('instagramData:', instagramData)
     return (
         <>
-            <div>
-                Archives
-            </div>
-            <Grid templateColumns="1fr" gap={12} px={6}>
+            <div>Instagram</div>
+            {/* <Grid templateColumns="1fr" gap={12} px={6}>
                 {allArchives.map((archive) => (
                     <Grid key={archive.sys.id} templateColumns="repeat(2, 1fr)" gap={12}>
                         <Box overflow="hidden" css={imgBox}>
@@ -32,16 +29,17 @@ const Archive = ({ allArchives }) => {
                         </Box>
                     </Grid>
                 ))}
-            </Grid>
+            </Grid> */}
         </>
     )
 }
 
 export async function getStaticProps() {
-    const data = await fetchContentful(query_allArchives)
+    const data = await fetchInstagram()
+    console.log('data:', data)
     return {
         props: {
-            allArchives: data.kasumibroVideoCollection.items,
+            instagramData: data,
         },
         revalidate: 1,
     }

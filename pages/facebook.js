@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
 
-import { fetchInstagram } from '@/hook/instagram'
+import { fetchFacebook } from '@/hook/facebook'
 
 import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from '@emotion/react'
 
-const Instagram = ({ instagramData }) => {
-    console.log('instagramData:', instagramData)
+const Facebook = ({ facebookData }) => {
+    console.log('facebookData:', facebookData)
     return (
         <>
-            <div>Instagram</div>
+            <div>Facebook</div>
             {/* <Grid templateColumns="1fr" gap={12} px={6}>
                 {allArchives.map((archive) => (
                     <Grid key={archive.sys.id} templateColumns="repeat(2, 1fr)" gap={12}>
@@ -35,11 +35,11 @@ const Instagram = ({ instagramData }) => {
 }
 
 export async function getStaticProps() {
-    const data = await fetchInstagram()
+    const data = await fetchFacebook()
     console.log('data:', data)
     return {
         props: {
-            instagramData: data,
+            facebookData: data,
         },
         revalidate: 1,
     }
@@ -51,4 +51,4 @@ const imgBox = css`
   }
 `
 
-export default Instagram
+export default Facebook

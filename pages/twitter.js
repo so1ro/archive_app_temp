@@ -1,7 +1,8 @@
 import React from 'react';
-import { getTweets } from '@/lib/twitter';
+import { getTweets } from '@/lib/twitter'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-const Twitter = ({ tweets }) => {
+export default withPageAuthRequired(function Twitter({ tweets }) {
     console.log('tweets:', tweets)
     return (
         <ul>
@@ -10,7 +11,7 @@ const Twitter = ({ tweets }) => {
             ))}
         </ul>
     );
-};
+});
 
 export async function getStaticProps() {
     const tweets = await getTweets()
@@ -19,6 +20,3 @@ export async function getStaticProps() {
         revalidate: 1,
     }
 }
-
-
-export default Twitter;

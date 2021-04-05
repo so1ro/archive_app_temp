@@ -33,7 +33,7 @@ export default function Account({ subscriptionPlans }) {
 
       const checkSession = async () => {
         const customerData = await postData({
-          url: '/api/subscribe/check-session',
+          url: '/api/subscription/check-session',
           data: { session_id }
         }).then(data => data)
         await customerData.customer_email === user.email ? console.log('True') : console.log('false')
@@ -55,7 +55,7 @@ export default function Account({ subscriptionPlans }) {
 
     try {
       const { sessionId } = await postData({
-        url: '/api/subscribe/create-checkout-session',
+        url: '/api/subscription/create-checkout-session',
         data: {
           price,
           user_uuid: userData.sub,

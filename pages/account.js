@@ -15,7 +15,6 @@ export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
   const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
   const [{ subscription }, setSubscription] = useState({ subscription: undefined })
-  const [{ userData }, setUserData] = useState({ userData: undefined })
 
   useEffect(() => {
 
@@ -23,7 +22,6 @@ export default function Account({ subscriptionPlans }) {
 
   useEffect(() => {
     if (user) {
-      setUserData({ userData: user })
       setSubscription({ subscription: user?.metadata?.subscription })
     }
 
@@ -58,12 +56,11 @@ export default function Account({ subscriptionPlans }) {
         url: '/api/subscription/create-checkout-session',
         data: {
           price,
-          user_uuid: userData.sub,
-          user_email: userData.email
+          user_uuid: user.sub,
+          user_email: user.email
         }
         // token: session.access_token
       });
-      console.log('sessionId:', sessionId)
 
       const stripe = await getStripe();
       stripe.redirectToCheckout({ sessionId });

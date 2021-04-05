@@ -32,21 +32,17 @@ export default function Account({ subscriptionPlans }) {
       const session_id = urlParams.get('session_id');
 
       const checkSession = async () => {
-        console.log(userData);
-        const checkEmail = await postData({
-          url: '/api/subscripe/check-session',
+        const customerData = await postData({
+          url: '/api/subscribe/check-session',
           data: { session_id }
-        }).then(data => data.customer_email)
-        await checkEmail === user.email ? console.log('True') : console.log('false')
-        console.log('checkEmail:', checkEmail)
+        }).then(data => data)
+        await customerData.customer_email === user.email ? console.log('True') : console.log('false')
       }
       checkSession();
     }
   }, [user])
 
   //
-  console.log('user:', user)
-  // console.log('user.sub:', user.sub)
 
   const handleCheckout = async (price) => {
     // setPriceIdLoading(price.id);
@@ -58,9 +54,8 @@ export default function Account({ subscriptionPlans }) {
     // }
 
     try {
-      console.log('YesWorking!!!!!!');
       const { sessionId } = await postData({
-        url: '/api/subscripe/create-checkout-session',
+        url: '/api/subscribe/create-checkout-session',
         data: {
           price,
           user_uuid: userData.sub,
@@ -90,7 +85,7 @@ export default function Account({ subscriptionPlans }) {
           <div>
             Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
           </div>
-          <Button onClick={() => handleCheckout('price_1IbzbvF2cZ3hGzdma5SsXd3X')}>Subscription</Button>
+          <Button onClick={() => handleCheckout(subscriptionPlans[0].id)}>Subscription</Button>
 
         </main>
       </div>

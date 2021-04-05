@@ -11,7 +11,11 @@ const checkSession = async (req, res) => {
       const customer = await stripe.customers.retrieve(session.customer);
       console.log('customer:', customer)
 
-      return res.status(200).json({ customer_email: customer.email });
+      return res.status(200).json({
+        customer_email: customer.email,
+        customer_auth0UUID: customer.metadata.auth0UUID,
+        customer_priceId: customer.metadata.priceId
+      });
 
     } catch (e) {
       res.status(400);

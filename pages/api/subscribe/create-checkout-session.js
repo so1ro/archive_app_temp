@@ -8,17 +8,31 @@ const domain = process.env.NEXT_PUBLIC_DOMAIN
 // import { createOrRetrieveCustomer } from '@/utils/useDatabase';
 
 const createCheckoutSession = async (req, res) => {
-  const { price } = JSON.parse(req.body);
+  const { price, user_uuid, user_email } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
+      // const customer = await createOrRetrieveCustomer({
+      //   uuid: user.id,
+      //   email: user.email
+      // });
+
+      const customerData = {
+        metadata: {
+          priceId: price,
+          auth0UUID: user_uuid
+        }
+      };
+      if (user_email) customerData.email = user_email;
+      const customer = await stripe.customers.create(customerData)
+
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         payment_method_types: ['card'],
         // billing_address_collection: 'required',
-        // customer,
+        customer: customer.id,
         line_items: [
           {
             price,
@@ -30,8 +44,8 @@ const createCheckoutSession = async (req, res) => {
           trial_from_plan: true,
           // metadata
         },
-        success_url: `${domain}?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${domain}`
+        success_url: `${domain}account/?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${domain}account/`
       });
       return res.status(200).json({ sessionId: session.id });
 

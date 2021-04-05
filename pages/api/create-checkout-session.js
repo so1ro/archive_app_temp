@@ -2,6 +2,8 @@ import { stripe } from '@/utils/stripe';
 import { getURL } from '@/utils/helpers';
 import { parseJSON } from 'date-fns';
 
+const domain = process.env.NEXT_PUBLIC_DOMAIN
+
 // import { getUser } from '@/utils/supabase-admin';
 // import { createOrRetrieveCustomer } from '@/utils/useDatabase';
 
@@ -28,8 +30,8 @@ const createCheckoutSession = async (req, res) => {
           trial_from_plan: true,
           // metadata
         },
-        success_url: `http://localhost:3000/?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: 'http://localhost:3000/'
+        success_url: `${domain}?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${domain}`
       });
       return res.status(200).json({ sessionId: session.id });
 

@@ -5,41 +5,16 @@ import styles from '@/styles/Home.module.css'
 import { useUser } from '@auth0/nextjs-auth0'
 import { fetchSubscriptionPlans } from '@/hook/subscriptionPlans';
 
-import { Button } from '@chakra-ui/react'
-import { postData } from '@/utils/helpers';
-import { getStripe } from '@/utils/stripe-client';
 import PriceList from '@/components/priceList';
 
 export default function Account({ subscriptionPlans }) {
 
   console.log('subscriptionPlans:', subscriptionPlans)
   const { user, error, isLoading } = useUser();
-  const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
-  const [{ subscription }, setSubscription] = useState({ subscription: undefined })
+  // const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
 
   useEffect(() => {
-
   }, [])
-
-  useEffect(() => {
-    if (user) {
-      setSubscription({ subscription: user?.metadata?.subscription })
-    }
-
-    if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') > 0) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const session_id = urlParams.get('session_id');
-
-      const checkSession = async () => {
-        const customerData = await postData({
-          url: '/api/subscription/check-session',
-          data: { session_id }
-        }).then(data => data)
-        await customerData.customer_email === user.email ? console.log('True') : console.log('false')
-      }
-      checkSession();
-    }
-  }, [user])
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;

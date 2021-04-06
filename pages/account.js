@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-import { stripe } from '@/utils/stripe';
 import { useUser } from '@auth0/nextjs-auth0'
 
 import { Button } from '@chakra-ui/react'
@@ -10,7 +9,10 @@ import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
 
 export default function Account({ subscriptionPlans }) {
+
+  // Contextに入れる！！！！！！！！！！！！！
   console.log('subscriptionPlans:', subscriptionPlans)
+  // Contextに入れる！！！！！！！！！！！！！
 
   const { user, error, isLoading } = useUser();
   const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
@@ -93,17 +95,16 @@ export default function Account({ subscriptionPlans }) {
 }
 
 export async function getStaticProps() {
-  const products = await stripe.prices.list();
-  const subscriptionPlans = products.data
-    .filter(prod => prod.recurring?.interval === 'month')
-    .sort((a, b) => a.unit_amount - b.unit_amount)
+  // get Subscription Plans from Stripe
+  const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/subscription/get-price-list`)
+  const { subscriptionPlans } = await res.json()
 
   return {
     props: {
       subscriptionPlans
     },
     revalidate: 60
-  };
+  }
 }
 
 

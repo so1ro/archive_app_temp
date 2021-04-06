@@ -6,12 +6,12 @@ import { fetchContentful } from '@/hook/contentful'
 import { query_allArchives } from '@/hook/contentful-queries'
 
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '@/styles/Home.module.css'
 import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from '@emotion/react'
-import Price from '@/components/price';
 
-export default function ArchiveDumy({ allArchives }) {
+
+export default function Archive({ allArchives }) {
 
   const { user, error, isLoading } = useUser();
   if (isLoading) return <div>Loading...</div>;
@@ -24,7 +24,7 @@ export default function ArchiveDumy({ allArchives }) {
           <div>
             Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
           </div>
-          <Price />
+
 
           <div>
             Archives

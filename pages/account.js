@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '@/styles/Home.module.css'
 
 import { useUser } from '@auth0/nextjs-auth0'
+import { fetchSubscriptionPlans } from '@/hook/subscriptionPlans';
 
 import { Button } from '@chakra-ui/react'
 import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
+import PriceList from '@/components/priceList';
 
 export default function Account({ subscriptionPlans }) {
 
-  // Contextに入れる！！！！！！！！！！！！！
   console.log('subscriptionPlans:', subscriptionPlans)
-  // Contextに入れる！！！！！！！！！！！！！
-
   const { user, error, isLoading } = useUser();
   const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
   const [{ subscription }, setSubscription] = useState({ subscription: undefined })
@@ -42,38 +41,6 @@ export default function Account({ subscriptionPlans }) {
     }
   }, [user])
 
-  //
-
-  const handleCheckout = async (price) => {
-    // setPriceIdLoading(price.id);
-    // if (!session) {
-    //   return router.push('/signin');
-    // }
-    // if (subscription) {
-    //   return router.push('/account');
-    // }
-
-    try {
-      const { sessionId } = await postData({
-        url: '/api/subscription/create-checkout-session',
-        data: {
-          price,
-          user_uuid: user.sub,
-          user_email: user.email
-        }
-        // token: session.access_token
-      });
-
-      const stripe = await getStripe();
-      stripe.redirectToCheckout({ sessionId });
-    } catch (error) {
-      return alert(error.message);
-    } finally {
-      // setPriceIdLoading(false);
-    }
-  };
-  //
-
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
@@ -84,7 +51,7 @@ export default function Account({ subscriptionPlans }) {
           <div>
             Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
           </div>
-          <Button onClick={() => handleCheckout(subscriptionPlans[0].id)}>Subscription</Button>
+          <PriceList user={user} subscriptionPlans={subscriptionPlans} />
 
         </main>
       </div>
@@ -96,15 +63,7 @@ export default function Account({ subscriptionPlans }) {
 
 export async function getStaticProps() {
   // get Subscription Plans from Stripe
-  const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/subscription/get-price-list`)
-  const { subscriptionPlans } = await res.json()
-
-  return {
-    props: {
-      subscriptionPlans
-    },
-    revalidate: 60
-  }
+  return fetchSubscriptionPlans()
 }
 
 

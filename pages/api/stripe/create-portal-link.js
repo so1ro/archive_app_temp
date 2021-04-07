@@ -1,5 +1,4 @@
 import { stripe } from '@/utils/stripe';
-import { getUser } from '@/utils/supabase-admin';
 import { createOrRetrieveCustomer } from '@/utils/useDatabase';
 import { getURL } from '@/utils/helpers';
 

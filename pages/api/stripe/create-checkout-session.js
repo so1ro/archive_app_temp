@@ -4,9 +4,6 @@ import { parseJSON } from 'date-fns';
 
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
-// import { getUser } from '@/utils/supabase-admin';
-// import { createOrRetrieveCustomer } from '@/utils/useDatabase';
-
 const createCheckoutSession = async (req, res) => {
   const { price, user_uuid, user_email } = JSON.parse(req.body);
 

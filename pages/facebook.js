@@ -36,7 +36,7 @@ const Facebook = ({ facebookData }) => {
 
 export async function getStaticProps() {
     const data = await fetchFacebook()
-    console.log('data:', data)
+    // console.log('data:', data)
     return {
         props: {
             facebookData: data,

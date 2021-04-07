@@ -36,7 +36,7 @@ const YouTube = ({ youTubeData }) => {
 
 export async function getStaticProps() {
     const data = await fetchYouTube()
-    console.log('data:', data)
+    // console.log('data:', data)
     return {
         props: {
             youTubeData: data,

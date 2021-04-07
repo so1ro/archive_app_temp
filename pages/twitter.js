@@ -3,7 +3,7 @@ import { getTweets } from '@/lib/twitter'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 export default withPageAuthRequired(function Twitter({ tweets }) {
-    console.log('tweets:', tweets)
+    // console.log('tweets:', tweets)
     return (
         <ul>
             {tweets.data.map(tweet => (

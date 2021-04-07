@@ -36,7 +36,7 @@ const Instagram = ({ instagramData }) => {
 
 export async function getStaticProps() {
     const data = await fetchInstagram()
-    console.log('data:', data)
+    // console.log('data:', data)
     return {
         props: {
             instagramData: data,

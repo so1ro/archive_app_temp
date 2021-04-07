@@ -36,7 +36,7 @@ export default function Account({ subscriptionPlans }) {
 
 export async function getStaticProps() {
   // get Subscription Plans from Stripe
-  return fetchSubscriptionPlans()
+  return await fetchSubscriptionPlans()
 }
 
 

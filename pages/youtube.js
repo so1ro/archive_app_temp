@@ -7,7 +7,6 @@ import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from '@emotion/react'
 
 const YouTube = ({ youTubeData }) => {
-    console.log('youTubeData:', youTubeData)
     return (
         <>
             <div>YouTube</div>

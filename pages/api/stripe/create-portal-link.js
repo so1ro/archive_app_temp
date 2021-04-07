@@ -1,5 +1,5 @@
 import { stripe } from '@/utils/stripe';
-import { createOrRetrieveCustomer } from '@/utils/useDatabase';
+// import { createOrRetrieveCustomer } from '@/utils/useDatabase';
 import { getURL } from '@/utils/helpers';
 
 const createPortalLink = async (req, res) => {

@@ -1,9 +1,4 @@
 import { stripe } from '@/utils/stripe';
-import {
-  upsertProductRecord,
-  upsertPriceRecord,
-  manageSubscriptionStatusChange
-} from '@/utils/useDatabase';
 
 // Stripe requires the raw body to construct the event.
 export const config = {

@@ -8,8 +8,6 @@ import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
 import PriceList from '@/components/priceList';
 
 export default function Account({ subscriptionPlans }) {
-
-  console.log('subscriptionPlans:', subscriptionPlans)
   const { user, error, isLoading } = useUser();
   // const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
 

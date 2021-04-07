@@ -7,8 +7,6 @@ import PriceList from '@/components/priceList';
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
 
 export default function Price({ subscriptionPlans }) {
-
-    console.log('subscriptionPlans:', subscriptionPlans)
     const { user, error, isLoading } = useUser();
     const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
     const [{ subscription }, setSubscription] = useState({ subscription: undefined })

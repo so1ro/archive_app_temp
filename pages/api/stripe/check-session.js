@@ -3,7 +3,6 @@ import { getURL } from '@/utils/helpers';
 
 const checkSession = async (req, res) => {
   const { session_id } = JSON.parse(req.body);
-  console.log('session_id_CHECK-SESSION:', session_id)
 
   if (req.method === 'POST') {
     try {

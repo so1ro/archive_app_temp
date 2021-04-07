@@ -1,4 +1,5 @@
 import { stripe } from '@/utils/stripe';
+import { postData } from '@/utils/helpers';
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -33,10 +34,11 @@ const webhookHandler = async (req, res) => {
     if (req.method === 'POST') {
         const buf = await buffer(req);
         const sig = req.headers['stripe-signature'];
+
         const webhookSecret =
-            'whsec_q9jkvybCyYMvXwzP3Q2qO90J9fDohRpv'
-        // process.env.STRIPE_WEBHOOK_SECRET_LIVE ??
-        // process.env.STRIPE_WEBHOOK_SECRET;
+            process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET_LIVE ??
+            process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
+
         let event;
 
         try {
@@ -50,15 +52,16 @@ const webhookHandler = async (req, res) => {
             try {
                 // Handle the event
                 switch (event.type) {
-                    case 'payment_intent.succeeded':
-                        const paymentIntent = event.data.object;
-                        console.log('paymentIntent:', paymentIntent)
+                    case 'checkout.session.completed':
+                        const checkoutSession = event.data.object;
+                        console.log('checkoutSession:', checkoutSession)
+
                         // Then define and call a method to handle the successful payment intent.
                         // handlePaymentIntentSucceeded(paymentIntent);
                         break;
                     case 'payment_method.attached':
                         const paymentMethod = event.data.object;
-                        console.log('paymentMethod:', paymentMethod)
+
                         // Then define and call a method to handle the successful attachment of a PaymentMethod.
                         // handlePaymentMethodAttached(paymentMethod);
                         break;

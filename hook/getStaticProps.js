@@ -1,7 +1,7 @@
 export async function fetchSubscriptionPlans() {
     // add a try / catch loop for nicer error handling
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/subscription/get-price-list`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/stripe/get-price-list`)
         const { subscriptionPlans } = await res.json()
 
         return {

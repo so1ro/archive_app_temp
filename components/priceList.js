@@ -12,7 +12,7 @@ export default function PriceList({ user, subscriptionPlans }) {
 
         try {
             const { sessionId } = await postData({
-                url: '/api/subscription/create-checkout-session',
+                url: '/api/stripe/create-checkout-session',
                 data: {
                     price,
                     user_uuid: user.sub,

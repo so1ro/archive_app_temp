@@ -29,7 +29,7 @@ export default function Archive({ allArchives }) {
 
       const checkSession = async () => {
         const customerData = await postData({
-          url: '/api/subscription/check-session',
+          url: '/api/stripe/check-session',
           data: { session_id }
         }).then(data => data)
         customerData.customer_email === user.email ? console.log('True') : console.log('false')

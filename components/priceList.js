@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head'
 
-import { Button } from '@chakra-ui/react'
 import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
 
+import { Button, useToast } from '@chakra-ui/react'
+
 export default function PriceList({ user, subscriptionPlans }) {
+
+    const toast = useToast()
 
     const handleCheckout = async (price) => {
         // setPriceIdLoading(price.id);
@@ -34,7 +37,17 @@ export default function PriceList({ user, subscriptionPlans }) {
     return (
         <div>
             {subscriptionPlans.map(plan => (
-                <Button key={plan.id} onClick={() => handleCheckout(plan.id)}>{plan.nickname}</Button>
+                <Button key={plan.id} onClick={() => {
+                    toast({
+                        title: "チェックアウトセッションに移動中...",
+                        description: "このまま少々お待ち下さい。",
+                        status: "success",
+                        duration: 9000,
+                        isClosable: true,
+                    })
+                    handleCheckout(plan.id)
+                }}
+                >{plan.nickname}</Button>
             ))}
         </div>
     );

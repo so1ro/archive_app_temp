@@ -1,5 +1,6 @@
 import { stripe } from '@/utils/stripe';
 import { postData } from '@/utils/helpers';
+import { upsertPurchaseRecord } from '@/utils/useAuth0';
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -54,8 +55,7 @@ const webhookHandler = async (req, res) => {
                 switch (event.type) {
                     case 'checkout.session.completed':
                         const checkoutSession = event.data.object;
-                        console.log('checkoutSession:', checkoutSession)
-
+                        upsertPurchaseRecord(checkoutSession)
                         // Then define and call a method to handle the successful payment intent.
                         // handlePaymentIntentSucceeded(paymentIntent);
                         break;

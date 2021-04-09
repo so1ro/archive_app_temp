@@ -8,7 +8,7 @@ const checkSession = async (req, res) => {
     try {
       const session = await stripe.checkout.sessions.retrieve(session_id);
       const customer = await stripe.customers.retrieve(session.customer);
-      console.log('customer:', customer)
+      // console.log('customer:', customer)
 
       return res.status(200).json({
         customer_email: customer.email,

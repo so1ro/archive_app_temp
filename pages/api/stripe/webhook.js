@@ -53,9 +53,11 @@ const webhookHandler = async (req, res) => {
             try {
                 // Handle the event
                 switch (event.type) {
-                    case 'checkout.session.completed':
-                        const checkoutSession = event.data.object;
-                        upsertPurchaseRecord(checkoutSession)
+                    case 'customer.subscription.created':
+                    case 'customer.subscription.updated':
+                    case 'customer.subscription.deleted':
+                        const subscriptionSession = event.data.object;
+                        upsertPurchaseRecord(subscriptionSession)
                         // Then define and call a method to handle the successful payment intent.
                         // handlePaymentIntentSucceeded(paymentIntent);
                         break;

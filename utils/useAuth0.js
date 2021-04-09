@@ -70,7 +70,8 @@
 //     )
 // }
 // ///////
-
+import { stripe } from '@/utils/stripe';
+import axios from 'axios';
 
 const upsertProductRecord = async (product) => {
     const productData = {
@@ -90,8 +91,42 @@ const upsertProductRecord = async (product) => {
 }
 
 
+////////////////////////////////////////////////
+const auth0AccessToken = async (user_id) => {
+    const { AUTH0_DOMAIN, AUTH0_MTOM_CLIENTID, AUTH0_MTOM_CLIENT_SECRET } = process.env
+    const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
+
+    // Params of GET access_token options
+    const options = {
+        method: 'POST',
+        url: `https://${AUTH0_DOMAIN}/oauth/token`,
+        headers: { 'content-type': 'application/json' },
+        body: `{
+            "client_id":"${AUTH0_MTOM_CLIENTID}",
+            "client_secret":"${AUTH0_MTOM_CLIENT_SECRET}",
+            "audience":"https://${AUTH0_DOMAIN}/api/v2/",
+            "grant_type":"client_credentials"
+        }`
+    };
+
+    const data = await axios(options)
+    console.log('data:', data)
+
+}
+////////////////////////////////////////////////
+
+/////// ここまではうまくいったはずだった /////////////////////////////////////////
 const upsertPurchaseRecord = async (event) => {
-    console.log('event:', event)
+    const customerId = event.customer
+    const subscriptionId = event.subscription
+
+    const { metadata: { priceId, auth0UUID } } = await stripe.customers.retrieve(customerId);
+    const { plan: { nickname } } = await stripe.subscriptions.retrieve(subscriptionId);
+    console.log('customer.metadata', customer.metadata)
+    console.log('subscriptionId:', subscriptionId)
+    console.log('nickname:', nickname)
+
+    // auth0AccessToken(auth0UUID)
 };
 
 

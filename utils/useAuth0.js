@@ -91,10 +91,13 @@ const upsertProductRecord = async (product) => {
 }
 
 
+
 ////////////////////////////////////////////////
-const auth0AccessToken = async (user_id) => {
-    const { AUTH0_DOMAIN, AUTH0_MTOM_CLIENTID, AUTH0_MTOM_CLIENT_SECRET } = process.env
-    const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
+const { AUTH0_DOMAIN, AUTH0_MTOM_CLIENTID, AUTH0_MTOM_CLIENT_SECRET } = process.env
+
+////////////////////////////////////////////////
+// Get Auth0 Access Token
+const auth0AccessToken = async () => {
 
     // Params of GET access_token options
     const options = {
@@ -112,13 +115,37 @@ const auth0AccessToken = async (user_id) => {
         const { access_token } = await axios(options).then(res => res.data)
         return access_token
 
-    } catch (err) {
-        throw new Error(err)
+    } catch (error) {
+        console.log('error:', error)
+        throw new Error(error)
     }
 
 }
-////////////////////////////////////////////////
 
+////////////////////////////////////////////////
+// Patch user's App_metadata to Auth0
+const patchUserMetadataToAuth0 = async (user_id, token, planName, priceId) => {
+    const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
+    const option = {
+        url: URL,
+        method: 'PATCH',
+        headers: {
+            authorization: `Bearer ${token}`
+        },
+        data: {
+            user_metadata: { planName, priceId }
+        }
+    }
+
+    const data = await axios(option)
+        .then(res => res.data)
+        .catch(err => console.log(err))
+    console.log('data:', data)
+    // console.log(`Product inserted/updated: ${planName}/${priceId}`);
+}
+
+////////////////////////////////////////////////
+// Export Function
 const upsertPurchaseRecord = async (event) => {
     const customerId = event.customer
     const planName = event.plan.nickname
@@ -129,9 +156,12 @@ const upsertPurchaseRecord = async (event) => {
     console.log('auth0UUID:', auth0UUID)
     console.log('priceId:', priceId)
 
-    const auth0Token = await auth0AccessToken(auth0UUID)
+    const auth0Token = await auth0AccessToken()
     console.log('auth0Token:', auth0Token)
+    patchUserMetadataToAuth0(auth0UUID, auth0Token, planName, priceId)
 };
+
+////////////////////////////////////////////////
 
 
 export {

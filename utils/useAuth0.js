@@ -2,6 +2,9 @@ import { stripe } from '@/utils/stripe';
 import axios from 'axios';
 
 const { AUTH0_DOMAIN, AUTH0_MTOM_CLIENTID, AUTH0_MTOM_CLIENT_SECRET } = process.env
+const getAuth0URL = (id) => {
+    return `https://${AUTH0_DOMAIN}/api/v2/users/${id}`
+}
 
 ////////////////////////////////////////////////
 // Get Auth0 Access Token
@@ -30,7 +33,7 @@ const auth0AccessToken = async () => {
 
 ////////////////////////////////////////////////
 // Patch user's App_metadata to Auth0
-const patchUserMetadataToAuth0 = async (user_id, token, planName, priceId) => {
+const patchUserMetadataToAuth0 = async (user_id, token, stripeCustomerDetail) => {
     const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {
         url: URL,
@@ -39,7 +42,7 @@ const patchUserMetadataToAuth0 = async (user_id, token, planName, priceId) => {
             authorization: `Bearer ${token}`
         },
         data: {
-            user_metadata: { planName, priceId }
+            user_metadata: { Stripe_Customer_Detail: stripeCustomerDetail }
         }
     }
 
@@ -51,19 +54,43 @@ const patchUserMetadataToAuth0 = async (user_id, token, planName, priceId) => {
 
 ////////////////////////////////////////////////
 // Exported Function
+////////////////////////////////////////////////
+
+//// Get User metadata from Auth0
+const getUserMetadata = async (user_id) => {
+    const URL = getAuth0URL(user_id)
+    const auth0Token = await auth0AccessToken()
+
+    const option = { headers: { authorization: `Bearer ${auth0Token}` } }
+
+    const data = axios(URL, option)
+        .then(res => res.data)
+        .catch(err => { throw new Error(err) })
+
+    return data
+}
+
+
+//// Send purchase record to Auth0
 const upsertPurchaseRecord = async (event) => {
     const customerId = event.customer
     const planName = event.plan.nickname
 
     const { metadata: { priceId, auth0UUID } } = await stripe.customers.retrieve(customerId);
+    const stripeCustomerDetail = {
+        customerId,
+        priceId,
+        planName,
+    }
 
     const auth0Token = await auth0AccessToken()
-    patchUserMetadataToAuth0(auth0UUID, auth0Token, planName, priceId)
+    patchUserMetadataToAuth0(auth0UUID, auth0Token, stripeCustomerDetail)
 };
 
 ////////////////////////////////////////////////
 
 
 export {
-    upsertPurchaseRecord
+    upsertPurchaseRecord,
+    getUserMetadata,
 };

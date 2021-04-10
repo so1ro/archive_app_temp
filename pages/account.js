@@ -4,15 +4,26 @@ import styles from '@/styles/Home.module.css'
 
 import { useUser } from '@auth0/nextjs-auth0'
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
+import { postData } from '@/utils/helpers';
 
 import PriceList from '@/components/priceList';
 
 export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
-  // const [{ checkSessionEmail }, setCheckSessionEmail] = useState({ checkSessionEmail: '' })
+  console.log('user:', user)
 
   useEffect(() => {
-  }, [])
+    if (user) {
+      const getUserMetadata = async () => {
+        const metadata = await postData({
+          url: '/api/auth/fetch-user-metadata',
+          data: { user_id: user?.sub }
+        }).then(data => data)
+        console.log('metadata:', metadata)
+      }
+      getUserMetadata();
+    }
+  }, [user])
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;

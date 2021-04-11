@@ -1,21 +1,15 @@
 import { stripe } from '@/utils/stripe';
-// import { createOrRetrieveCustomer } from '@/utils/useDatabase';
-import { getURL } from '@/utils/helpers';
+
+const domain = process.env.NEXT_PUBLIC_DOMAIN
 
 const createPortalLink = async (req, res) => {
   if (req.method === 'POST') {
-    const token = req.headers.token;
+    const { customerId } = JSON.parse(req.body);
 
     try {
-      const user = await getUser(token);
-      const customer = await createOrRetrieveCustomer({
-        uuid: user.id,
-        email: user.email
-      });
-
       const { url } = await stripe.billingPortal.sessions.create({
-        customer,
-        return_url: `${getURL()}/account`
+        customer: customerId,
+        return_url: `${domain}/account`
       });
 
       return res.status(200).json({ url });

@@ -7,24 +7,38 @@ import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
 import { postData } from '@/utils/helpers';
 
 import PriceList from '@/components/priceList';
+import { Button } from '@chakra-ui/react';
 
 export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
-  console.log('user:', user)
+  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState({ Stripe_Customer_Detail: undefined })
 
+  //useEffect
   useEffect(() => {
     if (user) {
       const getUserMetadata = async () => {
-        const metadata = await postData({
+        const { user_metadata: { Stripe_Customer_Detail } } = await postData({
           url: '/api/auth/fetch-user-metadata',
-          data: { user_id: user?.sub }
+          data: { user_id: user.sub }
         }).then(data => data)
-        console.log('metadata:', metadata)
+
+        setStripeCustomerDetail({ Stripe_Customer_Detail })
       }
       getUserMetadata();
     }
   }, [user])
 
+  //Function
+  const handleCustomerPortal = async (customerId) => {
+    const { url, error } = await postData({
+      url: '/api/stripe/create-portal-link',
+      data: { customerId }
+    });
+    if (error) return alert(error.message);
+    window.location.assign(url);
+  }
+
+  //Render
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
@@ -36,6 +50,9 @@ export default function Account({ subscriptionPlans }) {
             Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
           </div>
           <PriceList user={user} subscriptionPlans={subscriptionPlans} />
+          <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customerId)}>
+            プランの変更／キャンセル
+          </Button>
 
         </main>
       </div>

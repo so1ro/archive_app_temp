@@ -11,10 +11,6 @@ const createCheckoutSession = async (req, res) => {
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
-      // const customer = await createOrRetrieveCustomer({
-      //   uuid: user.id,
-      //   email: user.email
-      // });
 
       const customerData = {
         metadata: {
@@ -41,8 +37,8 @@ const createCheckoutSession = async (req, res) => {
           trial_from_plan: true,
           // metadata
         },
-        success_url: `${domain}archive/?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${domain}account/`
+        success_url: `${domain}/archive/?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${domain}/account/`
       });
       return res.status(200).json({ sessionId: session.id });
 

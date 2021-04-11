@@ -8,7 +8,7 @@ export async function fetchSubscriptionPlans() {
             .filter(prod => prod.recurring?.interval === 'month')
             .sort((a, b) => a.unit_amount - b.unit_amount)
 
-        // const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/stripe/get-price-list`)
+        // const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/stripe/get-price-list`)
         // const { subscriptionPlans } = await res.json()
 
         return {

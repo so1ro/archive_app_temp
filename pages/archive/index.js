@@ -17,7 +17,7 @@ export default function Archive({ allArchives }) {
 
   const { user, error, isLoading } = useUser();
   const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
-  const [{ subscription }, setSubscription] = useState({ subscription: undefined })
+  console.log('Stripe_Customer_Detail:', Stripe_Customer_Detail)
 
   // useEffect(() => {
   // }, [])

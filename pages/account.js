@@ -13,6 +13,7 @@ import { Button } from '@chakra-ui/react';
 export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
   const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
+  console.log('Stripe_Customer_Detail:', Stripe_Customer_Detail)
 
   //useEffect
   // useEffect(() => {

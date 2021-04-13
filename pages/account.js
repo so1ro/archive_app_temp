@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 
 import { useUser } from '@auth0/nextjs-auth0'
+import { useUserMetadata } from '@/context/useUserMetadata';
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
 import { postData } from '@/utils/helpers';
 
@@ -11,22 +12,11 @@ import { Button } from '@chakra-ui/react';
 
 export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
-  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState({ Stripe_Customer_Detail: undefined })
+  const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
 
   //useEffect
-  useEffect(() => {
-    if (user) {
-      const getUserMetadata = async () => {
-        const { user_metadata: { Stripe_Customer_Detail } } = await postData({
-          url: '/api/auth/fetch-user-metadata',
-          data: { user_id: user.sub }
-        }).then(data => data)
-
-        setStripeCustomerDetail({ Stripe_Customer_Detail })
-      }
-      getUserMetadata();
-    }
-  }, [user])
+  // useEffect(() => {
+  // }, [])
 
   //Function
   const handleCustomerPortal = async (customerId) => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@auth0/nextjs-auth0'
+import { useUserMetadata } from '@/context/useUserMetadata';
 import { format, parseISO } from 'date-fns'
 
 import { fetchContentful } from '@/hook/contentful'
@@ -15,31 +16,11 @@ import { css } from '@emotion/react'
 export default function Archive({ allArchives }) {
 
   const { user, error, isLoading } = useUser();
+  const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
   const [{ subscription }, setSubscription] = useState({ subscription: undefined })
 
-
-  useEffect(() => {
-    // if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') < 0) {
-    //   ////
-    //   // have to get metadata through API, check Account page //
-    //   ////
-    //   setSubscription({ subscription: user?.metadata?.subscription })
-    // }
-
-    // if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') > 0) {
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const session_id = urlParams.get('session_id');
-
-    //   const checkSession = async () => {
-    //     const customerData = await postData({
-    //       url: '/api/stripe/check-session',
-    //       data: { session_id }
-    //     }).then(data => data)
-    //     customerData.customer_email === user.email ? console.log('True') : console.log('false')
-    //   }
-    //   checkSession();
-    // }
-  }, [user])
+  // useEffect(() => {
+  // }, [])
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;

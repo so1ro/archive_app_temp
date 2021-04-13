@@ -19,23 +19,26 @@ export default function Archive({ allArchives }) {
 
 
   useEffect(() => {
-    if (user) {
-      setSubscription({ subscription: user?.metadata?.subscription })
-    }
+    // if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') < 0) {
+    //   ////
+    //   // have to get metadata through API, check Account page //
+    //   ////
+    //   setSubscription({ subscription: user?.metadata?.subscription })
+    // }
 
-    if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') > 0) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const session_id = urlParams.get('session_id');
+    // if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') > 0) {
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const session_id = urlParams.get('session_id');
 
-      const checkSession = async () => {
-        const customerData = await postData({
-          url: '/api/stripe/check-session',
-          data: { session_id }
-        }).then(data => data)
-        customerData.customer_email === user.email ? console.log('True') : console.log('false')
-      }
-      checkSession();
-    }
+    //   const checkSession = async () => {
+    //     const customerData = await postData({
+    //       url: '/api/stripe/check-session',
+    //       data: { session_id }
+    //     }).then(data => data)
+    //     customerData.customer_email === user.email ? console.log('True') : console.log('false')
+    //   }
+    //   checkSession();
+    // }
   }, [user])
 
   if (isLoading) return <div>Loading...</div>;

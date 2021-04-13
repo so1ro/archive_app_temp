@@ -36,7 +36,7 @@ const Instagram = ({ instagramData }) => {
 
 // export async function getStaticProps() {
 //     const data = await fetchInstagram()
-//     // console.log('data:', data)
+//     console.log('data:', data)
 //     return {
 //         props: {
 //             instagramData: data,
@@ -45,10 +45,10 @@ const Instagram = ({ instagramData }) => {
 //     }
 // }
 
-// const imgBox = css`
-//   img {
-//     border-radius: 0.4rem;
-//   }
-// `
+const imgBox = css`
+  img {
+    border-radius: 0.4rem;
+  }
+`
 
 export default Instagram

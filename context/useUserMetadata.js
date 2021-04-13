@@ -36,8 +36,6 @@ export const UserMetadataProvider = (props) => {
   const value = {
     User_Detail,
     Stripe_Customer_Detail,
-    setUserDetail,
-    setStripeCustomerDetail,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;
 };

@@ -49,7 +49,7 @@ const patchUserMetadataToAuth0 = async (user_id, token, stripeCustomerDetail) =>
     const data = await axios(option)
         .then(res => res.data)
         .catch(err => console.log(err))
-    console.log('data:', data)
+    // console.log('data:', data)
 }
 
 ////////////////////////////////////////////////
@@ -73,18 +73,34 @@ const getUserMetadata = async (user_id) => {
 
 //// Send purchase record to Auth0
 const upsertPurchaseRecord = async (event) => {
-    const customerId = event.customer
-    const planName = event.plan.nickname
+    const { id: subscription_Id,
+        customer: customer_Id,
+        plan: { nickname: subscription_Name },
+        status: subscription_Status,
+        cancel_at_period_end,
+        cancel_at,
+        canceled_at, } = event
+    try {
+        const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        const stripeCustomerDetail = {
+            customer_Id,
+            price_Id,
+            subscription_Name,
+            subscription_Id,
+            subscription_Status,
+            cancel_at_period_end,
+            cancel_at,
+            canceled_at,
+        }
+        // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
 
-    const { metadata: { priceId, auth0UUID } } = await stripe.customers.retrieve(customerId);
-    const stripeCustomerDetail = {
-        customerId,
-        priceId,
-        planName,
+        const auth0Token = await auth0AccessToken()
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, stripeCustomerDetail)
+
+    } catch (error) {
+        console.log(`❌ Error message: ${err.message}`);
+        throw new Error(error)
     }
-
-    const auth0Token = await auth0AccessToken()
-    patchUserMetadataToAuth0(auth0UUID, auth0Token, stripeCustomerDetail)
 };
 
 ////////////////////////////////////////////////

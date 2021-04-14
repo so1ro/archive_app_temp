@@ -44,20 +44,21 @@ const webhookHandler = async (req, res) => {
 
         try {
             event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
-        } catch (err) {
-            console.log(`❌ Error message: ${err.message}`);
-            return res.status(400).send(`Webhook Error: ${err.message}`);
+        } catch (error) {
+            console.log(`❌ Error message: ${error.message}`);
+            return res.status(400).send(`Webhook Error: ${error.message}`);
         }
 
         if (relevantEvents.has(event.type)) {
             try {
                 // Handle the event
                 switch (event.type) {
-                    case 'customer.created':
+                    // case 'customer.created':
                     case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object;
+                        console.log('subscriptionSession:', subscriptionSession)
                         upsertPurchaseRecord(subscriptionSession)
                         // Then define and call a method to handle the successful payment intent.
                         // handlePaymentIntentSucceeded(paymentIntent);

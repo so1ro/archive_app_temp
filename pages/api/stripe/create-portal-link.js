@@ -4,11 +4,11 @@ const domain = process.env.NEXT_PUBLIC_DOMAIN
 
 const createPortalLink = async (req, res) => {
   if (req.method === 'POST') {
-    const { customerId } = JSON.parse(req.body);
+    const { customer_Id } = JSON.parse(req.body);
 
     try {
       const { url } = await stripe.billingPortal.sessions.create({
-        customer: customerId,
+        customer: customer_Id,
         return_url: `${domain}/account`
       });
 

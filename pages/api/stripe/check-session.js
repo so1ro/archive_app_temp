@@ -12,8 +12,8 @@ const checkSession = async (req, res) => {
 
       return res.status(200).json({
         customer_email: customer.email,
-        customer_auth0UUID: customer.metadata.auth0UUID,
-        customer_priceId: customer.metadata.priceId
+        customer_auth0_UUID: customer.metadata.auth0_UUID,
+        customer_price_Id: customer.metadata.price_Id
       });
 
     } catch (e) {

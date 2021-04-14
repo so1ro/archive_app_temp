@@ -14,8 +14,8 @@ const createCheckoutSession = async (req, res) => {
 
       const customerData = {
         metadata: {
-          priceId: price,
-          auth0UUID: user_uuid
+          price_Id: price,
+          auth0_UUID: user_uuid
         }
       };
       if (user_email) customerData.email = user_email;

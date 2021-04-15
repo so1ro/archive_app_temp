@@ -20,10 +20,6 @@ async function buffer(readable) {
 }
 
 const relevantEvents = new Set([
-    'product.created',
-    'product.updated',
-    'price.created',
-    'price.updated',
     'invoice.payment_succeeded',
     'charge.refunded',
     'checkout.session.completed',
@@ -71,6 +67,7 @@ const webhookHandler = async (req, res) => {
 
                     case 'charge.refunded':
                         const refound = event.data.object;
+                        console.log('refound:', refound)
 
                         // Then define and call a method to handle the successful attachment of a PaymentMethod.
                         // handlePaymentMethodAttached(paymentMethod);

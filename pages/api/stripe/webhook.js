@@ -24,6 +24,8 @@ const relevantEvents = new Set([
     'product.updated',
     'price.created',
     'price.updated',
+    'invoice.payment_succeeded',
+    'charge.refunded',
     'checkout.session.completed',
     'customer.subscription.created',
     'customer.subscription.updated',
@@ -59,20 +61,12 @@ const webhookHandler = async (req, res) => {
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object;
-                        console.log('subscriptionSession:', subscriptionSession)
                         upsertSubscriptionRecord(subscriptionSession)
-                        // Then define and call a method to handle the successful payment intent.
-                        // handlePaymentIntentSucceeded(paymentIntent);
                         break;
 
-                    case 'charge.succeeded':
-                        const chargeObject = event;
-                        console.log('event:', event)
-                        // console.log('chargeObject:', chargeObject)
-                        upsertChargeRecord(chargeObject)
-
-                        // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                        // handlePaymentMethodAttached(paymentMethod);
+                    case 'invoice.payment_succeeded':
+                        const invoice = event.data.object;
+                        upsertChargeRecord(invoice)
                         break;
 
                     case 'charge.refunded':

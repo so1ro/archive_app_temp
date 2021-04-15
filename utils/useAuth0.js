@@ -33,7 +33,7 @@ const auth0AccessToken = async () => {
 
 ////////////////////////////////////////////////
 // Patch user's App_metadata to Auth0
-const patchUserMetadataToAuth0 = async (user_id, token, stripeCustomerDetail) => {
+const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
     const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {
         url: URL,
@@ -42,7 +42,7 @@ const patchUserMetadataToAuth0 = async (user_id, token, stripeCustomerDetail) =>
             authorization: `Bearer ${token}`
         },
         data: {
-            user_metadata: { Stripe_Customer_Detail: stripeCustomerDetail }
+            user_metadata: { ...metadata }
         }
     }
 
@@ -82,44 +82,43 @@ const upsertSubscriptionRecord = async (event) => {
         canceled_at, } = event
     try {
         const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        const stripeCustomerDetail = {
-            customer_Id,
-            price_Id,
-            subscription_Name,
-            subscription_Id,
-            subscription_Status,
-            cancel_at_period_end,
-            cancel_at,
-            canceled_at,
+        const metadata = {
+            Stripe_Customer_Detail: {
+                customer_Id,
+                price_Id,
+                subscription_Name,
+                subscription_Id,
+                subscription_Status,
+                cancel_at_period_end,
+                cancel_at,
+                canceled_at,
+            }
         }
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
 
         const auth0Token = await auth0AccessToken()
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, stripeCustomerDetail)
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
-    } catch (error) {
+    } catch (err) {
         console.log(`❌ Error message: ${err.message}`);
-        throw new Error(error)
+        throw new Error(err)
     }
 };
 
 //// Send Charge (Payment Amount) record to Auth0
-const upsertChargeRecord = async (event) => {
-    console.log('event:', event)
-    // const {  } = event
-    // try {
-    //     const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-    //     const stripeCustomerDetail = {
-    //     }
-    //     // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
+const upsertChargeRecord = async (invoice) => {
 
-    //     const auth0Token = await auth0AccessToken()
-    //     patchUserMetadataToAuth0(auth0_UUID, auth0Token, stripeCustomerDetail)
+    const { customer: customer_Id, amount_paid } = invoice
+    try {
+        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
+        const auth0Token = await auth0AccessToken()
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: past_charged_fee + amount_paid })
 
-    // } catch (error) {
-    //     console.log(`❌ Error message: ${err.message}`);
-    //     throw new Error(error)
-    // }
+    } catch (err) {
+        console.log(`❌ Error message: ${err.message}`);
+        throw new Error(err)
+    }
 };
 
 ////////////////////////////////////////////////

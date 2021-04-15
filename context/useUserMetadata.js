@@ -24,23 +24,22 @@ export const UserMetadataProvider = (props) => {
             data: { user_id: user.sub }
           }).then(data => data)
 
-          const { Stripe_Customer_Detail, ...User_Detail } = user_metadata
-          setUserDetail({ User_Detail })
-          setStripeCustomerDetail({ Stripe_Customer_Detail })
+          if (user_metadata?.Stripe_Customer_Detail) {
+            const { Stripe_Customer_Detail, ...User_Detail } = user_metadata
+            setUserDetail({ User_Detail })
+            setStripeCustomerDetail({ Stripe_Customer_Detail })
 
-          // Check if Today is before the cancel day
-          if (Stripe_Customer_Detail.cancel_at) {
-            const today = new Date()
-            const cancel_at = fromUnixTime(Stripe_Customer_Detail.cancel_at)
-            const canceled_at = fromUnixTime(Stripe_Customer_Detail.canceled_at)
-            Stripe_Customer_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日',)
-            Stripe_Customer_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
-            setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
+            // Check if Today is before the cancel day
+            if (Stripe_Customer_Detail.cancel_at) {
+              const today = new Date()
+              const cancel_at = fromUnixTime(Stripe_Customer_Detail.cancel_at)
+              const canceled_at = fromUnixTime(Stripe_Customer_Detail.canceled_at)
+              Stripe_Customer_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日',)
+              Stripe_Customer_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
+              setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
+            }
           }
-
         } catch (error) {
-          setUserDetail({ User_Detail: undefined })
-          setStripeCustomerDetail({ Stripe_Customer_Detail: undefined })
           setErrorMetadata({ error_metadata: error.message })
           throw new Error(error)
 

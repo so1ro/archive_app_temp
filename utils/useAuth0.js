@@ -71,8 +71,8 @@ const getUserMetadata = async (user_id) => {
 }
 
 
-//// Send purchase record to Auth0
-const upsertPurchaseRecord = async (event) => {
+//// Send Subscription record to Auth0
+const upsertSubscriptionRecord = async (event) => {
     const { id: subscription_Id,
         customer: customer_Id,
         plan: { nickname: subscription_Name },
@@ -103,10 +103,30 @@ const upsertPurchaseRecord = async (event) => {
     }
 };
 
+//// Send Charge (Payment Amount) record to Auth0
+const upsertChargeRecord = async (event) => {
+    console.log('event:', event)
+    // const {  } = event
+    // try {
+    //     const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+    //     const stripeCustomerDetail = {
+    //     }
+    //     // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
+
+    //     const auth0Token = await auth0AccessToken()
+    //     patchUserMetadataToAuth0(auth0_UUID, auth0Token, stripeCustomerDetail)
+
+    // } catch (error) {
+    //     console.log(`❌ Error message: ${err.message}`);
+    //     throw new Error(error)
+    // }
+};
+
 ////////////////////////////////////////////////
 
 
 export {
-    upsertPurchaseRecord,
     getUserMetadata,
+    upsertSubscriptionRecord,
+    upsertChargeRecord,
 };

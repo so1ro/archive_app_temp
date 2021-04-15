@@ -1,6 +1,6 @@
 import { stripe } from '@/utils/stripe';
 import { postData } from '@/utils/helpers';
-import { upsertPurchaseRecord } from '@/utils/useAuth0';
+import { upsertSubscriptionRecord, upsertChargeRecord } from '@/utils/useAuth0';
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -54,17 +54,29 @@ const webhookHandler = async (req, res) => {
                 // Handle the event
                 switch (event.type) {
                     // case 'customer.created':
+                    // case 'payment_intent.succeeded':
                     case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object;
                         console.log('subscriptionSession:', subscriptionSession)
-                        upsertPurchaseRecord(subscriptionSession)
+                        upsertSubscriptionRecord(subscriptionSession)
                         // Then define and call a method to handle the successful payment intent.
                         // handlePaymentIntentSucceeded(paymentIntent);
                         break;
-                    case 'payment_method.attached':
-                        const paymentMethod = event.data.object;
+
+                    case 'charge.succeeded':
+                        const chargeObject = event;
+                        console.log('event:', event)
+                        // console.log('chargeObject:', chargeObject)
+                        upsertChargeRecord(chargeObject)
+
+                        // Then define and call a method to handle the successful attachment of a PaymentMethod.
+                        // handlePaymentMethodAttached(paymentMethod);
+                        break;
+
+                    case 'charge.refunded':
+                        const refound = event.data.object;
 
                         // Then define and call a method to handle the successful attachment of a PaymentMethod.
                         // handlePaymentMethodAttached(paymentMethod);

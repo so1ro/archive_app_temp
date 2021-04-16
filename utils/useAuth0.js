@@ -62,7 +62,6 @@ const getUserMetadata = async (user_id) => {
     const auth0Token = await auth0AccessToken()
 
     const option = { headers: { authorization: `Bearer ${auth0Token}` } }
-
     const data = axios(URL, option)
         .then(res => res.data)
         .catch(err => { throw new Error(err) })
@@ -73,6 +72,7 @@ const getUserMetadata = async (user_id) => {
 
 //// Send Subscription record to Auth0
 const upsertSubscriptionRecord = async (event) => {
+
     const { id: subscription_Id,
         customer: customer_Id,
         plan: { nickname: subscription_Name },
@@ -106,14 +106,19 @@ const upsertSubscriptionRecord = async (event) => {
 };
 
 //// Send Charge (Payment Amount) record to Auth0
-const upsertChargeRecord = async (invoice) => {
+const upsertChargeRecord = async (obj) => {
 
-    const { customer: customer_Id, amount_paid } = invoice
+    const status = obj.object // 'invoice' or 'refund'
+    let customer_Id = obj.customer
+    let amount
+    if (status === 'invoice') amount = obj.amount_paid
+    if (status === 'refund') amount = obj.amount_refunded * -1
+
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
         const auth0Token = await auth0AccessToken()
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: past_charged_fee + amount_paid })
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: past_charged_fee + amount })
 
     } catch (err) {
         console.log(`❌ Error message: ${err.message}`);

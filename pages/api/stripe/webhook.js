@@ -61,13 +61,15 @@ const webhookHandler = async (req, res) => {
                         break;
 
                     case 'invoice.payment_succeeded':
-                        const invoice = event.data.object;
-                        upsertChargeRecord(invoice)
+                        const paymentSession = event.data.object;
+                        console.log('invoice:', paymentSession)
+                        upsertChargeRecord(paymentSession)
                         break;
 
                     case 'charge.refunded':
-                        const refound = event.data.object;
-                        console.log('refound:', refound)
+                        const refundSession = event.data.object;
+                        console.log('refound:', refundSession)
+                        upsertChargeRecord(refundSession)
 
                         // Then define and call a method to handle the successful attachment of a PaymentMethod.
                         // handlePaymentMethodAttached(paymentMethod);

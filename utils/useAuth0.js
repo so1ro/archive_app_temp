@@ -120,10 +120,14 @@ const upsertChargeRecord = async (obj) => {
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
         const auth0Token = await auth0AccessToken()
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: ((past_charged_fee + amount) || 0) })
-        console.log('{ past_charged_fee: ((past_charged_fee + amount) || 0) }:', { past_charged_fee: ((past_charged_fee + amount) || 0) })
+
+        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
+        const currentChargedFee = (past_charged_fee + amount) || 0
+        console.log('currentChargedFee:', currentChargedFee)
+
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
+        console.log('{ past_charged_fee: currentChargedFee }:', { past_charged_fee: currentChargedFee })
 
     } catch (err) {
         console.log(`❌ Error message: ${err.message}`);

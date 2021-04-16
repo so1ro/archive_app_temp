@@ -34,6 +34,7 @@ const auth0AccessToken = async () => {
 ////////////////////////////////////////////////
 // Patch user's App_metadata to Auth0
 const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
+    console.log('metadata:', metadata)
     const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {
         url: URL,
@@ -109,7 +110,7 @@ const upsertSubscriptionRecord = async (event) => {
 const upsertChargeRecord = async (obj) => {
 
     const status = obj.object // 'invoice' or 'refund'
-    let customer_Id = obj.customer
+    const customer_Id = obj.customer
     let amount
     if (status === 'invoice') amount = obj.amount_paid
     if (status === 'refund') amount = obj.amount_refunded * -1
@@ -118,7 +119,7 @@ const upsertChargeRecord = async (obj) => {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
         const auth0Token = await auth0AccessToken()
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: past_charged_fee + amount })
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: ((past_charged_fee + amount) || 0) })
 
     } catch (err) {
         console.log(`❌ Error message: ${err.message}`);

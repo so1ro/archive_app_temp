@@ -82,7 +82,9 @@ const upsertSubscriptionRecord = async (event) => {
         canceled_at, } = event
     try {
         const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        console.log('auth0_UUID:', auth0_UUID)
         const auth0Token = await auth0AccessToken()
+        console.log('auth0Token:', auth0Token)
         const metadata = {
             Stripe_Customer_Detail: {
                 customer_Id,
@@ -95,6 +97,7 @@ const upsertSubscriptionRecord = async (event) => {
                 canceled_at,
             }
         }
+        console.log('metadata:', metadata)
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
         patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
@@ -111,14 +114,18 @@ const upsertChargeRecord = async (obj) => {
     const customer_Id = obj.customer
 
     let amount
+    console.log('amount:', amount)
     if (status === 'invoice') amount = obj.amount_paid
     if (status === 'charge') amount = obj.amount_refunded * -1
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        console.log('auth0_UUID:', auth0_UUID)
         const auth0Token = await auth0AccessToken()
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
+        console.log('past_charged_fee:', past_charged_fee)
         const currentChargedFee = (past_charged_fee + amount) || 0
+        console.log('currentChargedFee:', currentChargedFee)
 
         patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
 

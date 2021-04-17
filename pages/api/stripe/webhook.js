@@ -22,8 +22,8 @@ async function buffer(readable) {
 const relevantEvents = new Set([
     'invoice.payment_succeeded',
     'charge.refunded',
-    'checkout.session.completed',
-    'customer.subscription.created',
+    // 'checkout.session.completed',
+    // 'customer.subscription.created',
     'customer.subscription.updated',
     'customer.subscription.deleted'
 ]);
@@ -53,21 +53,17 @@ const webhookHandler = async (req, res) => {
                 switch (event.type) {
                     // case 'customer.created':
                     // case 'payment_intent.succeeded':
-                    case 'customer.subscription.created':
+                    // case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object;
+                        console.log('subscriptionSession:', subscriptionSession)
                         upsertSubscriptionRecord(subscriptionSession)
-                        break;
-
-                    case 'invoice.updated':
-                        const invoiceSession = event.data.object;
-                        console.log('invoiceSession:', invoiceSession)
                         break;
 
                     case 'invoice.payment_succeeded':
                         const paymentSession = event.data.object;
-                        console.log('invoice:', paymentSession)
+                        console.log('paymentSession:', paymentSession)
                         upsertChargeRecord(paymentSession)
                         break;
 

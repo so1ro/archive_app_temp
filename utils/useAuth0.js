@@ -61,6 +61,7 @@ const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
 const getUserMetadata = async (user_id) => {
     const URL = getAuth0URL(user_id)
     const auth0Token = await auth0AccessToken()
+    console.log('auth0Token in getUserMetadata:', auth0Token)
 
     const option = { headers: { authorization: `Bearer ${auth0Token}` } }
     const data = axios(URL, option)
@@ -98,6 +99,8 @@ const upsertSubscriptionRecord = async (event) => {
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
 
         const auth0Token = await auth0AccessToken()
+        console.log('auth0Token in upsert_SubscriptionRecord:', auth0Token)
+
         patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
     } catch (err) {
@@ -110,24 +113,21 @@ const upsertSubscriptionRecord = async (event) => {
 const upsertChargeRecord = async (obj) => {
 
     const status = obj.object // 'invoice' or 'refund'
-    console.log('status:', status)
-
     const customer_Id = obj.customer
+
     let amount
     if (status === 'invoice') amount = obj.amount_paid
     if (status === 'charge') amount = obj.amount_refunded * -1
-    console.log('amount:', amount)
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
+        console.log('auth0Token in upsert_ChargeRecord:', auth0Token)
 
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
         const currentChargedFee = (past_charged_fee + amount) || 0
-        console.log('currentChargedFee:', currentChargedFee)
 
         patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
-        console.log('{ past_charged_fee: currentChargedFee }:', { past_charged_fee: currentChargedFee })
 
     } catch (err) {
         console.log(`❌ Error message: ${err.message}`);

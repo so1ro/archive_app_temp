@@ -56,7 +56,7 @@ const webhookHandler = async (req, res) => {
                     case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
-                    case 'invoice.updated':
+                        // case 'invoice.updated':
                         const subscriptionSession = event.data.object;
                         upsertSubscriptionRecord(subscriptionSession)
                         break;

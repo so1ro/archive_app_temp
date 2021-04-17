@@ -114,14 +114,18 @@ const upsertChargeRecord = async (obj) => {
     const customer_Id = obj.customer
 
     let amount
-    console.log('amount:', amount)
     if (status === 'invoice') amount = obj.amount_paid
     if (status === 'charge') amount = obj.amount_refunded * -1
+
+    console.log('status:', status)
+    console.log('customer_Id:', customer_Id)
+    console.log('amount:', amount)
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
         console.log('auth0_UUID:', auth0_UUID)
         const auth0Token = await auth0AccessToken()
+        console.log('auth0Token:', auth0Token)
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
         console.log('past_charged_fee:', past_charged_fee)
         const currentChargedFee = (past_charged_fee + amount) || 0

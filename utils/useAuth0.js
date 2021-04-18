@@ -54,9 +54,9 @@ const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
 ////////////////////////////////////////////////
 
 //// Get User metadata from Auth0
-const getUserMetadata = async (user_id) => {
+const getUserMetadata = async (user_id, token) => {
     const URL = getAuth0URL(user_id)
-    const auth0Token = await auth0AccessToken()
+    const auth0Token = !!token ? token : await auth0AccessToken()
 
     const option = { headers: { authorization: `Bearer ${auth0Token}` } }
     const data = axios(URL, option)
@@ -118,7 +118,7 @@ const upsertChargeRecord = async (obj) => {
     console.log('auth0_UUID:', auth0_UUID)
     const auth0Token = await auth0AccessToken()
     console.log('auth0Token:', auth0Token)
-    const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
+    const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
     console.log('past_charged_fee:', past_charged_fee)
     const currentChargedFee = (past_charged_fee + amount) || 0
     console.log('currentChargedFee:', currentChargedFee)

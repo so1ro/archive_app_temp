@@ -59,7 +59,7 @@ const getUserMetadata = async (user_id, token) => {
     const auth0Token = !!token ? token : await auth0AccessToken()
 
     const option = { headers: { authorization: `Bearer ${auth0Token}` } }
-    const data = axios(URL, option)
+    const data = await axios(URL, option)
         .then(res => res.data)
         .catch(err => { throw new Error(err) })
 

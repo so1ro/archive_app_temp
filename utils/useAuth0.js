@@ -1,9 +1,8 @@
 import { stripe } from '@/utils/stripe';
 import axios from 'axios';
 
-const { AUTH0_DOMAIN, AUTH0_MTOM_CLIENTID, AUTH0_MTOM_CLIENT_SECRET } = process.env
 const getAuth0URL = (id) => {
-    return `https://${AUTH0_DOMAIN}/api/v2/users/${id}`
+    return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`
 }
 
 ////////////////////////////////////////////////
@@ -12,13 +11,13 @@ const auth0AccessToken = async () => {
     // Options of Fetch Access_token
     const options = {
         method: 'post',
-        url: `https://${AUTH0_DOMAIN}/oauth/token`,
+        url: `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
         headers: { 'Content-Type': 'application/json' },
         data: {
-            audience: `https://${AUTH0_DOMAIN}/api/v2/`,
+            audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
             grant_type: "client_credentials",
-            client_id: `${AUTH0_MTOM_CLIENTID}`,
-            client_secret: `${AUTH0_MTOM_CLIENT_SECRET}`
+            client_id: `${process.env.AUTH0_MTOM_CLIENTID}`,
+            client_secret: `${process.env.AUTH0_MTOM_CLIENT_SECRET}`
         }
     };
     const { access_token } = await axios(options)
@@ -32,7 +31,7 @@ const auth0AccessToken = async () => {
 // Patch user's App_metadata to Auth0
 const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
     console.log('metadata:', metadata)
-    const URL = `https://${AUTH0_DOMAIN}/api/v2/users/${user_id}`
+    const URL = `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {
         url: URL,
         method: 'PATCH',

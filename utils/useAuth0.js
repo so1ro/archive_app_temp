@@ -21,14 +21,11 @@ const auth0AccessToken = async () => {
             client_secret: `${AUTH0_MTOM_CLIENT_SECRET}`
         }
     };
-    try {
-        const { access_token } = await axios(options).then(res => res.data)
-        return access_token
+    const { access_token } = await axios(options)
+        .then(res => res.data)
+        .catch(err => { throw new Error(err) })
+    return access_token
 
-    } catch (error) {
-        console.log('error:', error)
-        throw new Error(error)
-    }
 }
 
 ////////////////////////////////////////////////
@@ -49,7 +46,7 @@ const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
 
     const data = await axios(option)
         .then(res => res.data)
-        .catch(err => console.log(err))
+        .catch(err => { throw new Error(err) })
 }
 
 ////////////////////////////////////////////////
@@ -80,31 +77,27 @@ const upsertSubscriptionRecord = async (event) => {
         cancel_at_period_end,
         cancel_at,
         canceled_at, } = event
-    try {
-        const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        console.log('auth0_UUID:', auth0_UUID)
-        const auth0Token = await auth0AccessToken()
-        console.log('auth0Token:', auth0Token)
-        const metadata = {
-            Stripe_Customer_Detail: {
-                customer_Id,
-                price_Id,
-                subscription_Name,
-                subscription_Id,
-                subscription_Status,
-                cancel_at_period_end,
-                cancel_at,
-                canceled_at,
-            }
-        }
-        console.log('metadata:', metadata)
-        // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
-    } catch (err) {
-        console.log(`❌ Error message: ${err.message}`);
-        throw new Error(err)
+    const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+    console.log('auth0_UUID:', auth0_UUID)
+    const auth0Token = await auth0AccessToken()
+    console.log('auth0Token:', auth0Token)
+    const metadata = {
+        Stripe_Customer_Detail: {
+            customer_Id,
+            price_Id,
+            subscription_Name,
+            subscription_Id,
+            subscription_Status,
+            cancel_at_period_end,
+            cancel_at,
+            canceled_at,
+        }
     }
+    console.log('metadata:', metadata)
+    // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
+    patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
+
 };
 
 //// Send Charge (Payment Amount) record to Auth0
@@ -121,22 +114,17 @@ const upsertChargeRecord = async (obj) => {
     console.log('customer_Id:', customer_Id)
     console.log('amount:', amount)
 
-    try {
-        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        console.log('auth0_UUID:', auth0_UUID)
-        const auth0Token = await auth0AccessToken()
-        console.log('auth0Token:', auth0Token)
-        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
-        console.log('past_charged_fee:', past_charged_fee)
-        const currentChargedFee = (past_charged_fee + amount) || 0
-        console.log('currentChargedFee:', currentChargedFee)
+    const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+    console.log('auth0_UUID:', auth0_UUID)
+    const auth0Token = await auth0AccessToken()
+    console.log('auth0Token:', auth0Token)
+    const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID)
+    console.log('past_charged_fee:', past_charged_fee)
+    const currentChargedFee = (past_charged_fee + amount) || 0
+    console.log('currentChargedFee:', currentChargedFee)
 
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
+    patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
 
-    } catch (err) {
-        console.log(`❌ Error message: ${err.message}`);
-        throw new Error(err)
-    }
 };
 
 ////////////////////////////////////////////////

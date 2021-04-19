@@ -70,6 +70,7 @@ const getUserMetadata = async (user_id, token) => {
 //// Send Subscription record to Auth0
 const upsertSubscriptionRecord = async (event) => {
 
+    console.log('Start upsert SubscriptionRcord!!!!!')
     const { id: subscription_Id,
         customer: customer_Id,
         plan: { nickname: subscription_Name },
@@ -103,6 +104,7 @@ const upsertSubscriptionRecord = async (event) => {
 //// Send Charge (Payment Amount) record to Auth0
 const upsertChargeRecord = async (obj) => {
 
+    console.log('Start upsert ChargeRcord!!!!!')
     const status = obj.object // 'invoice' or 'refund'
     const customer_Id = obj.customer
 

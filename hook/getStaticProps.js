@@ -15,7 +15,7 @@ export async function fetchSubscriptionPlans() {
             props: {
                 subscriptionPlans
             },
-            revalidate: 60
+            revalidate: 1
         }
     } catch (error) {
         // add a descriptive error message first,

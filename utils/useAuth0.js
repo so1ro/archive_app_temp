@@ -100,7 +100,7 @@ const upsertSubscriptionRecord = async (event) => {
         }
         console.log('metadata:', metadata)
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
-        patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
+        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
     } catch (error) {
         console.log('Error in upsertSubscriptionRecord:', error)

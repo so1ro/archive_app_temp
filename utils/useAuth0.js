@@ -79,7 +79,10 @@ const upsertSubscriptionRecord = async (event) => {
         cancel_at,
         canceled_at, } = event
 
-    const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+
+    const customerData = await stripe.customers.retrieve(customer_Id);
+    console.log('customerData:', customerData)
+    // const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
     console.log('auth0_UUID:', auth0_UUID)
     const auth0Token = await auth0AccessToken()
     console.log('auth0Token:', auth0Token)

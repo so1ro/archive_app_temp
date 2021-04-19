@@ -33,8 +33,8 @@ const webhookHandler = async (req, res) => {
     const buf = await buffer(req);
     const sig = req.headers['stripe-signature'];
     const webhookSecret =
-      process.env.STRIPE_WEBHOOK_SECRET_LIVE ??
-      process.env.STRIPE_WEBHOOK_SECRET;
+      process.env.STRIPE_STRIPE_WEBHOOK_SECRET_LIVE ??
+      process.env.STRIPE_STRIPE_WEBHOOK_SECRET;
     let event;
 
     try {

@@ -30,6 +30,7 @@ const auth0AccessToken = async () => {
 ////////////////////////////////////////////////
 // Patch user's App_metadata to Auth0
 const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
+    console.log('patching Metadatda to Auth0 is working!!!!')
     console.log('metadata:', metadata)
     const URL = `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {

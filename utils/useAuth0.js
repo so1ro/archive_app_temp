@@ -1,5 +1,6 @@
 import { stripe } from '@/utils/stripe';
 import axios from 'axios';
+import { upsertSubscriptionRecord } from '@/utils/useAuth0';
 
 const getAuth0URL = (id) => {
     return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`
@@ -79,28 +80,33 @@ const upsertSubscriptionRecord = async (event) => {
         cancel_at,
         canceled_at, } = event
 
-
-    const customerData = await stripe.customers.retrieve(customer_Id);
-    console.log('customerData:', customerData)
-    // const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-    console.log('auth0_UUID:', auth0_UUID)
-    const auth0Token = await auth0AccessToken()
-    console.log('auth0Token:', auth0Token)
-    const metadata = {
-        Stripe_Customer_Detail: {
-            customer_Id,
-            price_Id,
-            subscription_Name,
-            subscription_Id,
-            subscription_Status,
-            cancel_at_period_end,
-            cancel_at,
-            canceled_at,
+    try {
+        const customerData = await stripe.customers.retrieve(customer_Id);
+        console.log('customerData:', customerData)
+        // const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        console.log('auth0_UUID:', auth0_UUID)
+        const auth0Token = await auth0AccessToken()
+        console.log('auth0Token:', auth0Token)
+        const metadata = {
+            Stripe_Customer_Detail: {
+                customer_Id,
+                price_Id,
+                subscription_Name,
+                subscription_Id,
+                subscription_Status,
+                cancel_at_period_end,
+                cancel_at,
+                canceled_at,
+            }
         }
+        console.log('metadata:', metadata)
+        // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
+        patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
+
+    } catch (error) {
+        console.log('Error in upsertSubscriptionRecord:', error)
+
     }
-    console.log('metadata:', metadata)
-    // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
-    patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
 };
 

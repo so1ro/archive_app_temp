@@ -58,19 +58,19 @@ const webhookHandler = async (req, res) => {
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object;
                         console.log('subscriptionSession:', subscriptionSession)
-                        upsertSubscriptionRecord(subscriptionSession)
+                        await upsertSubscriptionRecord(subscriptionSession)
                         break;
 
                     case 'invoice.payment_succeeded':
                         const paymentSession = event.data.object;
                         console.log('paymentSession:', paymentSession)
-                        upsertChargeRecord(paymentSession)
+                        await upsertChargeRecord(paymentSession)
                         break;
 
                     case 'charge.refunded':
                         const refundSession = event.data.object;
                         console.log('refound:', refundSession)
-                        upsertChargeRecord(refundSession)
+                        await upsertChargeRecord(refundSession)
 
                         // Then define and call a method to handle the successful attachment of a PaymentMethod.
                         // handlePaymentMethodAttached(paymentMethod);

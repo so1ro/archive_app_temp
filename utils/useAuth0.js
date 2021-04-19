@@ -133,7 +133,7 @@ const upsertChargeRecord = async (obj) => {
     const currentChargedFee = (past_charged_fee + amount) || 0
     console.log('currentChargedFee:', currentChargedFee)
 
-    patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
+    await patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
 
 };
 

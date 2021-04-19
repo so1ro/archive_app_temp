@@ -1,6 +1,5 @@
 import { stripe } from '@/utils/stripe';
 import axios from 'axios';
-import { upsertSubscriptionRecord } from '@/utils/useAuth0';
 
 const getAuth0URL = (id) => {
     return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`

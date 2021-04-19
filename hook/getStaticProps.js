@@ -5,7 +5,8 @@ export async function fetchSubscriptionPlans() {
     try {
         const products = await stripe.prices.list();
         const subscriptionPlans = products.data
-            .filter(prod => prod.recurring?.interval === 'month')
+            .filter(prod => prod.type === 'recurring')
+            .filter(prod => prod.nickname)
             .sort((a, b) => a.unit_amount - b.unit_amount)
 
         // const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/stripe/get-price-list`)
@@ -15,7 +16,7 @@ export async function fetchSubscriptionPlans() {
             props: {
                 subscriptionPlans
             },
-            revalidate: 1
+            revalidate: 30
         }
     } catch (error) {
         // add a descriptive error message first,

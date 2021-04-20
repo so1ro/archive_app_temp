@@ -13,6 +13,8 @@ export const UserMetadataProvider = (props) => {
   const [{ error_metadata }, setErrorMetadata] = useState({ error_metadata: '' })
   const [{ isLoading_metadata }, setIsLoadingMetadata] = useState({ isLoading_metadata: true })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState({ isBeforeCancelDate: false })
+  // Temporary chec isSubscribing
+  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState({ temporaryCheckIsSubscribing: false })
 
   useEffect(() => {
     if (user) {
@@ -57,6 +59,8 @@ export const UserMetadataProvider = (props) => {
     error_metadata,
     isLoading_metadata,
     isBeforeCancelDate,
+    temporaryCheckIsSubscribing,
+    setTemporaryCheckIsSubscribing,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;
 };

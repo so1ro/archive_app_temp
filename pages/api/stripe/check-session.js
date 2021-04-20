@@ -8,12 +8,14 @@ const checkSession = async (req, res) => {
     try {
       const session = await stripe.checkout.sessions.retrieve(session_id);
       const customer = await stripe.customers.retrieve(session.customer);
-      // console.log('customer:', customer)
+      const subscriptionDetail = await stripe.prices.retrieve(customer.metadata.price_Id);
+      const isSubscribing = subscriptionDetail.active
 
       return res.status(200).json({
         customer_email: customer.email,
         customer_auth0_UUID: customer.metadata.auth0_UUID,
-        customer_price_Id: customer.metadata.price_Id
+        customer_price_Id: customer.metadata.price_Id,
+        isSubscribing
       });
 
     } catch (e) {

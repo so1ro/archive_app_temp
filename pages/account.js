@@ -21,11 +21,29 @@ export default function Account({ subscriptionPlans }) {
     error_metadata,
     isLoading_metadata,
     isBeforeCancelDate,
+    temporaryCheckIsSubscribing,
+    setTemporaryCheckIsSubscribing,
   } = useUserMetadata()
 
   // useEffect
-  // useEffect(() => {
-  // }, [])
+  useEffect(() => {
+    if (user && typeof window !== 'undefined' && window.location.search.indexOf('session_id') > 0) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const session_id = urlParams.get('session_id');
+      const checkSession = async () => {
+        const customerData = await postData({
+          url: '/api/stripe/check-session',
+          data: { session_id }
+        }).then(data => data)
+
+        if (customerData.customer_email === user.email) {
+          setTemporaryCheckIsSubscribing({ temporaryCheckIsSubscribing: customerData.isSubscribing })
+        }
+      }
+      checkSession();
+    }
+
+  }, [user])
 
   // Function
   const handleCustomerPortal = async (customer_Id) => {
@@ -52,11 +70,11 @@ export default function Account({ subscriptionPlans }) {
                 {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
                   (isBeforeCancelDate ? `にキャンセルされます。` : `にキャンセルされました。`)}
               </Code>}
-            {Stripe_Customer_Detail?.subscription_Status &&
+            {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing) &&
               <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
                 {!Stripe_Customer_Detail.cancel_at_period_end ? `プランの変更 ／ キャンセル ／ その他詳細` : `サブスクリプションの再開 ／ その他詳細`}
               </Button>}
-            {!Stripe_Customer_Detail?.subscription_Status &&
+            {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing) &&
               <PriceList user={user} subscriptionPlans={subscriptionPlans} />}
           </>
         }

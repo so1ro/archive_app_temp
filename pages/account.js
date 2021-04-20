@@ -72,7 +72,8 @@ export default function Account({ subscriptionPlans }) {
               </Code>}
             {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing) &&
               <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
-                {!Stripe_Customer_Detail.cancel_at_period_end ? `プランの変更 ／ キャンセル ／ その他詳細` : `サブスクリプションの再開 ／ その他詳細`}
+                {!Stripe_Customer_Detail.cancel_at_period_end ?
+                  `プランの変更 ／ キャンセル ／ その他詳細` : `サブスクリプションの再開 ／ その他詳細`}
               </Button>}
             {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing) &&
               <PriceList user={user} subscriptionPlans={subscriptionPlans} />}

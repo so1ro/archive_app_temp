@@ -12,7 +12,6 @@ export default function PriceList({ user, subscriptionPlans }) {
 
     const handleCheckout = async (price) => {
         // setPriceIdLoading(price.id);
-
         try {
             const { sessionId } = await postData({
                 url: '/api/stripe/create-checkout-session',

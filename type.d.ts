@@ -31,3 +31,8 @@ interface userMetadataContextInterface {
     season: string | null;
     expert:string[] | null ;
   }
+
+  interface subscriptionPlanInterface {
+    id: string | null;
+    nickname: string | null;
+  }

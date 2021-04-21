@@ -1,10 +1,12 @@
+import { AppProps } from 'next/app'
+
 import '../styles/globals.css'
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata';
 
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <UserMetadataProvider>
@@ -16,4 +18,4 @@ function MyApp({ Component, pageProps }) {
   )
 }
 
-export default MyApp
+export default App

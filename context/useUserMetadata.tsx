@@ -3,18 +3,18 @@ import { useUser } from '@auth0/nextjs-auth0';
 import { postData } from '@/utils/helpers';
 import { format, fromUnixTime, isBefore } from 'date-fns'
 
-export const UserMetadataContext = createContext();
+export const UserMetadataContext = createContext(null);
 
-export const UserMetadataProvider = (props) => {
+export const UserMetadataProvider: React.FC = (props) => {
 
   const { user } = useUser();
-  const [{ User_Detail }, setUserDetail] = useState({ User_Detail: undefined })
-  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState({ Stripe_Customer_Detail: undefined })
-  const [{ error_metadata }, setErrorMetadata] = useState({ error_metadata: '' })
-  const [{ isLoading_metadata }, setIsLoadingMetadata] = useState({ isLoading_metadata: true })
-  const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState({ isBeforeCancelDate: false })
+  const [{ User_Detail }, setUserDetail] = useState<{User_Detail : object}>({ User_Detail: null })
+  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{Stripe_Customer_Detail : object}>({ Stripe_Customer_Detail: null })
+  const [{ error_metadata }, setErrorMetadata] = useState<{error_metadata : string}>({ error_metadata: '' })
+  const [{ isLoading_metadata }, setIsLoadingMetadata] = useState<{isLoading_metadata : boolean}>({ isLoading_metadata: true })
+  const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean}>({ isBeforeCancelDate: false })
   // Temporary chec isSubscribing
-  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState({ temporaryCheckIsSubscribing: false })
+  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean}>({ temporaryCheckIsSubscribing: false })
 
   useEffect(() => {
     if (user) {
@@ -53,7 +53,7 @@ export const UserMetadataProvider = (props) => {
     }
   }, [user]);
 
-  const value = {
+  const value: userMetadataContextInterface = {
     User_Detail,
     Stripe_Customer_Detail,
     error_metadata,

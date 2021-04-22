@@ -7,7 +7,7 @@ import { getStripe } from '@/utils/stripe-client';
 import { Button, useToast } from '@chakra-ui/react'
 
 export default function PriceList(
-    { user, subscriptionPlans }: { user: object, subscriptionPlans: subscriptionPlanInterface }) {
+    { user, subscriptionPlans }: { user, subscriptionPlans: subscriptionPlanInterface[] }) {
 
     const toast = useToast()
 

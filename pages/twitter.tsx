@@ -1,7 +1,7 @@
 import React from 'react';
 import { getData } from '@/utils/helpers';
 
-export default function twitter({ tweets }: { tweets: object[] }) {
+export default function twitter({ tweets }) {
     return (
         <ul>
             {tweets.data.map(tweet => (

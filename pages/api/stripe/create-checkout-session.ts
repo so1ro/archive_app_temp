@@ -13,7 +13,11 @@ const createCheckoutSession = async (req: NextApiRequest, res: NextApiResponse) 
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
-      const customerData = {
+      const customerData: {
+        email: string | null,
+        metadata: object | null
+      } = {
+        email: null,
         metadata: {
           price_Id: price,
           auth0_UUID: user_uuid

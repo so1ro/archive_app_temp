@@ -1,8 +1,9 @@
 import { stripe } from '@/utils/stripe';
 import { getURL } from '@/utils/helpers';
+import { NextApiRequest, NextApiResponse } from 'next'
 
-const checkSession = async (req, res) => {
-  const { session_id } = JSON.parse(req.body);
+const checkSession = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { session_id }: { session_id: string } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     try {

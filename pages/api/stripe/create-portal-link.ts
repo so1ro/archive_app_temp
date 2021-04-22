@@ -1,10 +1,11 @@
 import { stripe } from '@/utils/stripe';
+import { NextApiRequest, NextApiResponse } from 'next'
 
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
-const createPortalLink = async (req, res) => {
+const createPortalLink = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { customer_Id } = JSON.parse(req.body);
+    const { customer_Id }: { customer_Id: string } = JSON.parse(req.body);
 
     try {
       const { url } = await stripe.billingPortal.sessions.create({

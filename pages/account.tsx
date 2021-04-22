@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head'
+import { GetStaticProps } from "next"
 
 import { useUser } from '@auth0/nextjs-auth0'
 import { useUserMetadata } from '@/context/useUserMetadata';
@@ -13,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import styles from '@/styles/Home.module.css'
 
-export default function Account({ subscriptionPlans }) {
+export default function Account({ subscriptionPlans }: { subscriptionPlans: subscriptionPlanInterface[] }) {
   const { user, error, isLoading } = useUser();
   const {
     User_Detail,
@@ -23,7 +24,7 @@ export default function Account({ subscriptionPlans }) {
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
     setTemporaryCheckIsSubscribing,
-  } = useUserMetadata()
+  }: userMetadataContextInterface = useUserMetadata()
 
   // useEffect
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Account({ subscriptionPlans }) {
       const urlParams = new URLSearchParams(window.location.search);
       const session_id = urlParams.get('session_id');
       const checkSession = async () => {
-        const customerData = await postData({
+        const customerData: customerDataInterface = await postData({
           url: '/api/stripe/check-session',
           data: { session_id }
         }).then(data => data)
@@ -46,7 +47,7 @@ export default function Account({ subscriptionPlans }) {
   }, [user])
 
   // Function
-  const handleCustomerPortal = async (customer_Id) => {
+  const handleCustomerPortal = async (customer_Id: string) => {
     const { url, error } = await postData({
       url: '/api/stripe/create-portal-link',
       data: { customer_Id }
@@ -68,7 +69,7 @@ export default function Account({ subscriptionPlans }) {
             {Stripe_Customer_Detail?.cancel_at_period_end &&
               <Code>
                 {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
-                  (isBeforeCancelDate ? `にキャンセルされます。` : `にキャンセルされました。`)}
+                  (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
               </Code>}
             {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing) &&
               <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
@@ -85,7 +86,7 @@ export default function Account({ subscriptionPlans }) {
   return <a href="/api/auth/login">Login</a>;
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   // get Subscription Plans from Stripe
   return await fetchSubscriptionPlans()
 }

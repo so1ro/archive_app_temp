@@ -16,10 +16,17 @@ export const postData = async ({ url, /*token,*/ data = {} }) => {
     body: JSON.stringify(data)
   });
 
-  if (res.error) {
-    throw error;
-  }
+  if (res.error) { throw error; }
+  return res.json();
+};
 
+export const getData = async ({ url }) => {
+  const res = await fetch(url, {
+    method: 'GET',
+    credentials: 'same-origin',
+  });
+
+  if (res.error) { throw error; }
   return res.json();
 };
 

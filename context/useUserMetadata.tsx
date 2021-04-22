@@ -8,13 +8,13 @@ export const UserMetadataContext = createContext(null);
 export const UserMetadataProvider: React.FC = (props) => {
 
   const { user } = useUser();
-  const [{ User_Detail }, setUserDetail] = useState<{User_Detail : object}>({ User_Detail: null })
-  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{Stripe_Customer_Detail : object}>({ Stripe_Customer_Detail: null })
-  const [{ error_metadata }, setErrorMetadata] = useState<{error_metadata : string}>({ error_metadata: '' })
-  const [{ isLoading_metadata }, setIsLoadingMetadata] = useState<{isLoading_metadata : boolean}>({ isLoading_metadata: true })
-  const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean}>({ isBeforeCancelDate: false })
+  const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
+  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
+  const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
+  const [{ isLoading_metadata }, setIsLoadingMetadata] = useState<{ isLoading_metadata: boolean }>({ isLoading_metadata: true })
+  const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
   // Temporary chec isSubscribing
-  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean}>({ temporaryCheckIsSubscribing: false })
+  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
 
   useEffect(() => {
     if (user) {
@@ -36,7 +36,7 @@ export const UserMetadataProvider: React.FC = (props) => {
               const today = new Date()
               const cancel_at = fromUnixTime(Stripe_Customer_Detail.cancel_at)
               const canceled_at = fromUnixTime(Stripe_Customer_Detail.canceled_at)
-              Stripe_Customer_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日',)
+              Stripe_Customer_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日 k時',)
               Stripe_Customer_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
               setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
             }
@@ -53,7 +53,7 @@ export const UserMetadataProvider: React.FC = (props) => {
     }
   }, [user]);
 
-  const value: userMetadataContextInterface = {
+  const value = {
     User_Detail,
     Stripe_Customer_Detail,
     error_metadata,

@@ -1,11 +1,12 @@
 import { getUserMetadata } from '@/utils/useAuth0';
+import { NextApiRequest, NextApiResponse } from 'next'
 
-const retrieveUserMetadata = async (req, res) => {
-  const { user_id } = JSON.parse(req.body);
+const retrieveUserMetadata = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { user_id }: { user_id: string } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     try {
-      const { user_metadata } = await getUserMetadata(user_id)
+      const { user_metadata }: { user_metadata: object } = await getUserMetadata(user_id)
       return res.status(200).json({ user_metadata });
 
     } catch (e) {

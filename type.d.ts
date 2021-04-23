@@ -44,9 +44,9 @@ interface Stripe_Customer_Detail_Interface {
 }
 
 // check-session.ts
-interface sessionInterface {
-  customer: string
-}
+// interface sessionInterface {
+//   customer: string
+// }
 
 interface customerDataInterface {
   customer_email: string | null

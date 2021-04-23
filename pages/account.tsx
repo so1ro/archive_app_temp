@@ -72,13 +72,15 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: subs
                 {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
                   (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
               </Code>}
-            {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing) &&
-              <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
+            {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing)
+              && Stripe_Customer_Detail?.subscription_Status !== 'canceled'
+              && <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
                 {!Stripe_Customer_Detail.cancel_at_period_end ?
-                  `プランの変更 ／ キャンセル ／ その他詳細` : `サブスクリプションの再開 ／ その他詳細`}
+                  `プランの変更 ／ キャンセル ／ 過去のお支払い` : `サブスクリプションの再開 ／ 過去のお支払い`}
               </Button>}
-            {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing) &&
-              <PriceList user={user} subscriptionPlans={subscriptionPlans} />}
+            {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing)
+              || Stripe_Customer_Detail?.subscription_Status === 'canceled'
+              && <PriceList user={user} subscriptionPlans={subscriptionPlans} />}
           </>
         }
       </div>

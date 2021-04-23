@@ -1,7 +1,9 @@
 import React from 'react';
-import { getData } from '@/utils/helpers';
+import { getTweets } from '@/lib/twitter'
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-export default function twitter({ tweets }) {
+export default withPageAuthRequired(function Twitter({ tweets }) {
+    // console.log('tweets:', tweets)
     return (
         <ul>
             {tweets.data.map(tweet => (
@@ -9,11 +11,10 @@ export default function twitter({ tweets }) {
             ))}
         </ul>
     );
-};
+});
 
 export async function getStaticProps() {
-    const tweets = await getData({ url: `${process.env.NEXT_PUBLIC_DOMAIN}/api/twitter` })
-
+    const tweets = await getTweets()
     return {
         props: { tweets },
         revalidate: 1,

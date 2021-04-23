@@ -1,10 +1,13 @@
 import { stripe } from '@/utils/stripe';
 import { postData } from '@/utils/helpers';
 import { upsertSubscriptionRecord, upsertChargeRecord } from '@/utils/useAuth0';
-import { NextApiRequest, NextApiResponse } from 'next'
 
 // Stripe requires the raw body to construct the event.
-export const config = { api: { bodyParser: false } };
+export const config = {
+    api: {
+        bodyParser: false
+    }
+};
 
 async function buffer(readable) {
     const chunks = [];
@@ -26,7 +29,7 @@ const relevantEvents = new Set([
 ]);
 
 // Match the raw body to content type application/json
-const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const webhookHandler = async (req, res) => {
     if (req.method === 'POST') {
         const buf = await buffer(req);
         const sig = req.headers['stripe-signature'];

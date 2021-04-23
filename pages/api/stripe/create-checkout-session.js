@@ -1,23 +1,18 @@
 import { stripe } from '@/utils/stripe';
 import { getURL } from '@/utils/helpers';
 import { parseJSON } from 'date-fns';
-import { NextApiRequest, NextApiResponse } from 'next'
 
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
-const createCheckoutSession = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { price, user_uuid, user_email }:
-    { price: string, user_uuid: string, user_email: string } = JSON.parse(req.body);
+const createCheckoutSession = async (req, res) => {
+  const { price, user_uuid, user_email } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
-      const customerData: {
-        email: string | null,
-        metadata: object | null
-      } = {
-        email: null,
+
+      const customerData = {
         metadata: {
           price_Id: price,
           auth0_UUID: user_uuid

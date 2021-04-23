@@ -9,24 +9,26 @@ export const getURL = () => {
 };
 
 export const postData = async ({ url, /*token,*/ data = {} }) => {
-  const res = await fetch(url, {
+  let res: any = {}
+  res = await fetch(url, {
     method: 'POST',
     // headers: new Headers({ 'Content-Type': 'application/json', token }),
     credentials: 'same-origin',
     body: JSON.stringify(data)
   });
 
-  if (res.error) { throw error; }
+  if (res.error) { throw new Error(res.error); }
   return res.json();
 };
 
 export const getData = async ({ url }) => {
-  const res = await fetch(url, {
+  let res: any = {}
+  res = await fetch(url, {
     method: 'GET',
     credentials: 'same-origin',
   });
 
-  if (res.error) { throw error; }
+  if (res.error) { throw new Error(res.error); }
   return res.json();
 };
 

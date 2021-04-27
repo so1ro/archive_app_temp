@@ -76,7 +76,7 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: Subs
               && Stripe_Customer_Detail?.subscription_Status !== 'canceled'
               && <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
                 {!Stripe_Customer_Detail.cancel_at_period_end ?
-                  `プランの変更 ／ キャンセル ／ 過去のお支払い` : `サブスクリプションの再開 ／ 過去のお支払い`}
+                  `プランの変更・キャンセル ／ 過去のお支払い履歴` : `サブスクリプションの再開 ／ 過去のお支払い履歴`}
               </Button>}
             {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing)
               || Stripe_Customer_Detail?.subscription_Status === 'canceled'

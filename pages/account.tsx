@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import styles from '@/styles/Home.module.css'
 
-export default function Account({ subscriptionPlans }: { subscriptionPlans: subscriptionPlanInterface[] }) {
+export default function Account({ subscriptionPlans }: { subscriptionPlans: SubscriptionPlanInterface[] }) {
   // export default function Account({ subscriptionPlans }) {
   const { user, error, isLoading } = useUser();
   const {
@@ -25,7 +25,7 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: subs
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
     setTemporaryCheckIsSubscribing,
-  }: userMetadataContextInterface = useUserMetadata()
+  }: UserMetadataContextInterface = useUserMetadata()
 
   // useEffect
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: subs
       const urlParams = new URLSearchParams(window.location.search);
       const session_id = urlParams.get('session_id');
       const checkSession = async () => {
-        const customerData: customerDataInterface = await postData({
+        const customerData: CustomerDataInterface = await postData({
           url: '/api/stripe/check-session',
           data: { session_id }
         }).then(data => data)

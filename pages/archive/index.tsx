@@ -13,7 +13,7 @@ import styles from "@/styles/Home.module.css"
 import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 
-export default function Archive({ allArchives }: { allArchives: allArchivesInterface[] }) {
+export default function Archive({ allArchives }: { allArchives: AllArchivesInterface[] }) {
 
   const { user, error, isLoading } = useUser()
   const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()

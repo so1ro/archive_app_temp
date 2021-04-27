@@ -1,4 +1,4 @@
-interface userMetadataContextInterface {
+interface UserMetadataContextInterface {
   User_Detail: object | null;
   Stripe_Customer_Detail: Stripe_Customer_Detail_Interface;
   error_metadata: string | null;
@@ -13,7 +13,7 @@ interface userMetadataContextInterface {
   setTemporaryCheckIsSubscribing: ({ temporaryCheckIsSubscribing: boolean }) => void;
 }
 
-interface allArchivesInterface {
+interface AllArchivesInterface {
   sys: { id: string };
   thumbnail: { url: string | null };
   title: string | null;
@@ -28,7 +28,7 @@ interface allArchivesInterface {
   expert: string[] | null;
 }
 
-interface subscriptionPlanInterface {
+interface SubscriptionPlanInterface {
   id: string | null;
   nickname: string | null;
 }
@@ -48,7 +48,7 @@ interface Stripe_Customer_Detail_Interface {
 //   customer: string
 // }
 
-interface customerDataInterface {
+interface CustomerDataInterface {
   customer_email: string | null
   customer_auth0_UUID: string | null
   customer_price_Id: string | null

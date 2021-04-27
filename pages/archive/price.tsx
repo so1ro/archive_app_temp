@@ -7,7 +7,7 @@ import PriceList from '@/components/priceList'
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps'
 import { GetStaticProps } from 'next'
 
-export default function Price({ subscriptionPlans }: { subscriptionPlans: subscriptionPlanInterface[] }) {
+export default function Price({ subscriptionPlans }: { subscriptionPlans: SubscriptionPlanInterface[] }) {
 
     const { user, error, isLoading } = useUser()
 

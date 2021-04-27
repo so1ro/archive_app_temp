@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
+import { GetStaticProps } from "next"
 
 import { fetchYouTube } from '@/hook/youtube'
 
@@ -33,7 +34,7 @@ const YouTube = ({ youTubeData }) => {
     )
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
     const data = await fetchYouTube()
     // console.log('data:', data)
     return {

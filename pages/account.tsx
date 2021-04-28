@@ -63,7 +63,9 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: Subs
 
   if (user) {
     return (
-      <div className={styles.container}>
+      <div
+      // className={ styles.container }
+      >
         <div>Welcome {user.name}! <a href="/api/auth/logout">Logout</a></div>
         {!isLoading_metadata &&
           <>

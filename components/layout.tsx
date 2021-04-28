@@ -1,9 +1,21 @@
 import Head from 'next/head'
-
-import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
+import { useUser } from '@auth0/nextjs-auth0'
+
+import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
+import { useColorMode, useColorModeValue } from "@chakra-ui/react"
+// import { bg, color } from '@/styles/colorModeValue';
+import { MoonIcon, SunIcon } from '@/styles/icons';
+import ModalMenu from '@/components/modalMenu'
+
 export default function Layout({ children }) {
+
+    const { colorMode, toggleColorMode } = useColorMode()
+    const bg = useColorModeValue("#ffffff", "#1D2932")
+    const color = useColorModeValue("black", "white")
+    const { user, error, isLoading } = useUser();
+
     return (
         <>
             <Head>
@@ -28,6 +40,8 @@ export default function Layout({ children }) {
                     // p={4}
                     px={4}
                     py={2}
+                    bg={bg}
+                    color={color}
                 // bgColor={bg}
                 >
                     <Stack spacing={4} isInline alignItems="center">
@@ -40,7 +54,15 @@ export default function Layout({ children }) {
                     </NextLink> */}
                     </Stack>
                     <Flex alignItems="center">
-                        <Text fontSize="2xl">ログイン</Text>
+                        <Text fontSize="2xl">
+                            {isLoading ?
+                                '' :
+                                (user ? <a href="/api/auth/logout">ログアウト</a> : <a href="/api/auth/login">ログイン</a>)}
+                        </Text>
+                        <Button onClick={toggleColorMode} size="md">
+                            {colorMode === "light" ? <MoonIcon width={6} height={6} /> : <SunIcon width={6} height={6} />}
+                        </Button>
+                        <ModalMenu />
                         {/* <Button onClick={toggleColorMode}>
                         Toggle {colorMode === "light" ? "Dark" : "Light"}
                     </Button> */}
@@ -69,6 +91,8 @@ export default function Layout({ children }) {
                     // p={4}
                     px={4}
                     py={2}
+                    bg={bg}
+                    color={color}
                 // bgColor={bg}
                 >
                     <Stack spacing={4} isInline alignItems="center">

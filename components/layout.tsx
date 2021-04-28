@@ -5,15 +5,14 @@ import { useUser } from '@auth0/nextjs-auth0'
 
 import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
-// import { bg, color } from '@/styles/colorModeValue';
+
+import { bg, color } from '@/styles/colorModeValue';
 import { MoonIcon, SunIcon } from '@/styles/icons';
 import ModalMenu from '@/components/modalMenu'
 
 export default function Layout({ children }) {
 
     const { colorMode, toggleColorMode } = useColorMode()
-    const bg = useColorModeValue("#ffffff", "#1D2932")
-    const color = useColorModeValue("black", "white")
     const { user, error, isLoading } = useUser();
 
     return (
@@ -30,7 +29,7 @@ export default function Layout({ children }) {
                 />
             </Head>
             <Flex flexDirection="column"
-                // bgColor={bg_Content}
+                bg={useColorModeValue(bg.light, bg.dark)}
                 minH="100vh"
             >
                 <Flex
@@ -40,8 +39,8 @@ export default function Layout({ children }) {
                     // p={4}
                     px={4}
                     py={2}
-                    bg={bg}
-                    color={color}
+                    bg={useColorModeValue(bg.light, bg.dark)}
+                    color={useColorModeValue(color.light, color.dark)}
                 // bgColor={bg}
                 >
                     <Stack spacing={4} isInline alignItems="center">

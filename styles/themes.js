@@ -16,7 +16,7 @@ const theme = extendTheme({
             //     minHeight: "100vh",
             // },
             body: {
-                background: props.colorMode === "dark" ? "#1D2932" : "#edf2f7",
+                // background: props.colorMode === "dark" ? "#1D2932" : "#edf2f7",
                 color: props.colorMode === "dark" ? "white" : "gray.600",
             }
         }),

@@ -5,7 +5,7 @@ import { format, fromUnixTime, isBefore } from 'date-fns'
 
 export const UserMetadataContext = createContext(null);
 
-export const UserMetadataProvider: React.FC = (props) => {
+export const UserMetadataProvider = (props) => {
 
   const { user } = useUser();
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })

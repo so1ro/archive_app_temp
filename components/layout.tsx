@@ -1,5 +1,7 @@
+import { useState } from "react"
 import Head from 'next/head'
 import NextLink from 'next/link';
+import { useRouter } from 'next/router'
 
 import { useUser } from '@auth0/nextjs-auth0'
 
@@ -11,9 +13,13 @@ import { MoonIcon, SunIcon } from '@/styles/icons';
 import ModalMenu from '@/components/modalMenu'
 
 export default function Layout({ children }) {
+    const router = useRouter()
+    console.log('router.pathname:', router.pathname)
 
+    // Hooks
     const { colorMode, toggleColorMode } = useColorMode()
     const { user, error, isLoading } = useUser();
+    const [{ isMenuOpen }, setIsMenuOpen] = useState<{ isMenuOpen: boolean }>({ isMenuOpen: false })
 
     return (
         <>
@@ -44,32 +50,33 @@ export default function Layout({ children }) {
                 // bgColor={bg}
                 >
                     <Stack spacing={4} isInline alignItems="center">
-                        <Text as="h1" fontSize="3xl">カスブラ</Text>
+                        <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
                         {/* <NextLink href="/sites" passHref>
                         <Link>Site</Link>
-                    </NextLink>
-                    <NextLink href="/feedback" passHref>
+                        </NextLink>
+                        <NextLink href="/feedback" passHref>
                         <Link>Feedback</Link>
                     </NextLink> */}
                     </Stack>
                     <Flex alignItems="center">
-                        <Text fontSize="2xl">
-                            {isLoading ?
-                                '' :
-                                (user ? <a href="/api/auth/logout">ログアウト</a> : <a href="/api/auth/login">ログイン</a>)}
-                        </Text>
-                        <Button onClick={toggleColorMode} size="md">
-                            {colorMode === "light" ? <MoonIcon width={6} height={6} /> : <SunIcon width={6} height={6} />}
-                        </Button>
-                        <ModalMenu />
-                        {/* <Button onClick={toggleColorMode}>
+                        <Stack spacing={[1, 2, 4]} isInline alignItems="center">
+                            <Text fontSize={["sm", "md", "lg"]}>
+                                {isLoading ?
+                                    '' :
+                                    (user ? <a href="/api/auth/logout">ログアウト</a> : <a href="/api/auth/login">ログイン</a>)}
+                            </Text>
+                            <Button onClick={toggleColorMode} size="md" p={0}>
+                                {colorMode === "light" ? <MoonIcon width={6} height={6} /> : <SunIcon width={6} height={6} />}
+                            </Button>
+                            {/* <Button onClick={toggleColorMode}>
                         Toggle {colorMode === "light" ? "Dark" : "Light"}
                     </Button> */}
-                        {/* <Link mr={4}>Account</Link> */}
-                        {/* {!!user ?
+                            {/* <Link mr={4}>Account</Link> */}
+                            {/* {!!user ?
                         <Button variant="ghost" mr={2} onClick={() => signout()}>Sign out</Button> :
                         <Button variant="ghost" mr={2} onClick={() => signinWithGithub()}>Sign in</Button>}
                     <Avatar size="sm" src={user?.photoUrl} /> */}
+                        </Stack>
                     </Flex>
                 </Flex>
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1}>
@@ -82,6 +89,7 @@ export default function Layout({ children }) {
                     >
                         {children}
                     </Flex>
+                    <ModalMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
                 </Flex>
                 <Flex
                     backgroundColor="white"

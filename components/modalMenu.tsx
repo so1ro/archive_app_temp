@@ -1,43 +1,19 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-} from "@chakra-ui/react"
-import { useDisclosure } from "@chakra-ui/react"
 
-
-export default function ModalMenu() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
+export default function ModalMenu(
+    { isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolean, setIsMenuOpen: Function }
+) {
     return (
         <>
-            <HamburgerIcon w={6} h={6} onClick={onOpen} />
-
-            <Modal
-                onClose={onClose}
-                isOpen={isOpen}
-                motionPreset="slideInBottom"
-                isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={onClose}>Close</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <HamburgerIcon
+                w={6}
+                h={6}
+                pos="fixed"
+                bottom={[1, 2, 4]}
+                left={[1, 2, 4]}
+                zIndex={2}
+                onClick={() => setIsMenuOpen({ isMenuOpen: !isMenuOpen })} />
         </>
     )
 }
+

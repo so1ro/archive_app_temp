@@ -34,10 +34,13 @@ export default function Layout({ children }) {
                     crossOrigin=""
                 />
             </Head>
+
+            {/* //////// Shell //////// */}
             <Flex flexDirection="column"
                 bg={useColorModeValue(bg.light, bg.dark)}
                 minH="100vh"
             >
+                {/* //// Nav //// */}
                 <Flex
                     backgroundColor="white"
                     justifyContent="space-between"
@@ -47,6 +50,7 @@ export default function Layout({ children }) {
                     py={2}
                     bg={useColorModeValue(bg.light, bg.dark)}
                     color={useColorModeValue(color.light, color.dark)}
+                    zIndex={3}
                 // bgColor={bg}
                 >
                     <Stack spacing={4} isInline alignItems="center">
@@ -79,7 +83,9 @@ export default function Layout({ children }) {
                         </Stack>
                     </Flex>
                 </Flex>
-                <Flex backgroundColor="blackAlpha.100" flexGrow={1}>
+
+                {/* //// Body //// */}
+                <Flex backgroundColor="blackAlpha.100" flexGrow={1} >
                     <Flex
                         w="100%"
                         maxWidth="800px"
@@ -91,6 +97,8 @@ export default function Layout({ children }) {
                     </Flex>
                     <ModalMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
                 </Flex>
+
+                {/* //// Footer //// */}
                 <Flex
                     backgroundColor="white"
                     justifyContent="space-between"
@@ -124,6 +132,7 @@ export default function Layout({ children }) {
                     <Avatar size="sm" src={user?.photoUrl} /> */}
                     </Flex>
                 </Flex>
+
             </Flex>
         </>
     );

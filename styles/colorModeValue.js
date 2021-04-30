@@ -1,7 +1,7 @@
 
 
-const bg = { light: "#ffffff", dark: "#1D2932" }
-const color = { light: "black", dark: "white" }
+const bg_color = { l: "#ffffff", d: "#1D2932" }
+const text_color = { l: "black", d: "white" }
 
 
-export { bg, color }
+export { bg_color, text_color }

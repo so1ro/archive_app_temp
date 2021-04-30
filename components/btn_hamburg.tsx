@@ -1,32 +1,14 @@
 import React from 'react';
-import { Box, Button, Wrap } from "@chakra-ui/react"
+import { Box, Button } from "@chakra-ui/react"
 import { css } from "@emotion/react"
-import { useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { useColorModeValue } from "@chakra-ui/react"
+import { text_color } from '@/styles/colorModeValue';
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
-    const btnBottomPosition = [1, 2, 4]
-    const btnLeftPosition = [1, 2, 4]
+  const btnBottomPosition = [1, 2, 4]
+  const btnLeftPosition = [1, 2, 4]
 
-    return (
-        <Wrap
-            css={hamburg_btn}
-            w={6}
-            h={6}
-            pos="fixed"
-            bottom={btnBottomPosition}
-            left={btnLeftPosition}
-            zIndex={2}
-            onClick={onHandler}>
-            <Button className={`hamburger hamburger--elastic ${isOpen && 'is-active'}`} type="button" p={0}>
-                <span className="hamburger-box">
-                    <span className="hamburger-inner"></span>
-                </span>
-            </Button>
-        </Wrap>
-    );
-}
-
-const hamburg_btn = css`
+  const hamburg_btn = css`
 /*!
 * Hamburgers
 * @description Tasty CSS-animated hamburgers
@@ -55,7 +37,7 @@ const hamburg_btn = css`
  .hamburger.is-active .hamburger-inner,
  .hamburger.is-active .hamburger-inner::before,
  .hamburger.is-active .hamburger-inner::after {
-   background-color: #000; }
+   background-color: ${useColorModeValue(text_color.l, text_color.d)}; }
 
 .hamburger-box {
  width: 40px;
@@ -70,7 +52,7 @@ const hamburg_btn = css`
  .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
    width: 40px;
    height: 4px;
-   background-color: #000;
+   background-color: ${useColorModeValue(text_color.l, text_color.d)};
    border-radius: 4px;
    position: absolute;
    transition-property: transform;
@@ -736,3 +718,22 @@ const hamburg_btn = css`
    bottom: 0;
    transform: rotate(-90deg); }
 `
+  return (
+    <Box
+      css={hamburg_btn}
+      w={6}
+      h={6}
+      pos="fixed"
+      bottom={btnBottomPosition}
+      left={btnLeftPosition}
+      zIndex={2}
+      onClick={onHandler}>
+      <Button className={`hamburger hamburger--elastic ${isOpen && 'is-active'}`} type="button" p={0}>
+        <span className="hamburger-box">
+          <span className="hamburger-inner"></span>
+        </span>
+      </Button>
+    </Box>
+  );
+}
+

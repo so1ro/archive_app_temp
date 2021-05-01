@@ -14,7 +14,7 @@ import { useColorModeValue } from "@chakra-ui/react"
 import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/btn_hamburg';
 
-export default function ModalMenu() {
+export default function Nav_Modal_SP_TB() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 

@@ -7,7 +7,7 @@ import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
-import ModalMenu from '@/components/modalMenu'
+import Nav_Modal_SP_TB from '@/components/nav_modal_SP_TB'
 import Nav from '@/components/nav';
 
 export default function Layout({ children }) {
@@ -35,7 +35,7 @@ export default function Layout({ children }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                <ModalMenu />
+                <Nav_Modal_SP_TB />
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

@@ -4,7 +4,7 @@ import { UserProvider } from '@auth0/nextjs-auth0';
 import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata';
 
-import Layout from '@/components/layout';
+import Layout from '@/components/Layout';
 import '@/styles/globals.css'
 import theme from '@/styles/themes';
 

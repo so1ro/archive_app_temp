@@ -6,7 +6,7 @@ import { useUser } from '@auth0/nextjs-auth0'
 import { useUserMetadata } from '@/context/useUserMetadata';
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
 import { postData } from '@/utils/helpers';
-import PriceList from '@/components/priceList';
+import PriceList from '@/components/PriceList';
 
 import {
   Button,

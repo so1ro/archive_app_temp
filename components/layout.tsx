@@ -7,15 +7,12 @@ import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
-import Nav_Modal_SP_TB from '@/components/nav_modal_SP_TB'
-import Nav from '@/components/nav';
+import Nav_Modal_SP_TB from '@/components/Nav_modal_SP_TB'
+import Nav from '@/components/Nav';
 
 export default function Layout({ children }) {
-    const router = useRouter()
-    console.log('router.pathname:', router.pathname)
-
-    // Hooks
-    // const [{ isMenuOpen }, setIsMenuOpen] = useState<{ isMenuOpen: boolean }>({ isMenuOpen: false })
+    // const router = useRouter()
+    // console.log('router.pathname:', router.pathname)
 
     return (
         <>

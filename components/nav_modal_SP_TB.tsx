@@ -1,5 +1,5 @@
 // /** @jsxImportSource @emotion/react */
-import Nav from '@/components/nav';
+import Nav from '@/components/Nav';
 import NextLink from 'next/link';
 
 import {
@@ -12,7 +12,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react"
 import { useColorModeValue } from "@chakra-ui/react"
 import { bg_color } from '@/styles/colorModeValue';
-import Btn_hamburg from '@/components/btn_hamburg';
+import Btn_hamburg from '@/components/Btn_hamburg';
 
 export default function Nav_Modal_SP_TB() {
 

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 
 import { useUser } from '@auth0/nextjs-auth0'
-import PriceList from '@/components/priceList'
+import PriceList from '@/components/PriceList'
 import { fetchSubscriptionPlans } from '@/hook/getStaticProps'
 import { GetStaticProps } from 'next'
 

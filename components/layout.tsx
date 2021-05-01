@@ -33,7 +33,10 @@ export default function Layout({ children }) {
                 bg={useColorModeValue(bg_color.l, bg_color.d)}
                 minH="100vh"
             >
+                {/* //// Nav //// */}
                 <Nav />
+                <ModalMenu />
+
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >
                     <Flex
@@ -45,7 +48,6 @@ export default function Layout({ children }) {
                     >
                         {children}
                     </Flex>
-                    <ModalMenu />
                 </Flex>
 
                 {/* //// Footer //// */}

@@ -8,13 +8,13 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button,
-    Box
+    Flex,
 } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
 import { useColorModeValue } from "@chakra-ui/react"
 import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/btn_hamburg';
+import { motion } from "framer-motion"
 
 export default function ModalMenu() {
 
@@ -32,15 +32,22 @@ export default function ModalMenu() {
                 <ModalOverlay
                     bg={useColorModeValue(bg_color.l, bg_color.d)}
                 />
-                <ModalContent >
+                <ModalContent bg={useColorModeValue(bg_color.l, bg_color.d)}>
                     <Nav />
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
+                    {/* <ModalCloseButton /> */}
+
+                    <Flex
+                        flexDirection='column'
+                        justifyContent='center'
+                        alignItems='center'
+                        pos='absolute'
+                        w='100vw'
+                        h='100vh'>
                         <p>Some contents...</p>
                         <p>Some contents...</p>
                         <p>Some contents...</p>
-                    </ModalBody>
+                    </Flex>
+
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>
             </Modal>

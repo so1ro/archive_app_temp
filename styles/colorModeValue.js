@@ -1,6 +1,6 @@
 
 
-const bg_color = { l: "#ffffff", d: "#1D2932" }
+const bg_color = { l: "#ffffff", d: "#1B272F" }
 const text_color = { l: "black", d: "white" }
 
 

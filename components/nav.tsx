@@ -1,15 +1,23 @@
+import { useEffect } from 'react'
 import { useUser } from '@auth0/nextjs-auth0'
 
-import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
+import { Flex, Heading, Stack, Text, Button, Link } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { useMediaQuery } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
 import { MoonIcon, SunIcon } from '@/styles/icons';
+import ActiveLink from '@/components/ActiveLink';
+import { nav_links } from '@/data/nav_links';
+
 
 export default function Nav() {
     // Hooks
     const { colorMode, toggleColorMode } = useColorMode()
     const { user, error, isLoading } = useUser();
+
+
+    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
 
     return (
         <Flex
@@ -26,6 +34,15 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
+                {isLargerThan992 && <Flex>
+                    <Stack spacing={4} mr={4} isInline alignItems="center">
+                        {nav_links.map(link => (
+                            <ActiveLink href={link.href} key={link.key}>
+                                <Link>{link.text}</Link>
+                            </ActiveLink>
+                        ))}
+                    </Stack>
+                </Flex>}
                 <Stack spacing={[1, 2, 4]} isInline alignItems="center">
                     <Text fontSize={["sm", "md", "lg"]}>
                         {isLoading ?

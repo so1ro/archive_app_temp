@@ -13,11 +13,11 @@ import { useDisclosure } from "@chakra-ui/react"
 import { useColorModeValue } from "@chakra-ui/react"
 import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/Btn_hamburg';
+import { nav_links } from '@/data/nav_links';
 
 export default function Nav_Modal_SP_TB() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-
 
     return (
         <>
@@ -40,16 +40,15 @@ export default function Nav_Modal_SP_TB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        <ActiveLink href='/'><Link onClick={onClose}>トップ</Link></ActiveLink>
-                        <ActiveLink href='/archive'><Link onClick={onClose}>アーカイブ</Link></ActiveLink>
-                        <ActiveLink href='/twitter'><Link onClick={onClose}>ツイッター</Link></ActiveLink>
-                        <ActiveLink href='/instagram'><Link onClick={onClose}>インスタグラム</Link></ActiveLink>
+                        {nav_links.map(link => (
+                            <ActiveLink href={link.href} key={link.key}>
+                                <Link onClick={onClose}>{link.text}</Link>
+                            </ActiveLink>
+                        ))}
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>
             </Modal>
-
         </>
     )
-
 }

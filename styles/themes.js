@@ -19,6 +19,9 @@ const theme = extendTheme({
                 // background: props.colorMode === "dark" ? "#1D2932" : "#edf2f7",
                 color: props.colorMode === "dark" ? "white" : "gray.600",
             },
+            // a: {
+            //     textDecoration: "none",
+            // },
             "a.active": {
                 color: props.colorMode === "dark" ? "#F79F22" : "#E63946",
             }

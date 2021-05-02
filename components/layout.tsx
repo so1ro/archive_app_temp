@@ -1,18 +1,15 @@
-import { useState } from "react"
 import Head from 'next/head'
-import NextLink from 'next/link';
-import { useRouter } from 'next/router'
-
-import { Flex, Heading, Stack, Text, Button } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { useMediaQuery } from "@chakra-ui/react"
 
-import { bg_color, text_color } from '@/styles/colorModeValue';
+import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import Nav_Modal_SP_TB from '@/components/Nav_modal_SP_TB'
 import Nav from '@/components/Nav';
 
+import { bg_color, text_color } from '@/styles/colorModeValue';
+
 export default function Layout({ children }) {
-    // const router = useRouter()
-    // console.log('router.pathname:', router.pathname)
+    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
 
     return (
         <>
@@ -21,8 +18,6 @@ export default function Layout({ children }) {
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="preload" href="/fonts/RocknRollOne-Regular.woff2" as="font" crossOrigin="" />
-                <link rel="preload" href="/fonts/AniconsGX.ttf" as="font" crossOrigin="" />
-                <link rel="preload" href="/fonts/AniconsColorGX.ttf" as="font" crossOrigin="" />
             </Head>
 
             {/* //////// Shell //////// */}
@@ -32,7 +27,7 @@ export default function Layout({ children }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                <Nav_Modal_SP_TB />
+                {!isLargerThan992 && <Nav_Modal_SP_TB />}
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

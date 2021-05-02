@@ -20,7 +20,7 @@ const theme = extendTheme({
                 color: props.colorMode === "dark" ? "white" : "gray.600",
             },
             "a.active": {
-                color: props.colorMode === "dark" ? "#E63946" : "#F79F22",
+                color: props.colorMode === "dark" ? "#F79F22" : "#E63946",
             }
         }),
     },

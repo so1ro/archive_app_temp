@@ -40,10 +40,10 @@ export default function Nav_Modal_SP_TB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        <ActiveLink href='/' ><Link onClick={onClose}>トップ</Link></ActiveLink>
-                        <ActiveLink href='/archive' ><Link onClick={onClose}>アーカイブ</Link></ActiveLink>
-                        <ActiveLink href='/twitter' ><Link onClick={onClose}>ツイッター</Link></ActiveLink>
-                        <ActiveLink href='/instagram' ><Link onClick={onClose}>インスタグラム</Link></ActiveLink>
+                        <ActiveLink href='/'><Link onClick={onClose}>トップ</Link></ActiveLink>
+                        <ActiveLink href='/archive'><Link onClick={onClose}>アーカイブ</Link></ActiveLink>
+                        <ActiveLink href='/twitter'><Link onClick={onClose}>ツイッター</Link></ActiveLink>
+                        <ActiveLink href='/instagram'><Link onClick={onClose}>インスタグラム</Link></ActiveLink>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>

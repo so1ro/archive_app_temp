@@ -1,6 +1,6 @@
 // /** @jsxImportSource @emotion/react */
 import Nav from '@/components/Nav';
-import NextLink from 'next/link';
+import ActiveLink from '@/components/ActiveLink';
 
 import {
     Modal,
@@ -40,10 +40,10 @@ export default function Nav_Modal_SP_TB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        <NextLink href='/' passHref><Link onClick={onClose}>トップ</Link></NextLink>
-                        <NextLink href='/archive' passHref><Link onClick={onClose}>アーカイブ</Link></NextLink>
-                        <NextLink href='/twitter' passHref><Link onClick={onClose}>ツイッター</Link></NextLink>
-                        <NextLink href='/instagram' passHref><Link onClick={onClose}>インスタグラム</Link></NextLink>
+                        <ActiveLink href='/' ><Link onClick={onClose}>トップ</Link></ActiveLink>
+                        <ActiveLink href='/archive' ><Link onClick={onClose}>アーカイブ</Link></ActiveLink>
+                        <ActiveLink href='/twitter' ><Link onClick={onClose}>ツイッター</Link></ActiveLink>
+                        <ActiveLink href='/instagram' ><Link onClick={onClose}>インスタグラム</Link></ActiveLink>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>

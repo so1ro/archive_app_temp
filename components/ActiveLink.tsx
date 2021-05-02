@@ -1,11 +1,14 @@
-import React from 'react';
+import React from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-function ActiveLink(props) {
-    return (
-        <div>
+export default function ActiveLink({ href, children }) {
+    const router = useRouter()
 
-        </div>
-    );
+    let className = children.props.className || ''
+    if (router.pathname === href) {
+        className = `${className} active`
+    }
+
+    return <Link href={href} passHref>{React.cloneElement(children, { className })}</Link>
 }
-
-export default ActiveLink;

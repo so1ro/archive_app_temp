@@ -8,7 +8,7 @@ import Nav from '@/components/Nav';
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
 
     return (

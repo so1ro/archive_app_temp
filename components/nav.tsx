@@ -7,7 +7,7 @@ import { useMediaQuery } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
 import { MoonIcon, SunIcon } from '@/styles/icons';
-import ActiveLink from '@/components/ActiveLink';
+import ActiveLink from '@/components/activeLink';
 import { nav_links } from '@/data/nav_links';
 
 

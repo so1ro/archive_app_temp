@@ -1,5 +1,5 @@
-import Nav from '@/components/Nav';
-import ActiveLink from '@/components/ActiveLink';
+import Nav from '@/components/nav';
+import ActiveLink from '@/components/activeLink';
 
 import {
     Modal,
@@ -11,7 +11,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react"
 import { useColorModeValue } from "@chakra-ui/react"
 import { bg_color } from '@/styles/colorModeValue';
-import Btn_hamburg from '@/components/Btn_hamburg';
+import Btn_hamburg from '@/components/btnHamburg';
 import { nav_links } from '@/data/nav_links';
 
 export default function NavModalSPTB() {

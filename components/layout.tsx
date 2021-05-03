@@ -3,7 +3,7 @@ import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 import { useMediaQuery } from "@chakra-ui/react"
 
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
-import NavModalSPTB from '@/components/Nav_modal_SP_TB'
+import NavModalSPTB from '@/components/NavModalSPTB'
 import Nav from '@/components/Nav';
 
 import { bg_color, text_color } from '@/styles/colorModeValue';

@@ -15,7 +15,7 @@ import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/Btn_hamburg';
 import { nav_links } from '@/data/nav_links';
 
-export default function Nav_Modal_SP_TB() {
+export default function NavModalSPTB() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 

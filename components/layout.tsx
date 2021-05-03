@@ -3,7 +3,7 @@ import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 import { useMediaQuery } from "@chakra-ui/react"
 
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
-import Nav_Modal_SP_TB from '@/components/Nav_modal_SP_TB'
+import NavModalSPTB from '@/components/Nav_modal_SP_TB'
 import Nav from '@/components/Nav';
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
@@ -27,8 +27,7 @@ export default function Layout({ children }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                {/* {!isLargerThan992 && <Nav_Modal_SP_TB />} */}
-                {<Nav_Modal_SP_TB />}
+                {!isLargerThan992 && <NavModalSPTB />}
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

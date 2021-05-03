@@ -1,4 +1,3 @@
-// /** @jsxImportSource @emotion/react */
 import Nav from '@/components/Nav';
 import ActiveLink from '@/components/ActiveLink';
 

@@ -27,7 +27,8 @@ export default function Layout({ children }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                {!isLargerThan992 && <Nav_Modal_SP_TB />}
+                {/* {!isLargerThan992 && <Nav_Modal_SP_TB />} */}
+                {<Nav_Modal_SP_TB />}
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

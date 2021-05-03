@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useUser } from '@auth0/nextjs-auth0'
 
-import { Flex, Heading, Stack, Text, Button, Link } from '@chakra-ui/react';
+import { Box, Flex, Heading, Stack, Text, Button, Link } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 import { useMediaQuery } from "@chakra-ui/react"
 
@@ -34,7 +34,8 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
-                {isLargerThan992 && <Flex>
+                {/* {isLargerThan992 && <Flex> */}
+                {<Flex>
                     <Stack spacing={4} mr={4} isInline alignItems="center">
                         {nav_links.map(link => (
                             <ActiveLink href={link.href} key={link.key}>
@@ -49,9 +50,9 @@ export default function Nav() {
                             '' :
                             (user ? <a href="/api/auth/logout">ログアウト</a> : <a href="/api/auth/login">ログイン</a>)}
                     </Text>
-                    <Button onClick={toggleColorMode} size="md" p={0}>
+                    <Box onClick={toggleColorMode} size="md" p={0}>
                         {colorMode === "light" ? <MoonIcon width={6} height={6} /> : <SunIcon width={6} height={6} />}
-                    </Button>
+                    </Box>
                 </Stack>
             </Flex>
         </Flex>

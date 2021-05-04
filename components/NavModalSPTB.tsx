@@ -6,7 +6,8 @@ import {
     ModalOverlay,
     ModalContent,
     Flex,
-    Link
+    Link,
+    Box
 } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
 import { useColorModeValue } from "@chakra-ui/react"
@@ -19,7 +20,7 @@ export default function NavModalSPTB() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-        <>
+        <Box d={{ sm: "block", md: "block", lg: "none" }}>
             <Btn_hamburg onHandler={onOpen} isOpen={isOpen} />
             <Modal
                 onClose={onClose}
@@ -48,6 +49,6 @@ export default function NavModalSPTB() {
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>
             </Modal>
-        </>
+        </Box>
     )
 }

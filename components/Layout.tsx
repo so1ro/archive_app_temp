@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
-import { useMediaQuery } from "@chakra-ui/react"
 
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import NavModalSPTB from '@/components/NavModalSPTB'
@@ -9,8 +8,6 @@ import Nav from '@/components/Nav';
 import { bg_color, text_color } from '@/styles/colorModeValue';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-
-    const [isPC] = useMediaQuery("(min-width: 992px)")
 
     return (
         <>
@@ -28,7 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                {!isPC && <NavModalSPTB />}
+                <NavModalSPTB />
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

@@ -3,7 +3,6 @@ import { useUser } from '@auth0/nextjs-auth0'
 
 import { Box, Flex, Heading, Stack, Text, Button, Link } from '@chakra-ui/react';
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
-import { useMediaQuery } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
 import { MoonIcon, SunIcon } from '@/styles/icons';
@@ -15,7 +14,6 @@ export default function Nav() {
     // Hooks
     const { colorMode, toggleColorMode } = useColorMode()
     const { user, error, isLoading } = useUser();
-    const [isPC] = useMediaQuery("(min-width: 992px)")
 
     return (
         <Flex
@@ -32,7 +30,7 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
-                {isPC && <Flex>
+                <Flex d={{ sm: "none", md: "none", lg: "flex" }}>
                     <Stack spacing={4} mr={4} isInline alignItems="center">
                         {nav_links.map(link => (
                             <ActiveLink href={link.href} key={link.key}>
@@ -40,7 +38,7 @@ export default function Nav() {
                             </ActiveLink>
                         ))}
                     </Stack>
-                </Flex>}
+                </Flex>
                 <Stack spacing={[1, 2, 4]} isInline alignItems="center">
                     <Text fontSize={["sm", "md", "lg"]}>
                         {isLoading ?

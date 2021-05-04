@@ -7,6 +7,7 @@ import { UserMetadataProvider } from '@/context/useUserMetadata';
 import Layout from '@/components/Layout';
 
 import '@/styles/globals.css'
+import '@/styles/font.css'
 import theme from '@/styles/themes';
 
 function App({ Component, pageProps }: AppProps) {

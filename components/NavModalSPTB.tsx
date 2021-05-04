@@ -32,7 +32,6 @@ export default function NavModalSPTB() {
                     bg={useColorModeValue(bg_color.l, bg_color.d)}
                 />
                 <ModalContent bg={useColorModeValue(bg_color.l, bg_color.d)} m={0}>
-                    <Nav />
                     <Flex
                         flexDirection='column'
                         justifyContent='center'

@@ -30,7 +30,7 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
-                <Flex d={{ sm: "none", lg: "flex" }}>
+                <Flex d={{ base: "none", lg: "flex" }}>
                     <Stack spacing={4} mr={4} isInline alignItems="center">
                         {nav_links.map(link => (
                             <ActiveLink href={link.href} key={link.key}>

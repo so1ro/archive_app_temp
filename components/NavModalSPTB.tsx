@@ -20,7 +20,7 @@ export default function NavModalSPTB() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-        <Box d={{ lg: "none" }}>
+        <Box d={{ base: "block", lg: "none" }}>
             <Btn_hamburg onHandler={onOpen} isOpen={isOpen} />
             <Modal
                 onClose={onClose}

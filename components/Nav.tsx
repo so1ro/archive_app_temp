@@ -15,9 +15,7 @@ export default function Nav() {
     // Hooks
     const { colorMode, toggleColorMode } = useColorMode()
     const { user, error, isLoading } = useUser();
-
-
-    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
+    const [isPC] = useMediaQuery("(min-width: 992px)")
 
     return (
         <Flex
@@ -34,7 +32,7 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
-                {isLargerThan992 && <Flex>
+                {isPC && <Flex>
                     <Stack spacing={4} mr={4} isInline alignItems="center">
                         {nav_links.map(link => (
                             <ActiveLink href={link.href} key={link.key}>

@@ -9,7 +9,8 @@ import Nav from '@/components/Nav';
 import { bg_color, text_color } from '@/styles/colorModeValue';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
+
+    const [isPC] = useMediaQuery("(min-width: 992px)")
 
     return (
         <>
@@ -27,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             >
                 {/* //// Nav //// */}
                 <Nav />
-                {!isLargerThan992 && <NavModalSPTB />}
+                {!isPC && <NavModalSPTB />}
 
                 {/* //// Body //// */}
                 <Flex backgroundColor="blackAlpha.100" flexGrow={1} >

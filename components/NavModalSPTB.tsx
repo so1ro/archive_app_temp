@@ -6,17 +6,21 @@ import {
     ModalOverlay,
     ModalContent,
     Flex,
-    Box
+    Box,
+    Stack,
+    VStack,
 } from "@chakra-ui/react"
 import {
     useDisclosure,
+    useColorMode,
     useColorModeValue,
 } from "@chakra-ui/react"
 import { MotionLink } from '@/components/Chakra_Framer/element';
 import { nav_link_variants } from '@/components/Chakra_Framer/variants';
 
-import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/BtnHamburg';
+import SnsIcons from '@/components/SnsIcons';
+import { bg_color } from '@/styles/colorModeValue';
 import { nav_links } from '@/data/nav_links';
 
 
@@ -44,16 +48,20 @@ export default function NavModalSPTB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        {nav_links.map(link => (
-                            <ActiveLink href={link.href} key={link.key}>
-                                <MotionLink
-                                    onClick={onClose}
-                                    initial="hidden"
-                                    animate="visible"
-                                    variants={nav_link_variants}
-                                >{link.text}</MotionLink>
-                            </ActiveLink>
-                        ))}
+                        <VStack spacing={2}>
+                            {nav_links.map(link => (
+                                <ActiveLink href={link.href} key={link.key}>
+                                    <MotionLink
+                                        onClick={onClose}
+                                        initial="hidden"
+                                        animate="visible"
+                                        variants={nav_link_variants}
+                                        fontSize="xl"
+                                    >{link.text}</MotionLink>
+                                </ActiveLink>
+                            ))}
+                            <SnsIcons />
+                        </VStack>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />
                 </ModalContent>

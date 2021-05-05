@@ -46,7 +46,7 @@ export default function Nav() {
                             (user ? <a href="/api/auth/logout">ログアウト</a> : <a href="/api/auth/login">ログイン</a>)}
                     </Text>
                     <Box onClick={toggleColorMode} size="md" p={0}>
-                        {colorMode === "light" ? <MoonIcon width={6} height={6} /> : <SunIcon width={6} height={6} />}
+                        {colorMode === "light" ? <MoonIcon width={5} height={5} mb="2px" /> : <SunIcon width={6} height={6} />}
                     </Box>
                 </Stack>
             </Flex>

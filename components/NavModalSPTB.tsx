@@ -6,14 +6,19 @@ import {
     ModalOverlay,
     ModalContent,
     Flex,
-    Link,
     Box
 } from "@chakra-ui/react"
-import { useDisclosure } from "@chakra-ui/react"
-import { useColorModeValue } from "@chakra-ui/react"
+import {
+    useDisclosure,
+    useColorModeValue,
+} from "@chakra-ui/react"
+import { MotionLink } from '@/components/Chakra_Framer/element';
+import { nav_link_variants } from '@/components/Chakra_Framer/variants';
+
 import { bg_color } from '@/styles/colorModeValue';
 import Btn_hamburg from '@/components/BtnHamburg';
 import { nav_links } from '@/data/nav_links';
+
 
 export default function NavModalSPTB() {
 
@@ -41,7 +46,12 @@ export default function NavModalSPTB() {
                         h='100vh'>
                         {nav_links.map(link => (
                             <ActiveLink href={link.href} key={link.key}>
-                                <Link onClick={onClose}>{link.text}</Link>
+                                <MotionLink
+                                    onClick={onClose}
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={nav_link_variants}
+                                >{link.text}</MotionLink>
                             </ActiveLink>
                         ))}
                     </Flex>

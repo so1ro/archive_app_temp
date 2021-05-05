@@ -6,6 +6,7 @@ import NavModalSPTB from '@/components/NavModalSPTB'
 import Nav from '@/components/Nav';
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
+import Footer from '@/components/Footer';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 
@@ -41,21 +42,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </Flex>
 
                 {/* //// Footer //// */}
-                <Flex
-                    justifyContent="space-between"
-                    alignItems="center"
-                    px={4}
-                    py={2}
-                    bg={bg_color}
-                    color={text_color}
-                >
-                    <Stack spacing={4} isInline alignItems="center">
-                        <Heading as="h1" size="xl" isTruncated>Footer</Heading>
-                    </Stack>
-                    <Flex alignItems="center">
-                        <Text fontSize="2xl">ログイン</Text>
-                    </Flex>
-                </Flex>
+                <Footer />
 
             </Flex>
         </>

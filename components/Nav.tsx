@@ -6,8 +6,7 @@ import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 
 import { bg_color, text_color } from '@/styles/colorModeValue';
 import { MoonIcon, SunIcon } from '@/styles/icons';
-import ActiveLink from '@/components/ActiveLink';
-import { nav_links } from '@/data/nav_links';
+import NavLinks from '@/components/NavLinks';
 
 
 export default function Nav() {
@@ -31,13 +30,7 @@ export default function Nav() {
             </Stack>
             <Flex alignItems="center">
                 <Flex d={{ base: "none", lg: "flex" }}>
-                    <Stack spacing={4} mr={4} isInline alignItems="center">
-                        {nav_links.map(link => (
-                            <ActiveLink href={link.href} key={link.key}>
-                                <Link>{link.text}</Link>
-                            </ActiveLink>
-                        ))}
-                    </Stack>
+                    <NavLinks />
                 </Flex>
                 <Stack spacing={[1, 2, 4]} isInline alignItems="center">
                     <Text fontSize={["sm", "md", "lg"]}>

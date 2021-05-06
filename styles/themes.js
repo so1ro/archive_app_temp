@@ -24,7 +24,10 @@ const theme = extendTheme({
             // },
             "a.active": {
                 color: props.colorMode === "dark" ? "#F79F22" : "#E63946",
-            }
+            },
+            "a:hover": {
+                textDecoration: "none!important",
+            },
         }),
     },
     fonts: {

@@ -9,35 +9,21 @@ const year = date.getFullYear();
 
 export default function Footer() {
     return (
-        <Grid
-            templateRows="repeat(2, 1fr)"
-            justifyItems="center"
-            alignItems="center"
+        <Flex
+            direction={{ base: "column", lg: "row" }}
+            align={{ base: "center", lg: "flex-start" }}
+            justify='space-between'
             bg={bg_color}
             color={text_color}
-            gap={2}
-            p={4}
-        // templateAreas={{
-        //     base: `'1st_Row' '2nd_Row'`,
-        // }}
-        >
-            <GridItem rowStart={2}>
-                <VStack spacing={0} alignItems="center" >
-                    <Text fontSize="xl" isTruncated>カスブラ</Text>
-                    <Text fontSize="xs">&#xA9; {year} カスミブラザーズ All rights reserved.</Text>
-                </VStack>
-            </GridItem>
-            <GridItem rowStart={1}>
-                <Grid
-                    justifyItems="center"
-                    alignItems="center"
-                    gap={2}
-                    templateRows="repeat(2, 1fr)"
-                >
-                    <NavLinks />
-                    <SnsIcons animation={false} type={'footer'} />
-                </Grid>
-            </GridItem>
-        </Grid>
+            p={{ base: 4, lg: 9 }}>
+            <VStack spacing={1} align={{ base: "center", lg: "flex-start" }} order={{ base: 2, lg: 1 }}>
+                <Text fontSize={{ base: "xl", lg: "2xl" }} isTruncated>カスブラ</Text>
+                <Text fontSize="xs">&#xA9; {year} カスミブラザーズ All rights reserved.</Text>
+            </VStack>
+            <VStack mb={{ base: 4, lg: 0 }} spacing={3} align={{ base: "center", lg: "flex-end" }} order={{ base: 1, lg: 2 }}>
+                <NavLinks />
+                <SnsIcons animation={false} type={'footer'} />
+            </VStack>
+        </Flex >
     );
 }

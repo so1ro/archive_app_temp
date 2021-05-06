@@ -32,7 +32,7 @@ export const InstagramIcon = createIcon({
     viewBox: "0 0 26 26",
     // path can also be an array of elements, if you have multiple paths, lines, shapes, etc.
     path: (
-        <><path d="M13 8.667a4.333 4.333 0 100 8.666 4.333 4.333 0 000-8.666z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M6.026 1.109a63.294 63.294 0 0113.948 0c2.531.283 4.573 2.277 4.87 4.817.55 4.7.55 9.448 0 14.148-.297 2.54-2.339 4.534-4.87 4.817a63.3 63.3 0 01-13.948 0c-2.531-.282-4.573-2.277-4.87-4.817-.55-4.7-.55-9.448 0-14.148.297-2.54 2.339-4.534 4.87-4.817zM19.666 5a1.333 1.333 0 100 2.667 1.333 1.333 0 000-2.667zm-13 8a6.333 6.333 0 1112.667 0 6.333 6.333 0 01-12.666 0z" fill="currentColor" /></>
+        <><path d="M13 8.667a4.333 4.333 0 100 8.666 4.333 4.333 0 000-8.666z" fill="currentColor" /><path fillRule="evenodd" clipRule="evenodd" d="M6.026 1.109a63.294 63.294 0 0113.948 0c2.531.283 4.573 2.277 4.87 4.817.55 4.7.55 9.448 0 14.148-.297 2.54-2.339 4.534-4.87 4.817a63.3 63.3 0 01-13.948 0c-2.531-.282-4.573-2.277-4.87-4.817-.55-4.7-.55-9.448 0-14.148.297-2.54 2.339-4.534 4.87-4.817zM19.666 5a1.333 1.333 0 100 2.667 1.333 1.333 0 000-2.667zm-13 8a6.333 6.333 0 1112.667 0 6.333 6.333 0 01-12.666 0z" fill="currentColor" /></>
     ),
 })
 
@@ -41,6 +41,6 @@ export const MailIcon = createIcon({
     viewBox: "0 0 26 21",
     // path can also be an array of elements, if you have multiple paths, lines, shapes, etc.
     path: (
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M2.5.001h21a2.5 2.5 0 012.5 2.5v15a2.5 2.5 0 01-2.5 2.5h-21a2.5 2.5 0 01-2.5-2.5v-15a2.5 2.5 0 012.5-2.5zM4.46 3.41a.75.75 0 00-.92 1.184l9 7c.27.21.65.21.92 0l9-7a.75.75 0 00-.92-1.184L13 10.052 4.46 3.41z" fill="currentColor" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M2.5.001h21a2.5 2.5 0 012.5 2.5v15a2.5 2.5 0 01-2.5 2.5h-21a2.5 2.5 0 01-2.5-2.5v-15a2.5 2.5 0 012.5-2.5zM4.46 3.41a.75.75 0 00-.92 1.184l9 7c.27.21.65.21.92 0l9-7a.75.75 0 00-.92-1.184L13 10.052 4.46 3.41z" fill="currentColor" />
     ),
 })

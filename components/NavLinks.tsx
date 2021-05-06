@@ -4,7 +4,7 @@ import ActiveLink from '@/components/ActiveLink';
 
 export default function NavLinks() {
     return (
-        <Stack spacing={4} mr={4} isInline alignItems="center">
+        <Stack spacing={4} isInline alignItems="center" d={{ base: "none", lg: "flex" }}>
             {nav_links.map(link => (
                 <ActiveLink href={link.href} key={link.key}>
                     <Link>{link.text}</Link>

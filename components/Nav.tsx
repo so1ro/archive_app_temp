@@ -29,10 +29,8 @@ export default function Nav() {
                 <Text as="h1" fontSize={["md", "lg", "xl", "2xl"]}>カスブラ</Text>
             </Stack>
             <Flex alignItems="center">
-                <Flex d={{ base: "none", lg: "flex" }}>
-                    <NavLinks />
-                </Flex>
-                <Stack spacing={[1, 2, 4]} isInline alignItems="center">
+                <NavLinks />
+                <Stack spacing={[1, 2, 4]} isInline alignItems="center" ml={4}>
                     <Text fontSize={["sm", "md", "lg"]}>
                         {isLoading ?
                             '' :

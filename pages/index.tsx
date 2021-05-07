@@ -10,13 +10,11 @@ export default function Home() {
 
   if (user) {
     return (
-      <div >
-        <main>
-          <div>
-            Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-          </div>
-        </main>
-      </div>
+      <main>
+        <div>
+          Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
+        </div>
+      </main>
     )
   }
   return <a href="/api/auth/login">Login</a>;

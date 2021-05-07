@@ -33,7 +33,6 @@ export default function Nav() {
             <Flex alignItems="center">
                 <NavLinks />
                 <Stack spacing={[1, 2, 4]} isInline align="center" ml={6}>
-                    {/* <Text fontSize={["sm", "md", "lg"]}> */}
                     {isLoading ?
                         '' :
                         (user ? <UserMenu /> :
@@ -44,7 +43,6 @@ export default function Nav() {
                                 </Link>
                                 <Link href="/api/auth/login"><Button fontSize={["sm", "sm"]}>ログイン</Button></Link>
                             </HStack>)}
-                    {/* </Text> */}
                     <Box onClick={toggleColorMode} size="md" p={0}>
                         {colorMode === "light" ? <MoonIcon width={5} height={5} mb="2px" /> : <SunIcon width={6} height={6} />}
                     </Box>

@@ -36,7 +36,7 @@ class MyDocument extends Document {
                     <link rel='shortcut icon' href='/favicon.ico' />
                     <link rel='icon' type='image/png' sizes='32x32' href='/public/icons/favicon-32x32.png' />
                     <link rel='icon' type='image/png' sizes='16x16' href='/public/icons/favicon-16x16.png' />
-                    <link rel='manifest' href='/public/manifest.json' />
+                    <link rel='manifest' href='/manifest.json' />
                     <link rel='mask-icon' href='/public/icons/safari-pinned-tab.svg' color='#bf5555' />
 
                     {/* <meta name='twitter:card' content='summary' />

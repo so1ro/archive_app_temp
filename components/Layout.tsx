@@ -23,24 +23,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {/* //////// Shell //////// */}
             <Flex flexDirection="column"
                 bg={useColorModeValue(bg_color.l, bg_color.d)}
-                minH="100vh"
             >
                 {/* //// Nav //// */}
                 <Nav />
                 <NavModalSPTB />
 
                 {/* //// Body //// */}
-                <Flex backgroundColor="blackAlpha.100" flexGrow={1} >
-                    <Flex
-                        w="100%"
-                        maxWidth="800px"
-                        ml="auto"
-                        mr="auto"
-                        direction="column"
-                    >
-                        {children}
-                    </Flex>
+
+                <Flex
+                    w="100%"
+                    flexGrow={1}
+                    minH="100vh"
+                    // maxWidth="800px"
+                    ml="auto"
+                    mr="auto"
+                    direction="column"
+                >
+                    {children}
                 </Flex>
+
 
                 {/* //// Footer //// */}
                 <Footer />

@@ -16,7 +16,7 @@ export default function Home() {
       <main>
         <Box pos='relative'>
           <Container h='100vh' zIndex={'-1'}>
-            <Image src='/img/hero.jpg'
+            <Image src='/img/hero2.jpg'
               layout="fill"
               objectFit="cover"
               quality={100}

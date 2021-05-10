@@ -19,7 +19,7 @@ export default function Home() {
             <Image src='/img/hero.jpg'
               layout="fill"
               objectFit="cover"
-            // quality={100}
+              quality={100}
             />
           </Container>
         </Box>

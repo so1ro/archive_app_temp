@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Button } from "@chakra-ui/react"
+import { Box, Button, Center } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { useColorModeValue } from "@chakra-ui/react"
-import { text_color } from '@/styles/colorModeValue';
+import { text_color, bg_color_nav_top } from '@/styles/colorModeValue';
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
 
@@ -34,7 +34,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
  text-transform: none;
  background-color: transparent;
  border: 0;
- margin: 0;
+ margin: 5px 0 0;
  overflow: visible; }
  .hamburger:hover {
    opacity: ${hamburger_hover_opacity}; }
@@ -121,11 +121,13 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
    transition-delay: 0.075s; }
 `
   return (
-    <Box
+    <Center
       css={hamburg_btn}
-      w={8}
-      h={6}
+      w={14}
+      h={14}
       pos="fixed"
+      borderRadius='full'
+      bg={useColorModeValue(bg_color_nav_top.l, bg_color_nav_top.d)}
       bottom={btnBottomLeftPosition}
       left={btnBottomLeftPosition}
       zIndex={2}
@@ -139,7 +141,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
           <span className="hamburger-inner"></span>
         </span>
       </Box>
-    </Box>
+    </Center>
   );
 }
 

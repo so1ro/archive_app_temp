@@ -17,7 +17,7 @@ export const UserMetadataProvider = (props) => {
   const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
 
   useEffect(() => {
-    if (user) {
+    if (user && typeof window !== 'undefined') {
       setIsLoadingMetadata({ isLoading_metadata: true })
       const getUserMetadata = async () => {
         try {

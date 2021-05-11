@@ -15,7 +15,7 @@ import {
 import styles from '@/styles/Home.module.css'
 
 export default function Account({ subscriptionPlans }: { subscriptionPlans: SubscriptionPlanInterface[] }) {
-  // export default function Account({ subscriptionPlans }) {
+
   const { user, error, isLoading } = useUser();
   const {
     User_Detail,

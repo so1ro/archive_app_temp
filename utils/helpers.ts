@@ -37,3 +37,11 @@ export const toDateTime = (secs) => {
   t.setSeconds(secs);
   return t;
 };
+
+
+export const dailyNum = (array) => {
+  const today = Date.now();
+  const days = Math.floor(today / (1000 * 60 * 60 * 24));
+  const number = array.length;
+  return days % number;
+}

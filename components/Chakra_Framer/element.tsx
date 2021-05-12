@@ -8,14 +8,13 @@ type Merge<P, T> = Omit<P, keyof T> & T;
 type MotionLinkProps = Merge<HTMLChakraProps<"a">, HTMLMotionProps<"a">>;
 export const MotionLink: React.FC<MotionLinkProps> = motion(chakra.a);
 
+// MotionIconStack - Modal Menu
+// type MotionIconStackProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
+export const MotionIconStack = motion(Stack);
+
 // MotionButton - Top
 type MotionButtonProps = Merge<HTMLChakraProps<"button">, HTMLMotionProps<"button">>;
 export const MotionButton: React.FC<MotionButtonProps> = motion(chakra.button);
-// export const MotionButton = motion(Button);
-
-// MotionIconStack
-// type MotionIconStackProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
-export const MotionIconStack = motion(Stack);
 
 // MotionIconBox - Top
 type MotionIconBoxProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;

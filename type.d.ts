@@ -12,22 +12,6 @@ interface UserMetadataContextInterface {
   // setIsBeforeCancelDate:any, 
   setTemporaryCheckIsSubscribing: ({ temporaryCheckIsSubscribing: boolean }) => void;
 }
-
-interface AllArchivesInterface {
-  sys: { id: string };
-  thumbnail: { url: string | null };
-  title: string | null;
-  publishDate: string | null;
-  vimeoUrl: number | null;
-  category: string[] | null;
-  keyword: string[] | null;
-  releasedYear: number | null;
-  casts: string[] | null;
-  place: string[] | null;
-  season: string | null;
-  expert: string[] | null;
-}
-
 interface SubscriptionPlanInterface {
   id: string | null;
   nickname: string | null;
@@ -53,4 +37,39 @@ interface CustomerDataInterface {
   customer_auth0_UUID: string | null
   customer_price_Id: string | null
   isSubscribing: boolean | null
+}
+
+// Contentful queries
+interface AllArchivesInterface {
+  sys: { id: string };
+  thumbnail: { url: string | null };
+  title: string | null;
+  publishDate: string | null;
+  vimeoUrl: number | null;
+  category: string[] | null;
+  keyword: string[] | null;
+  releasedYear: number | null;
+  casts: string[] | null;
+  place: string[] | null;
+  season: string | null;
+  expert: string[] | null;
+}
+
+interface AllHeroImgInterface {
+  imageCollection: {
+    items: {
+      sys: { id: string };
+      title: string | null;
+      fileName: string | null;
+      url: string | null;
+      width: number | null;
+    }
+  }
+}
+interface TodayImgInterface {
+  sys: { id: string };
+  title: string | null;
+  fileName: string | null;
+  url: string | null;
+  width: number | null;
 }

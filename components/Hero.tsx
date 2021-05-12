@@ -3,12 +3,17 @@ import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons';
 import HeroArchiveLink from '@/components/HeroArchiveLink';
 
-export default function Hero() {
+export default function Hero({ todayImg }: { todayImg: TodayImgInterface }) {
+    todayImg.sort(function (a, b) {
+        return a.width - b.width;
+    });
+    const portraitImg = todayImg[0]
+    const landscapeImg = todayImg[1]
 
     return (
         <Box pos='relative'>
             <Container h='100vh' zIndex={'-1'} d={{ base: 'block', lg: 'none' }}>
-                <Image src='/img/hero3.jpg'
+                <Image src={portraitImg.url}
                     layout="fill"
                     objectFit="cover"
                     quality={100}
@@ -16,7 +21,7 @@ export default function Hero() {
                 />
             </Container>
             <Container h='100vh' zIndex={'-1'} d={{ base: 'none', lg: 'block' }}>
-                <Image src='/img/hero2.jpg'
+                <Image src={landscapeImg.url}
                     layout="fill"
                     objectFit="cover"
                     quality={100}
@@ -28,3 +33,4 @@ export default function Hero() {
         </Box>
     );
 }
+

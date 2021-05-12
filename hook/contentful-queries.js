@@ -22,3 +22,22 @@ export const query_allArchives =
         }
     }
     `
+export const query_allHeroImg =
+    ` {
+        topHeroImgsCollection(order : sys_publishedAt_DESC){
+            items{
+              imageCollection{
+                items{
+                  sys{
+                    id
+                  }
+                  title
+                  fileName
+                  url
+                  width
+                }
+              }
+            }
+          }
+    }
+    `

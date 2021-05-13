@@ -5,13 +5,14 @@ import HeroArchiveLink from '@/components/HeroArchiveLink';
 import { dailyNum } from '@/utils/helpers';
 
 export default function Hero({ allHeroImg }) {
-
-    const shapedAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
+    // Arrange Portrait First & Destructuring 
+    const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
 
     return (
         <Box pos='relative'>
-            {shapedAllImg.map((pair, i) => (
-                (i === dailyNum(shapedAllImg)) &&
+            {portraitFirstAllImg.map((pair, i) => (
+                // Change Hero image Everyday
+                (i === dailyNum(portraitFirstAllImg)) &&
                 <Box key={i}>
                     {pair.map((img, j) => (
                         <Container key={j}

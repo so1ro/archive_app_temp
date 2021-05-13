@@ -1,5 +1,5 @@
 export const query_allArchives =
-    ` {
+  ` {
         kasumibroVideoCollection ( order : publishDate_DESC ) {
             items {
                 sys {
@@ -22,14 +22,15 @@ export const query_allArchives =
         }
     }
     `
+// Top / Hero
 export const query_allHeroImg =
-    ` {
-        topHeroImgsCollection(order : sys_publishedAt_DESC){
-            items{
-              imageCollection{
-                items{
-                  sys{
-                    id
+  ` {
+  topHeroImgsCollection(order : sys_publishedAt_DESC){
+    items{
+      imageCollection{
+        items{
+          sys{
+            id
                   }
                   title
                   fileName
@@ -39,5 +40,20 @@ export const query_allHeroImg =
               }
             }
           }
-    }
+        }
     `
+
+// Top / Introduction
+export const query_topIntro = `{
+  topIntroCollection{
+    items{
+      sys{
+        id
+      }
+      	text
+        avatar{
+          url
+        }
+    }
+  }
+}`

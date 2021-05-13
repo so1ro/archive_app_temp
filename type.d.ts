@@ -73,3 +73,10 @@ interface TodayImgInterface {
   url: string | null;
   width: number | null;
 }
+
+interface TopIntroTextAvatar {
+  sys: { id: string };
+  text: string | null;
+  avatar: { url: string | null };
+
+}

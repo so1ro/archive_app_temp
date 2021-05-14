@@ -1,10 +1,12 @@
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, VStack, useMediaQuery } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { MotionIconBox } from '@/components/Chakra_Framer/element';
 import { hero_icon_twitter_variants, hero_icon_instagram_variants } from '@/components/Chakra_Framer/variants';
 import { TwitterIcon, InstagramIcon } from '@/styles/icons';
 
 export default function HeroSnsIcons() {
+    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
+
     return (
         <VStack
             spacing={5}
@@ -15,8 +17,8 @@ export default function HeroSnsIcons() {
                 <NextLink href={'/twitter'}>
                     <MotionIconBox
                         whileHover={{ scale: 1.1 }}
-                        initial="hidden"
-                        animate="visible"
+                        initial={isLargerThan992 ? "hidden" : ''}
+                        animate={isLargerThan992 ? "visible" : ''}
                         variants={hero_icon_twitter_variants}>
                         {/* <Box> */}
                         <TwitterIcon
@@ -31,8 +33,8 @@ export default function HeroSnsIcons() {
                 <NextLink href={'/instagram'}>
                     <MotionIconBox
                         whileHover={{ scale: 1.1 }}
-                        initial="hidden"
-                        animate="visible"
+                        initial={isLargerThan992 ? "hidden" : ''}
+                        animate={isLargerThan992 ? "visible" : ''}
                         variants={hero_icon_instagram_variants}>
                         {/* <Box> */}
                         <InstagramIcon

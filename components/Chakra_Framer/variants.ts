@@ -15,7 +15,7 @@ export const hero_archive_link_variants = {
     visible: {
         opacity: 1, y: 0,
         transition: {
-            delay: 1,
+            delay: 0.3,
             type: "spring",
             damping: 22,
             stiffness: 400,
@@ -25,7 +25,7 @@ export const hero_archive_link_variants = {
 }
 
 const hero_icon_hidden = { x: 100 }
-const hero_icon_visible = (delay = 1.3) => {
+const hero_icon_visible = (delay = 0.6) => {
     return {
         x: 0,
         transition: {
@@ -44,5 +44,5 @@ export const hero_icon_twitter_variants = {
 
 export const hero_icon_instagram_variants = {
     hidden: hero_icon_hidden,
-    visible: hero_icon_visible(1.6),
+    visible: hero_icon_visible(0.9),
 }

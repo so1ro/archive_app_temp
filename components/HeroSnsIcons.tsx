@@ -7,44 +7,30 @@ import { TwitterIcon, InstagramIcon } from '@/styles/icons';
 export default function HeroSnsIcons() {
     const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
 
+    const HeroSnsIconsBox = ({ children, href, variants }) => {
+        return (
+            <Box>
+                <NextLink href={href}>
+                    <MotionIconBox
+                        whileHover={{ scale: 1.1 }}
+                        initial={isLargerThan992 ? "hidden" : ''}
+                        animate={isLargerThan992 ? "visible" : ''}
+                        variants={variants}>
+                        {children}
+                    </MotionIconBox>
+                </NextLink>
+            </Box>
+        );
+    };
+
     return (
         <VStack
             spacing={5}
             pos='absolute'
             bottom={{ base: 6, lg: 16 }}
             right={{ base: 4, lg: 8 }}>
-            <Box>
-                <NextLink href={'/twitter'}>
-                    <MotionIconBox
-                        whileHover={{ scale: 1.1 }}
-                        initial={isLargerThan992 ? "hidden" : ''}
-                        animate={isLargerThan992 ? "visible" : ''}
-                        variants={hero_icon_twitter_variants}>
-                        {/* <Box> */}
-                        <TwitterIcon
-                            width={8}
-                            height={8}
-                            color='#FFF' />
-                        {/* </Box> */}
-                    </MotionIconBox>
-                </NextLink>
-            </Box>
-            <Box>
-                <NextLink href={'/instagram'}>
-                    <MotionIconBox
-                        whileHover={{ scale: 1.1 }}
-                        initial={isLargerThan992 ? "hidden" : ''}
-                        animate={isLargerThan992 ? "visible" : ''}
-                        variants={hero_icon_instagram_variants}>
-                        {/* <Box> */}
-                        <InstagramIcon
-                            width={8}
-                            height={8}
-                            color='#FFF' />
-                        {/* </Box> */}
-                    </MotionIconBox>
-                </NextLink>
-            </Box>
+            {<HeroSnsIconsBox href='/twitter' variants={hero_icon_twitter_variants}> <TwitterIcon width={8} height={8} color='#FFF' /> </HeroSnsIconsBox>}
+            {<HeroSnsIconsBox href='/instagram' variants={hero_icon_instagram_variants}> <InstagramIcon width={8} height={8} color='#FFF' /> </HeroSnsIconsBox>}
         </VStack>
     );
 }

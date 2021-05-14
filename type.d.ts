@@ -78,5 +78,10 @@ interface TopIntroTextAvatar {
   sys: { id: string };
   text: string | null;
   avatar: { url: string | null };
-
+}
+interface TopShopTextImage {
+  sys: { id: string };
+  productName: string | null;
+  productImage: { url: string | null };
+  url: string | null;
 }

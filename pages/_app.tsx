@@ -6,7 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata';
 import Layout from '@/components/Layout';
 
-import '@/styles/globals.css'
+// import '@/styles/globals.css'
 import '@/styles/font.css'
 import theme from '@/styles/themes';
 

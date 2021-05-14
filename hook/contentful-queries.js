@@ -57,3 +57,19 @@ export const query_topIntro = `{
     }
   }
 }`
+
+// Top / Shop
+export const query_topShop = `{
+  topShopCollection{
+    items{
+      sys{
+        id
+      }
+      productName
+      productImage{
+        url
+      }
+		url      
+    }
+  }
+}`

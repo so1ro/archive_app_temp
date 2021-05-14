@@ -27,7 +27,7 @@ export default function Home(
     <main>
       <Hero allHeroImg={allHeroImg} />
       <Container maxW='1000px'>
-        <VStack spacing={16} py={16}>
+        <VStack spacing={{ base: 24, lg: 32 }} py={{ base: 24, lg: 32 }}>
           <TopIntro introTextAvatar={introTextAvatar} />
           <TopShop productTextImage={productTextImage} />
         </VStack>

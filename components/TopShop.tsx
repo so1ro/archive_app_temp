@@ -8,9 +8,9 @@ export default function TopShop({ productTextImage }) {
             <Heading mb={4} as="h2" size="lg">Shop</Heading>
             <Grid gap={3} templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}>
                 {productTextImage.map(pro => (
-                    <GridItem key={pro.sys.id}>
+                    <GridItem key={pro.sys.id} overflow='hidden'>
                         <Link href={pro.url} isExternal>
-                            <Square borderRadius={12} overflow='hidden' >
+                            <Square borderRadius={12} overflow='hidden'>
                                 <Image
                                     src={pro.productImage.url}
                                     alt={pro.productName}
@@ -18,12 +18,11 @@ export default function TopShop({ productTextImage }) {
                                     height={540}
                                 />
                             </Square>
-                            <Text fontSize='sm' mt={1} isTruncated maxW="160px">{pro.productName}</Text>
+                            <Text fontSize='sm' mt={1} isTruncated>{pro.productName}</Text>
                         </Link>
                     </GridItem>
                 ))}
             </Grid>
-
         </Box>
     );
 }

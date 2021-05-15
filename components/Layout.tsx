@@ -19,33 +19,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="preload" href="/fonts/RocknRollOne-Regular.woff2" as="font" crossOrigin="" />
             </Head>
-
-            {/* //////// Shell //////// */}
-            <Flex flexDirection="column"
-                bg={useColorModeValue(bg_color.l, bg_color.d)}
-            >
-                {/* //// Nav //// */}
+            <Flex flexDirection="column" minH="100vh" bg={useColorModeValue(bg_color.l, bg_color.d)}>
                 <Nav />
                 <NavModalSPTB />
-
-                {/* //// Body //// */}
-
-                <Flex
-                    w="100%"
-                    flexGrow={1}
-                    minH="100vh"
-                    // maxWidth="800px"
-                    ml="auto"
-                    mr="auto"
-                    direction="column"
-                >
-                    {children}
-                </Flex>
-
-
-                {/* //// Footer //// */}
+                <Flex w="100%" flexGrow={1} ml="auto" mr="auto" direction="column">{children}</Flex>
                 <Footer />
-
             </Flex>
         </>
     );

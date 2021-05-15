@@ -18,7 +18,7 @@ export default function TopShop({ productTextImage }) {
                                     height={540}
                                 />
                             </Square>
-                            <Text fontSize='sm' mt={1} isTruncated>{pro.productName}</Text>
+                            <Text fontSize={{ base: 'xs', sm: 'sm' }} mt={1} isTruncated>{pro.productName}</Text>
                         </Link>
                     </GridItem>
                 ))}

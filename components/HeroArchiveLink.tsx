@@ -22,12 +22,11 @@ export default function HeroArchiveLink() {
                     bg={bgColor}
                     px={{ base: 6, md: 8 }}
                     py={2}
-                    // pb={'1px'}
                     color={colorMode === 'light' ? '#FFF' : '#000'}
+                    fontSize={{ base: 'md', lg: 'xl' }}
                     fontWeight='normal'
                     _hover={{ bg: bgColor }}
                     _active={{ bg: bgColor }}
-                    fontSize={{ base: 'sm', md: 'md' }}
                     // Framer //
                     initial="hidden"
                     animate="visible"

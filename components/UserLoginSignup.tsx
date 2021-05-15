@@ -6,6 +6,8 @@ import { highlight_color } from '@/styles/colorModeValue';
 export default function UserLoginSignup() {
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const buttonSize = useBreakpointValue({ base: 'xs', md: 'sm' });
+    const { colorMode } = useColorMode()
+    console.log('colorMode:', colorMode)
 
     return (
         <>
@@ -14,7 +16,12 @@ export default function UserLoginSignup() {
                     初めての方は<br />
                     <Text color={highlighColor}>サインアップ</Text>
                 </Link>
-                <Link href="/api/auth/login"><Button size={buttonSize} fontWeight='md'>ログイン</Button></Link>
+                <Link href="/api/auth/login"><Button
+                    size={buttonSize}
+                    fontWeight='md'
+                    colorScheme='gray'
+                    border="1px"
+                    borderColor={colorMode === 'light' ? "gray.300" : 'gray.600'}>ログイン</Button></Link>
             </HStack>
         </>
     );

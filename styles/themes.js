@@ -51,3 +51,6 @@ export default theme;
   xl: "80em" :  1280px,
   "2xl": "96em":  1536px
 */}
+
+//// FontSize Basic /////
+// fontSize={{ base: 'md', lg: 'xl' }}

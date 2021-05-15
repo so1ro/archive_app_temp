@@ -5,15 +5,16 @@ import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 import { highlight_color } from '@/styles/colorModeValue';
 
 export default function TopIntro({ introTextAvatar }) {
+    const avatarSize = { base: 36, lg: 48 }
     return (
         <Stack direction={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 12 }}>
-            <Box w={36} h={36} borderRadius='full' overflow='hidden' mx="auto">
+            <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
                 <Image
                     src={introTextAvatar.avatar.url}
-                    width='144px'
-                    height='144px' />
+                    width='192px'
+                    height='192px' />
             </Box>
-            <Box>
+            <Box fontSize={{ base: 'md', lg: 'xl' }}>
                 <Text maxW='600px'>{introTextAvatar.text}</Text>
                 <Text maxW='600px' mt={4}>
                     アーカイブの詳細は、<NextLink href={'/archive'} passHref>

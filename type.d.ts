@@ -12,9 +12,14 @@ interface UserMetadataContextInterface {
   // setIsBeforeCancelDate:any, 
   setTemporaryCheckIsSubscribing: ({ temporaryCheckIsSubscribing: boolean }) => void;
 }
-interface SubscriptionPlanInterface {
+interface AllPrices {
   id: string | null;
   nickname: string | null;
+  unit_amount: number | null;
+  type: string | null;
+  recurring: object | null;
+  active: boolean | null;
+  livemode: boolean | null;
 }
 interface Stripe_Customer_Detail_Interface {
   customer_Id: string | null;

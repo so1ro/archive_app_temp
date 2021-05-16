@@ -7,7 +7,6 @@ export default function UserLoginSignup() {
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const buttonSize = useBreakpointValue({ base: 'xs', md: 'sm' });
     const { colorMode } = useColorMode()
-    console.log('colorMode:', colorMode)
 
     return (
         <>

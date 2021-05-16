@@ -1,4 +1,7 @@
-export const bg_color = { l: "#ffffff", d: "#1B272F" }
+export const bg_color = { l: "#ffffff", d: "#1b272f" }
 export const bg_color_nav_top = { l: "rgba(255,255,255,0.68)", d: "rgb(27,39,47, 0.86)" }
 export const text_color = { l: "black", d: "white" }
-export const highlight_color = { l: "#E63946", d: "#F79F22" }
+export const highlight_color = { l: "#e63946", d: "#f79f22" }
+
+// price list
+export const price_card_color = { l: "#69b578", d: "#f79f22" }

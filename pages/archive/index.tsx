@@ -9,14 +9,25 @@ import { query_allArchives } from "@/hook/contentful-queries"
 import { postData } from "@/utils/helpers"
 
 import Image from "next/image"
-import styles from "@/styles/Home.module.css"
-import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
+import { Grid, GridItem, Box, List, ListItem, Container, VStack, Text, useColorModeValue } from "@chakra-ui/react"
 import { css } from "@emotion/react"
+import { fetchAllPrices } from '@/hook/getStaticProps';
+import PriceList from '@/components/PriceList';
+import styles from "@/styles/Home.module.css"
 
-export default function Archive({ allArchives }: { allArchives: AllArchivesInterface[] }) {
+export default function Archive(
+  { allArchives,
+    allPrices }:
+    {
+      allArchives: AllArchivesInterface[],
+      allPrices: AllPrices[]
+    }) {
 
   const { user, error, isLoading } = useUser()
   const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
+
+  // const subscription = allPrices.filter(plan => plan.type === 'recurring')
+  // const onePay = allPrices.filter(plan => plan.type === 'one_time')
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
@@ -58,17 +69,29 @@ export default function Archive({ allArchives }: { allArchives: AllArchivesInter
       </div>
     )
   }
-  return <a href="/api/auth/login">Login</a>
+  return (
+    <Container maxW='1000px'>
+      <VStack py={{ base: 12, lg: 24 }}>
+        <Text mb={8}>
+          このアーカイブアプリでは、下記のような4つの「サブスクリプションプラン」と、「ワンペイ永久ご視聴プラン」を用意しました。アーカイブアプリの購入を通して、カスブラをサポートいただけるととてもうれしいです！
+        </Text>
+        <PriceList user={null} allPrices={allPrices} />
+      </VStack>
+    </Container>
+  )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   // get Archivce data from Contentful
   const data = await fetchContentful(query_allArchives)
+  const allPrices = await fetchAllPrices()
+
   return {
     props: {
       allArchives: data.kasumibroVideoCollection.items,
+      allPrices: [...allPrices]
     },
-    revalidate: 1,
+    revalidate: 30
   }
 }
 

@@ -4,17 +4,13 @@ import { GetStaticProps } from "next"
 
 import { useUser } from '@auth0/nextjs-auth0'
 import { useUserMetadata } from '@/context/useUserMetadata';
-import { fetchSubscriptionPlans } from '@/hook/getStaticProps';
+import { fetchAllPrices } from '@/hook/getStaticProps';
 import { postData } from '@/utils/helpers';
 import PriceList from '@/components/PriceList';
 
-import {
-  Button,
-  Code
-} from '@chakra-ui/react';
-import styles from '@/styles/Home.module.css'
+import { Button, Code, Container, VStack } from '@chakra-ui/react';
 
-export default function Account({ subscriptionPlans }: { subscriptionPlans: SubscriptionPlanInterface[] }) {
+export default function Account({ allPrices }: { allPrices: AllPrices[] }) {
 
   const { user, error, isLoading } = useUser();
   const {
@@ -63,37 +59,41 @@ export default function Account({ subscriptionPlans }: { subscriptionPlans: Subs
 
   if (user) {
     return (
-      <div
-      // className={ styles.container }
-      >
-        <div>Welcome {user.name}! <a href="/api/auth/logout">Logout</a></div>
-        {!isLoading_metadata &&
-          <>
-            {Stripe_Customer_Detail?.cancel_at_period_end &&
-              <Code>
-                {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
-                  (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
-              </Code>}
-            {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing)
-              && Stripe_Customer_Detail?.subscription_Status !== 'canceled'
-              && <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
-                {!Stripe_Customer_Detail.cancel_at_period_end ?
-                  `プランの変更・キャンセル ／ 過去のお支払い履歴` : `サブスクリプションの再開 ／ 過去のお支払い履歴`}
-              </Button>}
-            {(!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing)
-              || Stripe_Customer_Detail?.subscription_Status === 'canceled'
-              && <PriceList user={user} subscriptionPlans={subscriptionPlans} />}
-          </>
-        }
-      </div>
-    )
+      <Container maxW='1000px'>
+        <VStack py={{ base: 12, lg: 24 }}>
+          {!isLoading_metadata &&
+            <>
+              {Stripe_Customer_Detail?.cancel_at_period_end &&
+                <Code>
+                  {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
+                    (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
+                </Code>}
+              {(Stripe_Customer_Detail?.subscription_Status || temporaryCheckIsSubscribing)
+                && Stripe_Customer_Detail?.subscription_Status !== 'canceled'
+                && <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
+                  {!Stripe_Customer_Detail.cancel_at_period_end ?
+                    `プランの変更・キャンセル ／ 過去のお支払い履歴` : `サブスクリプションの再開 ／ 過去のお支払い履歴`}
+                </Button>}
+              {((!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing) || Stripe_Customer_Detail?.subscription_Status === 'canceled')
+                && <PriceList user={user} allPrices={allPrices} />}
+            </>
+          }
+        </VStack>
+      </Container>)
   }
   return <a href="/api/auth/login">Login</a>;
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   // get Subscription Plans from Stripe
-  return await fetchSubscriptionPlans()
+  const allPrices = await fetchAllPrices()
+
+  return {
+    props: {
+      allPrices: [...allPrices]
+    },
+    revalidate: 1
+  }
 }
 
 

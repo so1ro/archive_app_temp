@@ -59,6 +59,16 @@ interface AllArchivesInterface {
   season: string | null;
   expert: string[] | null;
 }
+interface LandingPageText {
+  sys: { id: string };
+  message: string | null;
+  content: string[] | null;
+  functions: string[] | null;
+  merit: string[] | null;
+  vimeoId: string | null;
+  explain: string | null;
+  annotation: string | null;
+}
 
 interface AllHeroImgInterface {
   imageCollection: {

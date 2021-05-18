@@ -8,7 +8,7 @@ import { MotionButton } from '@/components/Chakra_Framer/element'
 import { price_card_color } from '@/styles/colorModeValue'
 import { highlight_color } from '@/styles/colorModeValue'
 
-export default function PriceList({ user, allPrices }) {
+export default function PriceList({ user, allPrices, annotation }) {
 
     const router = useRouter()
     const toast = useToast()
@@ -42,7 +42,7 @@ export default function PriceList({ user, allPrices }) {
 
     return (
         <div>
-            <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={2}>
+            <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={6}>
                 {allPrices.map(price => (
                     <Flex
                         direction='column'
@@ -101,9 +101,7 @@ export default function PriceList({ user, allPrices }) {
                     </Flex>
                 ))}
             </Grid>
-            <Text fontSize={{ base: 'xs', md: 'sm' }} color={useColorModeValue(highlight_color.l, highlight_color.d)}>
-                ※サブスクリプションの料金は毎月累積され、ワンペイ永久ご視聴プランの価格に達した場合、サブスクリプション終了後もアーカイブにログインが可能です。ワンペイ永久ご視聴プランの価格は、更新されることがありますが、サブスクリプション購入時の価格を基準とします。
-        </Text>
+            <Text fontSize={{ base: 'xs', md: 'sm' }} color={useColorModeValue(highlight_color.l, highlight_color.d)}>{annotation}</Text>
         </div>
     )
 }

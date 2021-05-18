@@ -74,7 +74,25 @@ export const query_topShop = `{
       productImage{
         url
       }
-		url      
+      url      
+    }
+  }
+}`
+
+// Archive / Pricing
+export const query_archivePricing = `{
+  archivePricingCollection {
+    items {
+      sys {
+        id
+      }
+      message
+      content
+      functions
+      merit
+      vimeoId
+      explain
+      annotation
     }
   }
 }`

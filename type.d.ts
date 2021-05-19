@@ -62,9 +62,9 @@ interface AllArchivesInterface {
 interface LandingPageText {
   sys: { id: string };
   message: string | null;
-  content: string[] | null;
-  functions: string[] | null;
-  merit: string[] | null;
+  content: object | null;
+  functions: object | null;
+  merit: object | null;
   vimeoId: string | null;
   explain: string | null;
   annotation: string | null;

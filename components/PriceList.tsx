@@ -3,20 +3,19 @@ import { useRouter } from 'next/router'
 import { postData } from '@/utils/helpers'
 import { getStripe } from '@/utils/stripe-client'
 
-import { Grid, Box, VStack, Text, HStack, useToast, Center, useColorMode, useColorModeValue, Flex } from '@chakra-ui/react'
-import { MotionButton } from '@/components/Chakra_Framer/element'
+import { Grid, Box, VStack, Text, HStack, useToast, Center, useColorMode, useColorModeValue, Flex, Link } from '@chakra-ui/react'
+import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
 import { price_card_color } from '@/styles/colorModeValue'
 import { highlight_color } from '@/styles/colorModeValue'
 
 export default function PriceList({ user, allPrices, annotation }) {
 
-    const router = useRouter()
     const toast = useToast()
-
     const { colorMode } = useColorMode()
     const priceCardColor = useColorModeValue(price_card_color.l, price_card_color.d)
     const oneTimeCardColor = '#e63946'
     const cardBorder = colorMode === 'light' ? '1px' : '0px'
+    const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     const handleCheckout = async (price) => {
         // setPriceIdLoading(price.id)
@@ -38,6 +37,49 @@ export default function PriceList({ user, allPrices, annotation }) {
         } finally {
             // setPriceIdLoading(false)
         }
+    }
+
+    // Compo in Compo
+    const SignupPurchaseButton = ({ price }) => {
+
+        const ConditionalButton = () => {
+            return (
+                <MotionButton
+                    borderRadius='full'
+                    bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}
+                    px={{ base: 4, md: 6 }}
+                    py={2}
+                    color='#fff'
+                    fontSize={{ base: 'sm', lg: 'md' }}
+                    fontWeight='normal'
+                    _hover={{ bg: price.type === "recurring" ? priceCardColor : oneTimeCardColor }}
+                    _active={{ bg: price.type === "recurring" ? priceCardColor : oneTimeCardColor }}
+                    // Framer //
+                    whileHover={{ scale: 1.1 }}
+                    onClick={(e) => {
+                        toast({
+                            title: (user ? "チェックアウトセッションに移動中..." : "サインアップに移動中..."),
+                            description: "このまま少々お待ち下さい。",
+                            status: "success",
+                            duration: 9000,
+                            isClosable: true,
+                        })
+                        if (user) handleCheckout(price.id)
+                    }}>
+                    {user ? '購入' : 'サインアップ・購入'}
+                </MotionButton>
+            )
+        }
+
+        if (user) return <ConditionalButton />
+        return (
+            <Link
+                href="/api/auth/login?param=signup"
+                color={highlighColor}
+                fontSize={["10px", "11px"]}>
+                <ConditionalButton />
+            </Link>
+        )
     }
 
     return (
@@ -63,41 +105,7 @@ export default function PriceList({ user, allPrices, annotation }) {
                             {price.type === "recurring" ? 'サブスクリプション' : 'ワンペイ永久ご視聴'}
                         </Center>
                         <Box px={6} py={6} flexGrow={1}>{price.nickname}</Box>
-                        <Box pb={6}>
-                            <MotionButton
-                                borderRadius='full'
-                                bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}
-                                px={{ base: 4, md: 6 }}
-                                py={2}
-                                color='#fff'
-                                fontSize={{ base: 'sm', lg: 'md' }}
-                                fontWeight='normal'
-                                _hover={{ bg: price.type === "recurring" ? priceCardColor : oneTimeCardColor }}
-                                _active={{ bg: price.type === "recurring" ? priceCardColor : oneTimeCardColor }}
-                                // Framer //
-                                whileHover={{ scale: 1.1 }}
-                                onClick={(e) => {
-                                    if (user) {
-                                        toast({
-                                            title: "チェックアウトセッションに移動中...",
-                                            description: "このまま少々お待ち下さい。",
-                                            status: "success",
-                                            duration: 9000,
-                                            isClosable: true,
-                                        })
-                                        handleCheckout(price.id)
-                                    } else {
-                                        e.preventDefault()
-                                        router.push("/api/auth/login?param=signup")
-                                        // router.push({
-                                        //     pathname: "/api/auth/login",
-                                        //     query: { param: 'signup' },
-                                        // })
-                                    }
-                                }}>
-                                {user ? '購入' : 'サインアップ・購入'}
-                            </MotionButton>
-                        </Box>
+                        <Box pb={6}><SignupPurchaseButton price={price} /></Box>
                     </Flex>
                 ))}
             </Grid>
@@ -105,4 +113,3 @@ export default function PriceList({ user, allPrices, annotation }) {
         </div>
     )
 }
-

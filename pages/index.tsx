@@ -8,7 +8,7 @@ import { query_allHeroImg, query_topIntro, query_topShop } from "@/hook/contentf
 import { Container, VStack } from "@chakra-ui/react"
 import TopIntro from '@/components/TopIntro';
 import TopShop from '@/components/TopShop';
-
+import PageShell from '@/components/PageShell';
 
 export default function Home(
   {
@@ -26,12 +26,10 @@ export default function Home(
   return (
     <main>
       <Hero allHeroImg={allHeroImg} />
-      <Container maxW='1000px'>
-        <VStack spacing={{ base: 24, lg: 32 }} py={{ base: 24, lg: 32 }}>
-          <TopIntro introTextAvatar={introTextAvatar} />
-          <TopShop productTextImage={productTextImage} />
-        </VStack>
-      </Container>
+      <PageShell customPY={{ base: 24, lg: 32 }}>
+        <TopIntro introTextAvatar={introTextAvatar} />
+        <TopShop productTextImage={productTextImage} />
+      </PageShell>
       {/* {user && <div> Welcome {user.name}! <a href="/api/auth/logout">Logout</a> </div>}
       {isLoading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}

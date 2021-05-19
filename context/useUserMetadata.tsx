@@ -7,7 +7,7 @@ export const UserMetadataContext = createContext(null);
 
 export const UserMetadataProvider = (props) => {
 
-  const { user } = useUser();
+  const { user, isLoading: userIsLoading } = useUser();
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
@@ -16,9 +16,14 @@ export const UserMetadataProvider = (props) => {
   // Temporary chec isSubscribing
   const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
 
+  // useEffect(() => {
+  //   // setIsLoadingMetadata({ isLoading_metadata: true })
+  //   if (!user) setIsLoadingMetadata({ isLoading_metadata: false })
+  // }, [])
+
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
-      setIsLoadingMetadata({ isLoading_metadata: true })
+      console.log('Get here!!');
       const getUserMetadata = async () => {
         try {
           const { user_metadata } = await postData({
@@ -60,6 +65,7 @@ export const UserMetadataProvider = (props) => {
     isLoading_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
+    setIsLoadingMetadata,
     setTemporaryCheckIsSubscribing,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;

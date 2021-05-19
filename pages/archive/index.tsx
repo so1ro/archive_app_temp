@@ -9,7 +9,7 @@ import { query_allArchives, query_archivePricing } from "@/hook/contentful-queri
 // import { postData } from "@/utils/helpers"
 
 import Image from "next/image"
-import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, useMediaQuery } from "@chakra-ui/react"
+import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, useMediaQuery, Spinner } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps';
 import PriceList from '@/components/PriceList';
@@ -32,71 +32,97 @@ export default function Archive(
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
-  const { User_Detail, Stripe_Customer_Detail } = useUserMetadata()
+  const { User_Detail, Stripe_Customer_Detail, isLoading_metadata, setIsLoadingMetadata } = useUserMetadata()
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
+  // const {subscription_Status} = Stripe_Customer_Detail
 
-  if (isLoading) return <div>Loading...</div>
+  // setIsLoadingMetadata({ isLoading_metadata: true })
+  console.log('isLoading:', isLoading)
+  console.log('isLoading_metadata:', isLoading_metadata)
+  console.log('Stripe_Customer_Detail.subscription_Status:', Stripe_Customer_Detail?.subscription_Status)
+
+  ////////
+  // useEffect(() => {
+  //   setIsLoadingMetadata({ isLoading_metadata: true })
+  //   if (!isLoading && !user) setIsLoadingMetadata({ isLoading_metadata: false })
+  // }, [])
+  ////////
+
   if (error) return <div>{error.message}</div>
-  // if (user) {
-  //   return (
-  //     <div className={styles.container}>
-  //       <main className={styles.main}>
-  //         <div>
-  //           Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-  //         </div>
-  //         <div>Archives</div>
-  //         <Grid templateColumns="1fr" gap={12} px={6}>
-  //           {allArchives.map((archive) => (
-  //             <Grid
-  //               key={archive.sys.id}
-  //               templateColumns="repeat(2, 1fr)"
-  //               gap={12}
-  //             >
-  //               <Box overflow="hidden" css={imgBox}>
-  //                 <Image
-  //                   src={archive.thumbnail.url}
-  //                   alt="Picture of the author"
-  //                   width={640}
-  //                   height={360}
-  //                 />
-  //               </Box>
-  //               <Box>
-  //                 <List m={0} p={0}>
-  //                   <ListItem>{archive.title}</ListItem>
-  //                   <ListItem color="#585858" size="10px">
-  //                     {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
-  //                   </ListItem>
-  //                 </List>
-  //               </Box>
-  //             </Grid>
-  //           ))}
-  //         </Grid>
-  //       </main>
-  //     </div>
-  //   )
-  // }
-  return (
-    <PageShell customPY={null}>
-      <Box>
-        <Heading
-          as='h2'
-          size="lg"
-          textAlign={{ base: 'left', md: 'center' }}
-          whiteSpace='pre-wrap'
-          lineHeight={{ base: '32px', md: '42px' }}
-          mb={6}>
-          {!isLargerThan768 ? messageWithoutNewline : message}
-        </Heading>
-        <ArchiveMeritList meritListItems={meritListItems} />
-      </Box>
-      <Box>
-        <Text mb={6}>{explain}</Text>
-        <VideoVimeo vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} />
-      </Box>
-      <PriceList user={user} allPrices={allPrices} annotation={annotation} />
-    </PageShell>
-  )
+  if (
+    (!isLoading && !isLoading_metadata) &&
+    (!user || (!Stripe_Customer_Detail || (Stripe_Customer_Detail?.subscription_Status !== ('active' || 'trialing'))))
+  ) {
+    //// Landing Page ////
+    return (
+      <PageShell customPY={null}>
+        <Box>
+          <Heading
+            as='h2'
+            size="lg"
+            textAlign={{ base: 'left', md: 'center' }}
+            whiteSpace='pre-wrap'
+            lineHeight={{ base: '32px', md: '42px' }}
+            mb={6}>
+            {!isLargerThan768 ? messageWithoutNewline : message}
+          </Heading>
+          <ArchiveMeritList meritListItems={meritListItems} />
+        </Box>
+        <Box>
+          <Text mb={6}>{explain}</Text>
+          <VideoVimeo vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} />
+        </Box>
+        <PriceList user={user} allPrices={allPrices} annotation={annotation} />
+      </PageShell>
+    )
+  }
+  if (
+    (!isLoading && !isLoading_metadata) &&
+    (user && (Stripe_Customer_Detail.subscription_Status === ('active' || 'trialing')))) {
+    //// Archive Page ////
+    return (
+      <PageShell customPY={null}>
+        <div>
+          Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
+        </div>
+        <div>Archives</div>
+        <Grid templateColumns="1fr" gap={12} px={6}>
+          {allArchives.map((archive) => (
+            <Grid
+              key={archive.sys.id}
+              templateColumns="repeat(2, 1fr)"
+              gap={12}
+            >
+              <Box overflow="hidden" css={imgBox}>
+                <Image
+                  src={archive.thumbnail.url}
+                  alt="Picture of the author"
+                  width={640}
+                  height={360}
+                />
+              </Box>
+              <Box>
+                <List m={0} p={0}>
+                  <ListItem>{archive.title}</ListItem>
+                  <ListItem color="#585858" size="10px">
+                    {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
+                  </ListItem>
+                </List>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </PageShell>
+    )
+  }
+  return <Spinner
+    thickness="4px"
+    speed="0.65s"
+    emptyColor="gray.200"
+    color="blue.500"
+    size="xl"
+  />
 }
 
 export const getStaticProps: GetStaticProps = async () => {

@@ -30,8 +30,6 @@ const auth0AccessToken = async () => {
 ////////////////////////////////////////////////
 // Patch user's App_metadata to Auth0
 const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
-    console.log('patching Metadatda to Auth0 is working!!!!')
-    console.log('metadata:', metadata)
     const URL = `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${user_id}`
     const option = {
         url: URL,
@@ -70,7 +68,6 @@ const getUserMetadata = async (user_id, token) => {
 //// Send Subscription record to Auth0
 const upsertSubscriptionRecord = async (event) => {
 
-    console.log('Start upsert SubscriptionRcord!!!!!')
     const { id: subscription_Id,
         customer: customer_Id,
         plan: { nickname: subscription_Name },
@@ -83,9 +80,7 @@ const upsertSubscriptionRecord = async (event) => {
         // const customerData = await stripe.customers.retrieve(customer_Id);
         // console.log('customerData:', customerData)
         const { metadata: { price_Id, auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        console.log('auth0_UUID:', auth0_UUID)
         const auth0Token = await auth0AccessToken()
-        console.log('auth0Token:', auth0Token)
         const metadata = {
             Stripe_Customer_Detail: {
                 customer_Id,
@@ -98,7 +93,6 @@ const upsertSubscriptionRecord = async (event) => {
                 canceled_at,
             }
         }
-        console.log('metadata:', metadata)
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
@@ -111,7 +105,6 @@ const upsertSubscriptionRecord = async (event) => {
 //// Send Charge (Payment Amount) record to Auth0
 const upsertChargeRecord = async (obj) => {
 
-    console.log('Start upsert ChargeRcord!!!!!')
     const status = obj.object // 'invoice' or 'refund'
     const customer_Id = obj.customer
 
@@ -119,19 +112,11 @@ const upsertChargeRecord = async (obj) => {
     if (status === 'invoice') amount = obj.amount_paid
     if (status === 'charge') amount = obj.amount_refunded * -1
 
-    console.log('status:', status)
-    console.log('customer_Id:', customer_Id)
-    console.log('amount:', amount)
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
-        console.log('auth0_UUID:', auth0_UUID)
         const auth0Token = await auth0AccessToken()
-        console.log('auth0Token:', auth0Token)
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
-        console.log('past_charged_fee:', past_charged_fee)
         const currentChargedFee = (past_charged_fee + amount) || 0
-        console.log('currentChargedFee:', currentChargedFee)
-
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
 
     } catch (error) {

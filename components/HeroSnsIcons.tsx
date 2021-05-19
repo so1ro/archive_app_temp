@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Box, VStack, useMediaQuery } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { MotionIconBox } from '@/components/Chakra_Framer/element';
@@ -9,7 +10,7 @@ export default function HeroSnsIcons() {
     const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
     const iconSize = { base: 8, lg: 10 }
 
-    const HeroSnsIconsBox = ({ children, href, variants }) => {
+    const HeroSnsIconsBox = ({ children, href, variants }: { children: ReactNode, href: string, variants: any }) => {
         return (
             <Box>
                 <NextLink href={href}>

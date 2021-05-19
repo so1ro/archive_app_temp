@@ -13,12 +13,11 @@ import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, useMediaQu
 import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps';
 import PriceList from '@/components/PriceList';
-import styles from "@/styles/Home.module.css"
 // import { highlight_color } from '@/styles/colorModeValue';
 // import { CheckIcon } from '@/styles/icons'
 import ArchiveMeritList from "@/components/ArchiveMeritList"
 import VideoVimeo from "@/components/VideoVimeo"
-import PageShell from '@/components/PageShell';
+import PageShell from '@/components/PageShell'
 
 export default function Archive(
   { allArchives,

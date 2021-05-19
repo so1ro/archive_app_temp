@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import Head from 'next/head'
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 
@@ -8,7 +9,7 @@ import Nav from '@/components/Nav';
 import { bg_color, text_color } from '@/styles/colorModeValue';
 import Footer from '@/components/Footer';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
 
     return (
         <>

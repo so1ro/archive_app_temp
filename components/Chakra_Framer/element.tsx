@@ -1,6 +1,6 @@
 import { motion, HTMLMotionProps } from "framer-motion"
 import { HTMLChakraProps, chakra } from "@chakra-ui/react"
-import { Stack, Button } from "@chakra-ui/react"
+import { Stack, Button, Box } from "@chakra-ui/react"
 
 type Merge<P, T> = Omit<P, keyof T> & T;
 
@@ -19,3 +19,4 @@ export const MotionButton: React.FC<MotionButtonProps> = motion(chakra.button);
 // MotionIconBox - Top
 type MotionIconBoxProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
 export const MotionIconBox: React.FC<MotionIconBoxProps> = motion(chakra.div);
+// export const MotionIconBox = motion(Box);

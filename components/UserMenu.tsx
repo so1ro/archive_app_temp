@@ -14,7 +14,7 @@ export default function UserMenu() {
                 _focus={{ bg: "none" }}
             />
             <MenuList>
-                <MenuItem><NextLink href="/account" passHref>アカウント</NextLink></MenuItem>
+                <MenuItem><NextLink href="/account" passHref><Link w='full'>アカウント</Link></NextLink></MenuItem>
                 <MenuItem><Link href="/api/auth/logout" w='full'>ログアウト</Link></MenuItem>
             </MenuList>
         </Menu>

@@ -9,7 +9,7 @@ interface UserMetadataContextInterface {
   // setStripeCustomerDetail:any, 
   // setErrorMetadata:any, 
   // setIsBeforeCancelDate:any, 
-  setIsLoadingMetadata: ({ isLoading_metadata: boolean }) => void;
+  // setIsLoadingMetadata: ({ isLoading_metadata: boolean }) => void;
   setTemporaryCheckIsSubscribing: ({ temporaryCheckIsSubscribing: boolean }) => void;
 }
 interface AllPrices {

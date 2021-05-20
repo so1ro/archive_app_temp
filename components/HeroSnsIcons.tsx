@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
-import { Box, VStack, useMediaQuery } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { MotionIconBox } from '@/components/Chakra_Framer/element';
 import { hero_icon_twitter_variants, hero_icon_instagram_variants } from '@/components/Chakra_Framer/variants';
 import { TwitterIcon, InstagramIcon } from '@/styles/icons';
 
+import { useMediaQuery } from '@/utils/useMediaQuery'
+
 export default function HeroSnsIcons() {
 
-    const [isLargerThan992] = useMediaQuery("(min-width: 992px)")
+    const isLargerThan992 = useMediaQuery("(min-width: 992px)")
     const iconSize = { base: 8, lg: 10 }
 
     const HeroSnsIconsBox = ({ children, href, variants }: { children: ReactNode, href: string, variants: any }) => {

@@ -1,7 +1,7 @@
 ////// Graphql Chrome Extension //////
 // URL: https://graphql.contentful.com/content/v1/spaces/ughdotpe40cx
-// 下部の HTTP HEADERS に下記追加する
-// {"Authorization": "Bearer v8ok8bs8VYdAmascnrSsVVjbpL1PZoN51SuW7xO_Ut8"}
+// 下部の HTTP HEADERS に下記追加する。SecretはContentfulのwebhooせ設定から利用。
+// {"Authorization": "Bearer ~~~~~"}
 
 export const query_allArchives =
   ` {

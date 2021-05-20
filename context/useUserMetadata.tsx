@@ -8,21 +8,18 @@ export const UserMetadataContext = createContext(null);
 export const UserMetadataProvider = (props) => {
 
   const { user, isLoading } = useUser();
+  const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
 
-  // Subscription State
-  const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
-  // 2 possible state =  "subscribe" / "unsubscribe"
+  // Subscription State "subscribe" OR "unsubscribe"
   const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: null })
   // Temporary check isSubscribing for after Payment and check via returning URL
   const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
 
   useEffect(() => {
-    console.log('start UseMetadata');
-    console.log('user:', user)
     if (user && typeof window !== 'undefined') {
       setIsMetadataLoading({ isMetadataLoading: true })
       const getUserMetadata = async () => {
@@ -32,9 +29,7 @@ export const UserMetadataProvider = (props) => {
             data: { user_id: user.sub }
           }).then(data => data)
 
-          console.log('user_metadata:', user_metadata)
           if (!user_metadata.Stripe_Customer_Detail) {
-            console.log('Without Customer Detail');
             setSubscriptionState({ subscription_state: 'unsubscribe' })
             setIsMetadataLoading({ isMetadataLoading: false })
           }
@@ -68,9 +63,6 @@ export const UserMetadataProvider = (props) => {
         }
       }
       getUserMetadata();
-    }
-    if (!user && !isLoading && typeof window !== 'undefined') {
-      setIsMetadataLoading({ isMetadataLoading: false })
     }
     setSubscriptionState({ subscription_state: 'unsubscribe' })
   }, [user]);

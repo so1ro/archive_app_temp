@@ -36,11 +36,6 @@ export default function Archive(
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
 
-  console.log('isLoading:', isLoading)
-  console.log('Stripe_Customer_Detail.subscription_Status:', Stripe_Customer_Detail?.subscription_Status)
-  console.log('subscription_state:', subscription_state)
-  console.log('isMetadataLoading:', isMetadataLoading)
-
   if (error) return <div>{error.message}</div>
   if (error_metadata) return <div>{error_metadata}</div>
   if (isLoading || isMetadataLoading) {

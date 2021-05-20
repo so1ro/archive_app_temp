@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Head from 'next/head'
 import { GetStaticProps } from "next"
 
 import { useUser } from '@auth0/nextjs-auth0'
@@ -10,7 +9,7 @@ import PriceList from '@/components/PriceList';
 import { fetchContentful } from '@/hook/contentful';
 import { query_archivePricing } from '@/hook/contentful-queries';
 
-import { Button, Code, Container, VStack } from '@chakra-ui/react';
+import { Button, Code } from '@chakra-ui/react';
 import PageShell from '@/components/PageShell';
 
 export default function Account({ allPrices, landingPageText }: { allPrices: AllPrices[], landingPageText: LandingPageText[], }) {

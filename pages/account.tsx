@@ -18,9 +18,9 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   const { user, error, isLoading } = useUser();
   const {
     User_Detail,
+    subscription_state,
     Stripe_Customer_Detail,
     error_metadata,
-    isLoading_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
     setTemporaryCheckIsSubscribing,
@@ -65,7 +65,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   if (user) {
     return (
       <PageShell customPY={null}>
-        {!isLoading_metadata &&
+        {(subscription_state === 'subscribe') &&
           <>
             {Stripe_Customer_Detail?.cancel_at_period_end &&
               <Code>
@@ -78,10 +78,11 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
                 {!Stripe_Customer_Detail.cancel_at_period_end ?
                   `プランの変更・キャンセル ／ 過去のお支払い履歴` : `サブスクリプションの再開 ／ 過去のお支払い履歴`}
               </Button>}
-            {((!Stripe_Customer_Detail?.subscription_Status && !temporaryCheckIsSubscribing) || Stripe_Customer_Detail?.subscription_Status === 'canceled')
-              && <PriceList user={user} allPrices={allPrices} annotation={annotation} />}
           </>
         }
+        {((subscription_state === 'unsubscribe' && !temporaryCheckIsSubscribing) ||
+          Stripe_Customer_Detail?.subscription_Status === 'canceled')
+          && <PriceList user={user} allPrices={allPrices} annotation={annotation} />}
       </PageShell>)
   }
   return <a href="/api/auth/login">Login</a>;

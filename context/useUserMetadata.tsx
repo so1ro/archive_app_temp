@@ -7,23 +7,24 @@ export const UserMetadataContext = createContext(null);
 
 export const UserMetadataProvider = (props) => {
 
-  const { user, isLoading: userIsLoading } = useUser();
+  const { user, isLoading } = useUser();
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
-  const [{ isLoading_metadata }, setIsLoadingMetadata] = useState<{ isLoading_metadata: boolean }>({ isLoading_metadata: true })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
-  // Temporary chec isSubscribing
+
+  // Subscription State
+  const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
+  // 2 possible state =  "subscribe" / "unsubscribe"
+  const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: null })
+  // Temporary check isSubscribing for after Payment and check via returning URL
   const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
 
-  // useEffect(() => {
-  //   // setIsLoadingMetadata({ isLoading_metadata: true })
-  //   if (!user) setIsLoadingMetadata({ isLoading_metadata: false })
-  // }, [])
-
   useEffect(() => {
+    console.log('start UseMetadata');
+    console.log('user:', user)
     if (user && typeof window !== 'undefined') {
-      console.log('Get here!!');
+      setIsMetadataLoading({ isMetadataLoading: true })
       const getUserMetadata = async () => {
         try {
           const { user_metadata } = await postData({
@@ -31,10 +32,22 @@ export const UserMetadataProvider = (props) => {
             data: { user_id: user.sub }
           }).then(data => data)
 
+          console.log('user_metadata:', user_metadata)
+          if (!user_metadata.Stripe_Customer_Detail) {
+            console.log('Without Customer Detail');
+            setSubscriptionState({ subscription_state: 'unsubscribe' })
+            setIsMetadataLoading({ isMetadataLoading: false })
+          }
+
           if (user_metadata?.Stripe_Customer_Detail) {
             const { Stripe_Customer_Detail, ...User_Detail } = user_metadata
             setUserDetail({ User_Detail })
             setStripeCustomerDetail({ Stripe_Customer_Detail })
+
+            setIsMetadataLoading({ isMetadataLoading: false })
+            Stripe_Customer_Detail.subscription_Status === ('active' || 'trialing') ?
+              setSubscriptionState({ subscription_state: 'subscribe' }) :
+              setSubscriptionState({ subscription_state: 'unsubscribe' })
 
             // Check if Today is before the cancel day
             if (Stripe_Customer_Detail.cancel_at) {
@@ -49,23 +62,27 @@ export const UserMetadataProvider = (props) => {
         } catch (error) {
           setErrorMetadata({ error_metadata: error.message })
           throw new Error(error)
-
-        } finally {
-          setIsLoadingMetadata({ isLoading_metadata: false })
+        }
+        finally {
+          setIsMetadataLoading({ isMetadataLoading: false })
         }
       }
       getUserMetadata();
     }
+    if (!user && !isLoading && typeof window !== 'undefined') {
+      setIsMetadataLoading({ isMetadataLoading: false })
+    }
+    setSubscriptionState({ subscription_state: 'unsubscribe' })
   }, [user]);
 
   const value = {
     User_Detail,
+    isMetadataLoading,
+    subscription_state,
     Stripe_Customer_Detail,
     error_metadata,
-    isLoading_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
-    // setIsLoadingMetadata,
     setTemporaryCheckIsSubscribing,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;

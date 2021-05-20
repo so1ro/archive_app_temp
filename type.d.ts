@@ -1,8 +1,9 @@
 interface UserMetadataContextInterface {
   User_Detail: object | null;
+  isMetadataLoading: boolean | null;
+  subscription_state: string | null;
   Stripe_Customer_Detail: Stripe_Customer_Detail_Interface;
   error_metadata: string | null;
-  isLoading_metadata: boolean | null;
   isBeforeCancelDate: boolean | null;
   temporaryCheckIsSubscribing: boolean | null;
   // setUserDetail:any, 

@@ -32,28 +32,29 @@ export default function Archive(
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
-  const { User_Detail, Stripe_Customer_Detail, isLoading_metadata, setIsLoadingMetadata } = useUserMetadata()
+  const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
-  // const {subscription_Status} = Stripe_Customer_Detail
 
-  // setIsLoadingMetadata({ isLoading_metadata: true })
   console.log('isLoading:', isLoading)
-  console.log('isLoading_metadata:', isLoading_metadata)
   console.log('Stripe_Customer_Detail.subscription_Status:', Stripe_Customer_Detail?.subscription_Status)
-
-  ////////
-  // useEffect(() => {
-  //   setIsLoadingMetadata({ isLoading_metadata: true })
-  //   if (!isLoading && !user) setIsLoadingMetadata({ isLoading_metadata: false })
-  // }, [])
-  ////////
+  console.log('subscription_state:', subscription_state)
+  console.log('isMetadataLoading:', isMetadataLoading)
 
   if (error) return <div>{error.message}</div>
+  if (error_metadata) return <div>{error_metadata}</div>
+  if (isLoading || isMetadataLoading) {
+    return <Spinner
+      thickness="4px"
+      speed="0.65s"
+      emptyColor="gray.200"
+      color="blue.500"
+      size="xl"
+    />
+  }
   if (
-    (!isLoading && !isLoading_metadata) &&
-    (!user || (!Stripe_Customer_Detail || (Stripe_Customer_Detail?.subscription_Status !== ('active' || 'trialing'))))
-  ) {
+    (!isLoading && !isMetadataLoading) &&
+    (!user || (!!subscription_state && (subscription_state === 'unsubscribe')))) {
     //// Landing Page ////
     return (
       <PageShell customPY={null}>
@@ -78,8 +79,8 @@ export default function Archive(
     )
   }
   if (
-    (!isLoading && !isLoading_metadata) &&
-    (user && (Stripe_Customer_Detail.subscription_Status === ('active' || 'trialing')))) {
+    (!isLoading && !isMetadataLoading) &&
+    (user && (subscription_state === 'subscribe'))) {
     //// Archive Page ////
     return (
       <PageShell customPY={null}>
@@ -116,13 +117,6 @@ export default function Archive(
       </PageShell>
     )
   }
-  return <Spinner
-    thickness="4px"
-    speed="0.65s"
-    emptyColor="gray.200"
-    color="blue.500"
-    size="xl"
-  />
 }
 
 export const getStaticProps: GetStaticProps = async () => {

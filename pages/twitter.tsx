@@ -1,30 +1,32 @@
-import React from 'react';
 import { getTweets } from '@/lib/twitter'
 import { GetStaticProps } from "next"
 
-export default function Twitter({
-    tweets
-}
-    // Add types later...
-    // : {
-    //     tweets: {
-    //         id: string
-    //     }
-    // }
-) {
+import { fetchTweetAst } from 'static-tweets'
+import { Tweet } from 'react-static-tweets'
+import 'react-static-tweets/styles.css'
+import PageShell from '@/components/PageShell'
+
+export default function Twitter({ twitterAST }) {
     return (
-        <ul>
-            {tweets.data.map(tweet => (
-                <li key={tweet.id} > { tweet.text} </li>
-            ))}
-        </ul>
-    );
-};
+        <PageShell customPY={null}>
+            {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
+        </PageShell>
+    )
+}
 
 export const getStaticProps: GetStaticProps = async () => {
-    const tweets = await getTweets()
+
+    const { data } = await getTweets()
+    const tweetId = data.map(t => t.id)
+
+    let twitterAST = []
+    for (const id of tweetId) {
+        const tweetAst = await fetchTweetAst(id)
+        twitterAST.push({ id, tweetAst })
+    }
+
     return {
-        props: { tweets },
+        props: { twitterAST },
         revalidate: 1,
     }
 }

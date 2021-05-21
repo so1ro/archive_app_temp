@@ -1,4 +1,4 @@
-import Hero from '@/components/Hero';
+import Hero from '@/components/Hero'
 import { useUser } from '@auth0/nextjs-auth0'
 import { GetStaticProps } from "next"
 
@@ -6,9 +6,9 @@ import { fetchContentful } from "@/hook/contentful"
 import { query_allHeroImg, query_topIntro, query_topShop } from "@/hook/contentful-queries"
 
 import { Container, VStack } from "@chakra-ui/react"
-import TopIntro from '@/components/TopIntro';
-import TopShop from '@/components/TopShop';
-import PageShell from '@/components/PageShell';
+import TopIntro from '@/components/TopIntro'
+import TopShop from '@/components/TopShop'
+import PageShell from '@/components/PageShell'
 
 export default function Home(
   {
@@ -21,7 +21,7 @@ export default function Home(
     productTextImage: TopShopTextImage[]
   }) {
 
-  const { user, error, isLoading } = useUser();
+  const { user, error, isLoading } = useUser()
 
   return (
     <main>

@@ -96,3 +96,17 @@ export const query_archivePricing = `{
     }
   }
 }`
+
+// Twitter
+export const query_twitter = `{
+  twitterCollection{
+    items{
+      sys{
+        id
+      }
+      name
+      twitterId
+      path
+    }
+  }
+}`

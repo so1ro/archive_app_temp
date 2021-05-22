@@ -101,3 +101,10 @@ interface TopShopTextImage {
   productImage: { url: string | null };
   url: string | null;
 }
+
+// interface TwitterCollectionitems {
+//   sys: { id: string };
+//   name: string | null;
+//   twitterId: string | null;
+//   path: string | null;
+// }

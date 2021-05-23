@@ -41,17 +41,18 @@ export default function Twitter({ twitterAST, items }) {
     }
 `
 
-    // return (
-    //     <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
-    //         <NavTwitter items={items} />
-    //         <PageShell customPY={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
-    //             {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
-    //         </PageShell>
-    //     </Box>
-    // )
+    return (
+        <Box>Twitter</Box>
+        // <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
+        //     <NavTwitter items={items} />
+        //     <PageShell customPY={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+        //         {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
+        //     </PageShell>
+        // </Box>
+    )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+// export const getStaticPaths: GetStaticPaths = async () => {
 
     // const { twitterCollection } = await fetchContentful(query_twitter)
     // const paths = twitterCollection.items.map((col) => ({
@@ -59,9 +60,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     // }))
 
     // return { paths, fallback: false }
-}
+// }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     // const { twitterCollection } = await fetchContentful(query_twitter)
     // const twitterItem = await twitterCollection.items.find(col => col.path === params.path)
@@ -78,4 +79,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     //     props: { twitterAST, items: twitterCollection.items },
     //     revalidate: 1,
     // }
-}
+// }

@@ -52,7 +52,7 @@ export default function Archive(
     (!user || (!!subscription_state && (subscription_state === 'unsubscribe')))) {
     //// Landing Page ////
     return (
-      <PageShell customPY={null}>
+      <PageShell customPY={null} customSpacing={null}>
         <Box>
           <Heading
             as='h2'
@@ -78,7 +78,7 @@ export default function Archive(
     (user && (subscription_state === 'subscribe'))) {
     //// Archive Page ////
     return (
-      <PageShell customPY={null}>
+      <PageShell customPY={null} customSpacing={null}>
         <div>
           Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
         </div>

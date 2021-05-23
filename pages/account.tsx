@@ -63,7 +63,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
 
   if (user) {
     return (
-      <PageShell customPY={null}>
+      <PageShell customPY={null} customSpacing={null}>
         {(subscription_state === 'subscribe') &&
           <>
             {Stripe_Customer_Detail?.cancel_at_period_end &&

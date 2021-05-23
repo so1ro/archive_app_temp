@@ -26,7 +26,7 @@ export default function Home(
   return (
     <main>
       <Hero allHeroImg={allHeroImg} />
-      <PageShell customPY={{ base: 24, lg: 32 }}>
+      <PageShell customPY={{ base: 24, lg: 32 }} customSpacing={null} >
         <TopIntro introTextAvatar={introTextAvatar} />
         <TopShop productTextImage={productTextImage} />
       </PageShell>

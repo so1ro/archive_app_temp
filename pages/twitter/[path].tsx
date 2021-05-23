@@ -10,7 +10,7 @@ import 'react-static-tweets/styles.css'
 import { css } from "@emotion/react"
 import { VStack, Box } from '@chakra-ui/react'
 import { useColorModeValue } from "@chakra-ui/react"
-import { card_background_color, bg_color_sns } from '@/styles/colorModeValue'
+import { card_background_color, bg_color_sns, highlight_color } from '@/styles/colorModeValue'
 import NavTwitter from '@/components/NavTwitter'
 
 export default function Twitter({ twitterAST, items }) {
@@ -31,9 +31,9 @@ export default function Twitter({ twitterAST, items }) {
         color : ${useColorModeValue('', '#fff')};
     }
     
-    // .static-tweet-like, .static-tweet-time{
-    //     color : ${useColorModeValue('', '#fff')};
-    // }
+    .static-tweet-p a {
+        color : ${useColorModeValue('', highlight_color.d)};
+    }
     
     .image-container {
         border-radius: 0.4rem;
@@ -42,12 +42,10 @@ export default function Twitter({ twitterAST, items }) {
 `
 
     return (
-        <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} >
+        <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
             <NavTwitter items={items} />
-            <PageShell customPY={{ base: 0, lg: 0 }}>
-                <VStack spacing={10} css={twitterBlockquoteWrap}>
-                    {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
-                </VStack>
+            <PageShell customPY={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+                {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
             </PageShell>
         </Box>
     )

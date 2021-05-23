@@ -1,5 +1,5 @@
 export const bg_color = { l: "#ffffff", d: "#1b272f" }
-export const bg_color_sns = { l: "#E9EEF2", d: "#1b272f" }
+export const bg_color_sns = { l: "#e9eef2", d: "#1b272f" }
 export const bg_color_nav_top = { l: "rgba(255,255,255,0.68)", d: "rgb(27,39,47, 0.86)" }
 export const text_color = { l: "black", d: "white" }
 export const highlight_color = { l: "#e63946", d: "#f79f22" }

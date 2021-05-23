@@ -102,9 +102,10 @@ interface TopShopTextImage {
   url: string | null;
 }
 
-// interface TwitterCollectionitems {
-//   sys: { id: string };
-//   name: string | null;
-//   twitterId: string | null;
-//   path: string | null;
-// }
+interface TwitterCollectionItems {
+  sys: { id: string };
+  name: string | null;
+  twitterId: string | null;
+  path: string | null;
+  order: number | null;
+}

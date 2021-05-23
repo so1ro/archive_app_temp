@@ -99,7 +99,7 @@ export const query_archivePricing = `{
 
 // Twitter
 export const query_twitter = `{
-  twitterCollection{
+  twitterCollection(order:order_ASC){
     items{
       sys{
         id
@@ -107,6 +107,7 @@ export const query_twitter = `{
       name
       twitterId
       path
+      order
     }
   }
 }`

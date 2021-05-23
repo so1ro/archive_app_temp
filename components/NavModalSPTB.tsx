@@ -50,7 +50,7 @@ export default function NavModalSPTB() {
                         h='100vh'>
                         <VStack spacing={2}>
                             {nav_links.map(link => (
-                                <ActiveLink href={link.href} key={link.key}>
+                                <ActiveLink href={link.href} root={link.root} key={link.key}>
                                     <MotionLink
                                         onClick={onClose}
                                         initial="hidden"

@@ -2,11 +2,13 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-export default function ActiveLink({ href, children }: { href: string, children: any }) {
+export default function ActiveLink({ href, root, children }: { href: string, root: string, children: any }) {
     const router = useRouter()
 
     let className = children.props.className || ''
-    if (router.pathname === href) {
+    const currentPaths = router.pathname.split('/')
+
+    if (router.pathname === href || currentPaths[1] === root) {
         className = `${className} active`
     }
 

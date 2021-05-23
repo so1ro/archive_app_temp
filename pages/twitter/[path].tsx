@@ -1,24 +1,30 @@
 import { GetStaticProps, GetStaticPaths } from "next"
 import { getTweets } from '@/lib/twitter'
 import { query_twitter } from "@/hook/contentful-queries"
-import { fetchContentful } from '@/hook/contentful';
+import { fetchContentful } from '@/hook/contentful'
 
 import { fetchTweetAst } from 'static-tweets'
 import { Tweet } from 'react-static-tweets'
 import PageShell from '@/components/PageShell'
 import 'react-static-tweets/styles.css'
 import { css } from "@emotion/react"
-import { VStack } from '@chakra-ui/react';
+import { VStack, Box } from '@chakra-ui/react'
 import { useColorModeValue } from "@chakra-ui/react"
-import { background_color } from '@/styles/colorModeValue';
+import { card_background_color, bg_color_sns } from '@/styles/colorModeValue'
+import NavTwitter from '@/components/NavTwitter'
 
-export default function Twitter({ twitterAST }) {
+export default function Twitter({ twitterAST, items }) {
 
     const twitterBlockquoteWrap = css`
-    .static-tweet-body{
-        background: ${useColorModeValue(background_color.l, background_color.d)};
-        border-color : ${useColorModeValue('', '#666')};
+    .static-tweet-body {
+        background: ${useColorModeValue(card_background_color.l, card_background_color.d)};
+        border-color : ${useColorModeValue('', '#263743')};
         color : ${useColorModeValue('', '#fff')};
+    }
+    
+    .static-tweet-body .static-tweet-body {
+        border-color : ${useColorModeValue('', '#666')};
+        margin-bottom: 8px;
     }
     
     .static-tweet-header-name, .static-tweet-header-username{
@@ -36,11 +42,14 @@ export default function Twitter({ twitterAST }) {
 `
 
     return (
-        <PageShell customPY={null}>
-            <VStack spacing={10} css={twitterBlockquoteWrap}>
-                {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
-            </VStack>
-        </PageShell>
+        <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} >
+            <NavTwitter items={items} />
+            <PageShell customPY={{ base: 0, lg: 0 }}>
+                <VStack spacing={10} css={twitterBlockquoteWrap}>
+                    {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
+                </VStack>
+            </PageShell>
+        </Box>
     )
 }
 
@@ -68,7 +77,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 
     return {
-        props: { twitterAST },
+        props: { twitterAST, items: twitterCollection.items },
         revalidate: 1,
     }
 }

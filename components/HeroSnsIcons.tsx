@@ -34,10 +34,10 @@ export default function HeroSnsIcons() {
             pos='absolute'
             bottom={{ base: 6, lg: 16 }}
             right={{ base: 4, lg: 8 }}>
-            {<HeroSnsIconsBox href='/twitter' variants={hero_icon_twitter_variants}>
+            {<HeroSnsIconsBox href='/twitter/official' variants={hero_icon_twitter_variants}>
                 <TwitterIcon width={iconSize} height={iconSize} color='#FFF' />
             </HeroSnsIconsBox>}
-            {<HeroSnsIconsBox href='/instagram' variants={hero_icon_instagram_variants}>
+            {<HeroSnsIconsBox href='/instagram/official' variants={hero_icon_instagram_variants}>
                 <InstagramIcon width={iconSize} height={iconSize} color='#FFF' />
             </HeroSnsIconsBox>}
         </VStack>

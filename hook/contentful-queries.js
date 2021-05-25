@@ -112,7 +112,7 @@ export const query_twitter = `{
   }
 }`
 
-// Instagram
+//// Instagram ////
 export const query_instagram = `{
   instagramCollection(order:order_ASC){
     items{
@@ -127,6 +127,7 @@ export const query_instagram = `{
   }
 }`
 
+// Normal size
 export const query_instagram_image_official = `{
   instagramOfficialCollection(order:sys_publishedAt_DESC) {
     items {

@@ -13,7 +13,7 @@ import PageShell from '@/components/PageShell'
 import 'react-static-tweets/styles.css'
 import { Grid, Box, Square, useColorModeValue } from '@chakra-ui/react'
 import { card_background_color, bg_color_sns, highlight_color } from '@/styles/colorModeValue'
-import NavTwitter from '@/components/NavTwitter'
+import NavSNS from '@/components/NavSNS'
 
 export default function Twitter({ items, images }) {
     console.log('items:', items)
@@ -21,8 +21,8 @@ export default function Twitter({ items, images }) {
 
     return (
         <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} flexGrow={1}>
-            <NavTwitter items={items} />
-            <PageShell customPY={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+            <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+                <NavSNS items={items} />
                 <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
                     {images.map(img => (
                         <Square key={img.sys.id} pos='relative'>

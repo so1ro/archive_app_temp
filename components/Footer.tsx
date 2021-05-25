@@ -21,7 +21,7 @@ export default function Footer() {
                 <Text fontSize="xs">&#xA9; {year} カスミブラザーズ All rights reserved.</Text>
             </VStack>
             <VStack mb={{ base: 4, lg: 0 }} spacing={3} align={{ base: "center", lg: "flex-end" }} order={{ base: 1, lg: 2 }}>
-                <NavLinks />
+                {/* <NavLinks /> */}
                 <SnsIcons animation={false} type={'footer'} />
             </VStack>
         </Flex >

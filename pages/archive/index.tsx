@@ -3,13 +3,14 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import { format, parseISO } from "date-fns"
 import { GetStaticProps } from "next"
+import { useMediaQuery } from '@/utils/useMediaQuery'
 
 import { fetchContentful } from "@/hook/contentful"
 import { query_allArchives, query_archivePricing } from "@/hook/contentful-queries"
 // import { postData } from "@/utils/helpers"
 
 import Image from "next/image"
-import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, useMediaQuery, Spinner } from "@chakra-ui/react"
+import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, Spinner } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps';
 import PriceList from '@/components/PriceList';
@@ -33,7 +34,7 @@ export default function Archive(
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
   const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
-  const [isLargerThan768] = useMediaQuery("(min-width: 768px)")
+  const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
 
   if (error) return <div>{error.message}</div>
@@ -52,7 +53,7 @@ export default function Archive(
     (!user || (!!subscription_state && (subscription_state === 'unsubscribe')))) {
     //// Landing Page ////
     return (
-      <PageShell customPY={null} customSpacing={null}>
+      <PageShell customPT={null} customSpacing={null}>
         <Box>
           <Heading
             as='h2'
@@ -78,7 +79,7 @@ export default function Archive(
     (user && (subscription_state === 'subscribe'))) {
     //// Archive Page ////
     return (
-      <PageShell customPY={null} customSpacing={null}>
+      <PageShell customPT={null} customSpacing={null}>
         <div>
           Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
         </div>

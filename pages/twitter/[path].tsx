@@ -11,7 +11,7 @@ import { css } from "@emotion/react"
 import { VStack, Box } from '@chakra-ui/react'
 import { useColorModeValue } from "@chakra-ui/react"
 import { card_background_color, bg_color_sns, highlight_color } from '@/styles/colorModeValue'
-import NavTwitter from '@/components/NavTwitter'
+import NavSNS from '@/components/NavSNS'
 
 export default function Twitter({ twitterAST, items }) {
 
@@ -45,7 +45,7 @@ export default function Twitter({ twitterAST, items }) {
         <Box>Twitter</Box>
         // <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
         //     <NavTwitter items={items} />
-        //     <PageShell customPY={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+        //     <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
         //         {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
         //     </PageShell>
         // </Box>

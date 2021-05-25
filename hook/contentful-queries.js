@@ -111,3 +111,82 @@ export const query_twitter = `{
     }
   }
 }`
+
+// Instagram
+export const query_instagram = `{
+  instagramCollection(order:order_ASC){
+    items{
+      sys{
+        id
+      }
+      name
+      instagramTopUrl
+      path
+      order
+    }
+  }
+}`
+
+export const query_instagram_image_official = `{
+  instagramOfficialCollection(order:sys_publishedAt_DESC) {
+    items {
+      sys {
+        id
+        publishedAt
+      }
+      image {
+        url
+      }
+      instagramUrl
+      id
+    }
+  }
+}`
+
+export const query_instagram_image_yappi = `{
+  instagramUser1Collection(order:sys_publishedAt_DESC) {
+    items {
+      sys {
+        id
+        publishedAt
+      }
+      image {
+        url
+      }
+      instagramUrl
+      id
+    }
+  }
+}`
+
+export const query_instagram_image_chansho = `{
+  instagramUser2Collection(order:sys_publishedAt_DESC) {
+    items {
+      sys {
+        id
+        publishedAt
+      }
+      image {
+        url
+      }
+      instagramUrl
+      id
+    }
+  }
+}`
+
+export const query_instagram_image_miyashi = `{
+  instagramUser3Collection(order:sys_publishedAt_DESC) {
+    items {
+      sys {
+        id
+        publishedAt
+      }
+      image {
+        url
+      }
+      instagramUrl
+      id
+    }
+  }
+}`

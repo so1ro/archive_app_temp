@@ -27,10 +27,9 @@ export default function Twitter({ items, images }) {
                     {images.map(img => (
                         <Square key={img.sys.id} pos='relative'>
                             <Image
-                                src={`${img.image.url}?w=600&h=600&fit=fill`}
+                                src={`${img.image.url}?w=660&h=660&fit=fill`}
                                 alt={`${img.id}のインスタグラム`}
-                                width={600}
-                                height={600} quality={100} />
+                                width={660} height={660} quality={100} />
                         </Square>
                     ))}
                 </Grid>

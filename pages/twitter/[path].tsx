@@ -44,8 +44,8 @@ export default function Twitter({ twitterAST, items }) {
     return (
         <Box>Twitter</Box>
         // <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
-        //     <NavTwitter items={items} />
         //     <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+        //     <NavTwitter items={items} />
         //         {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
         //     </PageShell>
         // </Box>

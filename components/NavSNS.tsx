@@ -3,21 +3,22 @@ import { useRouter } from 'next/router'
 import NextLink from 'next/link';
 import { TwitterIcon, InstagramIcon } from '@/styles/icons';
 
-export default function NavSNS({ items }: { items: TwitterCollectionItems[] }) {
+export default function NavSNS({ items }: { items: NavItem[] }) {
 
     const router = useRouter()
     const { path } = router.query
-    // Twitter path check!!!!
     const root = router.pathname.includes('twitter') ? 'twitter' : 'instagram'
     const iconSize = 8
 
 
     return (
         <Stack
-            direction={{ base: 'column', lg: 'row' }}
-            align={{ base: 'center', lg: '' }}
-            justify={{ base: '', lg: 'space-between' }}
-            w='full'
+            direction='column'
+            align='center'
+            // direction={{ base: 'column', lg: 'row' }}
+            // align={{ base: 'center', lg: '' }}
+            // justify={{ base: '', lg: 'space-between' }}
+            // w='full'
             pt={{ base: 12, lg: 16 }}
             pb={{ base: 0, lg: 6 }}
             spacing={4}>
@@ -31,7 +32,7 @@ export default function NavSNS({ items }: { items: TwitterCollectionItems[] }) {
                 alignSelf={{ base: 'center', lg: 'flex-end' }}
             >
                 {items.map(item => (
-                    (<NextLink href={`/${root}/${item.path}`} key={item.sys.id} passHref>
+                    (<NextLink href={`/${root}/${item.path}`} key={item.id} passHref>
                         <Link fontSize={{ base: 'sm', md: 'md' }} className={path === item.path ? 'active' : ''}>{item.name}</Link>
                     </NextLink>)
                 ))

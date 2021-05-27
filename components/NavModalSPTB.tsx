@@ -60,7 +60,7 @@ export default function NavModalSPTB() {
                                     >{link.text}</MotionLink>
                                 </ActiveLink>
                             ))}
-                            <SnsIcons animation={true} type={'NavModal'} />
+                            <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} />
                         </VStack>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />

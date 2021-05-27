@@ -4,7 +4,7 @@ import { useColorMode } from "@chakra-ui/react"
 import { MotionIconStack } from '@/components/Chakra_Framer/element';
 import { nav_link_variants } from '@/components/Chakra_Framer/variants';
 
-export default function SnsIcons({ animation, type }: { animation: boolean, type: string }) {
+export default function SnsIcons({ animation, type, onHandler }: { animation: boolean, type: string, onHandler: () => void | null }) {
 
     const { colorMode, toggleColorMode } = useColorMode()
     const colorHnadler = (mode) => mode === 'light' ? "#000" : "#fff"
@@ -19,12 +19,12 @@ export default function SnsIcons({ animation, type }: { animation: boolean, type
             variants={nav_link_variants}
         >
             <NextLink href={'/twitter/official'} passHref>
-                <TwitterIcon width={6} height={6} color={colorHnadler(colorMode)} />
+                <TwitterIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
             </NextLink>
             <NextLink href={'/instagram/official'} passHref>
-                <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} />
+                <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
             </NextLink>
-            <MailIcon width={6} height={6} color={colorHnadler(colorMode)} />
+            <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
         </MotionIconStack>
     );
 }

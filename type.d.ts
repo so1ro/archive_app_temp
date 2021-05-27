@@ -102,10 +102,37 @@ interface TopShopTextImage {
   url: string | null;
 }
 
+// Twitter
 interface TwitterCollectionItems {
   sys: { id: string };
   name: string | null;
   twitterId: string | null;
   path: string | null;
   order: number | null;
+}
+
+// Instagram
+interface InstagramItem {
+  sys: { id: string; }
+  instagramTopUrl: string | null;
+  name: string | null;
+  order: number | null;
+  path: string | null;
+  avatar: { url: string | null; }
+}
+
+interface InstagramImage {
+  id: string;
+  image: { url: string; }
+  instagramUrl: string | null;
+  sys: {
+    id: string;
+    publishedAt: string;
+  }
+}
+
+interface NavItem {
+  id: string;
+  name: string | null;
+  path: string | null;
 }

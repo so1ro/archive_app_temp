@@ -123,13 +123,18 @@ export const query_instagram = `{
       instagramTopUrl
       path
       order
+      avatar {
+        url(transform: { resizeStrategy: CROP, cornerRadius: -1 })
+      }
     }
   }
 }`
 
-// Normal size
+// How many photos to fetch
+const num_photos = 16
+
 export const query_instagram_image_official = `{
-  instagramOfficialCollection(limit:24,order:sys_publishedAt_DESC) {
+  instagramOfficialCollection(limit:${num_photos},order:sys_publishedAt_DESC) {
     items {
       sys {
         id
@@ -145,7 +150,7 @@ export const query_instagram_image_official = `{
 }`
 
 export const query_instagram_image_yappi = `{
-  instagramUser1Collection(limit:24,order:sys_publishedAt_DESC) {
+  instagramUser1Collection(limit:${num_photos},order:sys_publishedAt_DESC) {
     items {
       sys {
         id
@@ -161,7 +166,7 @@ export const query_instagram_image_yappi = `{
 }`
 
 export const query_instagram_image_chansho = `{
-  instagramUser2Collection(limit:24,order:sys_publishedAt_DESC) {
+  instagramUser2Collection(limit:${num_photos},order:sys_publishedAt_DESC) {
     items {
       sys {
         id
@@ -177,7 +182,7 @@ export const query_instagram_image_chansho = `{
 }`
 
 export const query_instagram_image_miyashi = `{
-  instagramUser3Collection(limit:24,order:sys_publishedAt_DESC) {
+  instagramUser3Collection(limit:${num_photos},order:sys_publishedAt_DESC) {
     items {
       sys {
         id

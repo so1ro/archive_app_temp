@@ -3,10 +3,12 @@ import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons';
 import HeroArchiveLink from '@/components/HeroArchiveLink';
 import { dailyNum } from '@/utils/helpers';
+import useWindowSize from '@/utils/useWindowSizeHero';
 
 export default function Hero({ allHeroImg }) {
     // Arrange Portrait First & Destructuring 
     const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
+    const { height: innerHeight } = useWindowSize();
 
     return (
         <Box pos='relative'>
@@ -16,7 +18,7 @@ export default function Hero({ allHeroImg }) {
                 <Box key={i}>
                     {pair.map((img, j) => (
                         <Container key={j}
-                            h='100vh'
+                            h={`${innerHeight}px`}
                             zIndex={'-1'}
                             d={j === 0 ? { base: 'block', lg: 'none' } : { base: 'none', lg: 'block' }}>
                             <Image src={img.url}

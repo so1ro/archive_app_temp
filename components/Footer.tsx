@@ -22,7 +22,7 @@ export default function Footer() {
             </VStack>
             <VStack mb={{ base: 4, lg: 0 }} spacing={3} align={{ base: "center", lg: "flex-end" }} order={{ base: 1, lg: 2 }}>
                 {/* <NavLinks /> */}
-                <SnsIcons animation={false} type={'footer'} />
+                <SnsIcons animation={false} type={'footer'} onHandler={null} />
             </VStack>
         </Flex >
     );

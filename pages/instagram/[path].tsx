@@ -115,7 +115,7 @@ const fslightboxCss = css`
         z-index: 9;
     }
 
-    .fslightbox-toolbar-button:nth-child(1), .fslightbox-toolbar-button:nth-child(4), .fslightbox-toolbar-button:nth-child(5) {
+    .fslightbox-toolbar-button:nth-of-type(1), .fslightbox-toolbar-button:nth-of-type(4), .fslightbox-toolbar-button:nth-of-type(5) {
         display: none;
     }
     

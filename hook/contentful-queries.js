@@ -3,30 +3,44 @@
 // 下部の HTTP HEADERS に下記追加する。SecretはContentfulのwebhooせ設定から利用。
 // {"Authorization": "Bearer ~~~~~"}
 
+// All Archive
 export const query_allArchives =
   ` {
-        kasumibroVideoCollection ( order : publishDate_DESC ) {
-            items {
-                sys {
-                    id
-                }
-                thumbnail {
-                    url
-                }
-                title
-                publishDate
-                vimeoUrl
-                category
-                keyword
-                releasedYear
-                casts
-                place
-                season
-                expert
-                }
-        }
+  kasumibroVideoCollection ( order : publishDate_DESC ) {
+    items {
+      sys {
+        id
+      }
+      thumbnail {
+        url
+      }
+      title
+      publishDate
+      vimeoUrl
+      category
+      keyword
+      releasedYear
+      casts
+      place
+      season
     }
-    `
+  }
+}
+`
+
+// Archive Dynamic Route Paths
+export const query_archiveRoute =
+  `{
+  archivePathCollection {
+    items {
+      sys {
+        id
+      }
+      archiveRouteArray
+    }
+  }
+}`
+
 // Top / Hero
 export const query_allHeroImg =
   ` {

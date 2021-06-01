@@ -22,6 +22,13 @@ interface AllPrices {
   active: boolean | null;
   livemode: boolean | null;
 }
+
+interface ArchivePath {
+  id: string;
+  categoryName: string;
+  paths: string[] | null;
+};
+
 interface Stripe_Customer_Detail_Interface {
   customer_Id: string | null;
   price_Id: string | null;
@@ -54,11 +61,10 @@ interface AllArchivesInterface {
   vimeoUrl: number | null;
   category: string[] | null;
   keyword: string[] | null;
-  releasedYear: number | null;
+  releasedYear: string[] | null;
   casts: string[] | null;
   place: string[] | null;
-  season: string | null;
-  expert: string[] | null;
+  season: string[] | null;
 }
 interface LandingPageText {
   sys: { id: string };

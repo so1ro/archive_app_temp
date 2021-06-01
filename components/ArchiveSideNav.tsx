@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 
-export default function ArchiveSideNav({ pathObj }: { pathObj: ArchivePath[] }) {
+export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
     const router = useRouter()
 
@@ -30,7 +30,7 @@ export default function ArchiveSideNav({ pathObj }: { pathObj: ArchivePath[] }) 
                 // ex: archive/名人
                 if (!obj.paths) return (
                     <ArchiveActiveLink href={`/archive/${obj.categoryName}`} key={i}>
-                        <Link>
+                        <Link onClick={onCloseDrawer}>
                             <Box pb={1}>{obj.categoryName}</Box>
                         </Link>
                     </ArchiveActiveLink>)
@@ -46,7 +46,7 @@ export default function ArchiveSideNav({ pathObj }: { pathObj: ArchivePath[] }) 
                         </h2>
                         {obj.paths.map(p => (
                             <ArchiveActiveLink href={`/archive/${obj.id}/${p}`} key={`${obj.id}/${p}`}>
-                                <Link>
+                                <Link onClick={onCloseDrawer}>
                                     <AccordionPanel py={2}>{p}</AccordionPanel>
                                 </Link>
                             </ArchiveActiveLink>))}

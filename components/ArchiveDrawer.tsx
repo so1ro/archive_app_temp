@@ -37,7 +37,7 @@ export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
                     <DrawerCloseButton top={null} right={null} bottom={btnBottomLeftPosition} left={btnBottomLeftPosition} />
                     <DrawerHeader>もくじ</DrawerHeader>
                     <DrawerBody>
-                        <ArchiveSideNav pathObj={pathObj} />
+                        <ArchiveSideNav pathObj={pathObj} onCloseDrawer={onClose} />
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>

@@ -20,7 +20,7 @@ export default function ArchiveRoute({
             <ArchiveDrawer pathObj={pathObj} />
             <Grid templateColumns={{ base: '1fr', lg: '240px 1fr' }} >
                 <Box p={4} display={{ base: 'none', lg: 'block' }}>
-                    <ArchiveSideNav pathObj={pathObj} />
+                    <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
                 </Box>
                 <Box>Archive Route</Box>
             </Grid>

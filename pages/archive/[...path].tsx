@@ -14,12 +14,13 @@ export default function ArchiveRoute({
     }) {
     console.log('paths:', pathObj)
     console.log('filteredData:', filteredData)
+
     return (
         <>
             <ArchiveDrawer pathObj={pathObj} />
             <Grid templateColumns={{ base: '1fr', lg: '240px 1fr' }} >
                 <Box p={4} display={{ base: 'none', lg: 'block' }}>
-                    <ArchiveSideNav pathObj={pathObj} onClose={null} />
+                    <ArchiveSideNav pathObj={pathObj} />
                 </Box>
                 <Box>Archive Route</Box>
             </Grid>

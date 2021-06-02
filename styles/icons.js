@@ -79,3 +79,12 @@ export const Test2Icon = createIcon({
         </>
     ),
 })
+
+export const ArchiveSideMenu = createIcon({
+    displayName: "ArchiveSideMenu",
+    viewBox: "0 0 32 25",
+    path: (
+        <path stroke="#fff" strokeWidth="3" strokeLinecap="round" d="M1.5 22.34h20M1.5 12.34h15M1.5 2.34h27" />
+    ),
+})
+

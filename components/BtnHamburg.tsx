@@ -1,13 +1,17 @@
 import React from 'react';
-import { Box, Button, Center } from "@chakra-ui/react"
+import { Box, Center } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { useColorModeValue } from "@chakra-ui/react"
-import { text_color, bg_color_nav_top } from '@/styles/colorModeValue';
+import { text_color, bg_color_nav_top } from '@/styles/colorModeValue'
+import { useRouter } from 'next/router'
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
 
+  const router = useRouter()
+  const isArvhiveContent = router.pathname === '/archive/[...path]'
+
   // Position
-  const btnBottomLeftPosition = [4, 6]
+  const btnPosition = [4, 6]
   // Adjust Size etc
   const hamburger_layer_width = '30px'
   const hamburger_hover_opacity = '1px'
@@ -128,8 +132,9 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
       pos="fixed"
       borderRadius='full'
       bg={useColorModeValue(bg_color_nav_top.l, bg_color_nav_top.d)}
-      bottom={btnBottomLeftPosition}
-      left={btnBottomLeftPosition}
+      bottom={btnPosition}
+      left={!isArvhiveContent && btnPosition}
+      right={isArvhiveContent && btnPosition}
       zIndex={2}
       onClick={onHandler}>
       <Box

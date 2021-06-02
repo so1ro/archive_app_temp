@@ -19,7 +19,7 @@ export const query_allArchives =
       vimeoUrl
       category
       keyword
-      releasedYear
+      year
       casts
       place
       season

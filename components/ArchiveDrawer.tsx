@@ -8,15 +8,19 @@ import {
     DrawerCloseButton,
     Button,
     useDisclosure,
+    useColorModeValue
 } from "@chakra-ui/react"
-
+import { archiveSideMenuButton_bg_color } from '@/styles/colorModeValue'
 import ArchiveSideNav from '@/components/ArchiveSideNav'
+import { ArchiveSideMenu } from '@/styles/icons';
 
 export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
-    const btnBottomLeftPosition = [4, 6]
+    const topRightPosition = 4
+    const btnBottomPosition = [5, 7]
+    const btnLeftPosition = -7
 
     return (
         <>
@@ -24,8 +28,17 @@ export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
                 ref={btnRef}
                 colorScheme="teal"
                 onClick={onOpen}
+                pos="fixed"
+                bottom={btnBottomPosition}
+                left={btnLeftPosition}
+                w={24}
+                h={12}
+                borderRadius={10}
+                justifyContent='flex-end'
+                bg={useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d)}
+                _hover={{ bg: useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d) }}
                 display={{ base: 'inline-flex', lg: 'none' }}>
-                Open
+                <ArchiveSideMenu w={8} h={8} />
             </Button>
             <Drawer
                 isOpen={isOpen}
@@ -34,7 +47,7 @@ export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
                 finalFocusRef={btnRef}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerCloseButton top={null} right={null} bottom={btnBottomLeftPosition} left={btnBottomLeftPosition} />
+                    <DrawerCloseButton top={topRightPosition} right={topRightPosition} />
                     <DrawerHeader>もくじ</DrawerHeader>
                     <DrawerBody>
                         <ArchiveSideNav pathObj={pathObj} onCloseDrawer={onClose} />

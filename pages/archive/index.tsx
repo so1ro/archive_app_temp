@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useRouter } from 'next/router'
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import { format, parseISO } from "date-fns"
@@ -36,18 +37,11 @@ export default function Archive(
   const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
+  const router = useRouter()
 
   if (error) return <div>{error.message}</div>
   if (error_metadata) return <div>{error_metadata}</div>
-  if (isLoading || isMetadataLoading) {
-    return <Spinner
-      thickness="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="blue.500"
-      size="xl"
-    />
-  }
+
   if (
     (!isLoading && !isMetadataLoading) &&
     (!user || (!!subscription_state && (subscription_state === 'unsubscribe')))) {
@@ -77,42 +71,26 @@ export default function Archive(
   if (
     (!isLoading && !isMetadataLoading) &&
     (user && (subscription_state === 'subscribe'))) {
-    //// Archive Page ////
+    // Redirect to Archive Page ////
+    if (typeof window !== 'undefined') router.push(`/archive/${encodeURI('すべて')}`)
     return (
-      <PageShell customPT={null} customSpacing={null}>
-        <div>
-          Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-        </div>
-        <div>Archives</div>
-        <Grid templateColumns="1fr" gap={12} px={6}>
-          {allArchives.map((archive) => (
-            <Grid
-              key={archive.sys.id}
-              templateColumns="repeat(2, 1fr)"
-              gap={12}
-            >
-              <Box overflow="hidden" css={imgBox}>
-                <Image
-                  src={archive.thumbnail.url}
-                  alt="Picture of the author"
-                  width={640}
-                  height={360}
-                />
-              </Box>
-              <Box>
-                <List m={0} p={0}>
-                  <ListItem>{archive.title}</ListItem>
-                  <ListItem color="#585858" size="10px">
-                    {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
-                  </ListItem>
-                </List>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </PageShell>
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="red.500"
+        size="xl"
+      />
+      // アーカイブページへ遷移します
     )
   }
+  return <Spinner
+    thickness="4px"
+    speed="0.65s"
+    emptyColor="gray.200"
+    color="blue.500"
+    size="xl"
+  />
 }
 
 export const getStaticProps: GetStaticProps = async () => {

@@ -5,7 +5,7 @@ export default handleAuth({
     async login(req: NextApiRequest, res: NextApiResponse) {
         try {
             await handleLogin(req, res, {
-                returnTo: '/archive/',
+                returnTo: `/archive`,// `/archive/${encodeURI('すべて')}` 
                 authorizationParams: { screen_hint: (req.query.param || null) }
             });
         } catch (error) {

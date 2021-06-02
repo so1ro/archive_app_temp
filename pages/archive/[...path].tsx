@@ -1,10 +1,14 @@
+import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries";
 import { fetchContentful } from '@/hook/contentful'
 
-import { Box, Grid } from '@chakra-ui/react';
+import { Box, Grid, Spinner } from '@chakra-ui/react';
 import ArchiveDrawer from "@/components/ArchiveDrawer";
 import ArchiveSideNav from '@/components/ArchiveSideNav';
+
+import { useUser } from "@auth0/nextjs-auth0"
+import { useUserMetadata } from "@/context/useUserMetadata"
 
 export default function ArchiveRoute({
     filteredData,
@@ -12,19 +16,46 @@ export default function ArchiveRoute({
         filteredData: AllArchivesInterface[],
         pathObj: ArchivePath[]
     }) {
-    console.log('paths:', pathObj)
-    console.log('filteredData:', filteredData)
+    // console.log('paths:', pathObj)
+    // console.log('filteredData:', filteredData)
 
+    const { user, error, isLoading } = useUser()
+    const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
+    const router = useRouter()
+
+    if (user && (subscription_state === 'subscribe')) {
+        return (
+            <>
+                <ArchiveDrawer pathObj={pathObj} />
+                <Grid templateColumns={{ base: '1fr', lg: '240px 1fr' }} >
+                    <Box p={4} display={{ base: 'none', lg: 'block' }}>
+                        <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
+                    </Box>
+                    <Box>Archive Route</Box>
+                </Grid>
+            </>
+        )
+
+    } else if (typeof window !== 'undefined') {
+        router.push(`/archive`)
+        return (
+            <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+            />
+        )
+    }
     return (
-        <>
-            <ArchiveDrawer pathObj={pathObj} />
-            <Grid templateColumns={{ base: '1fr', lg: '240px 1fr' }} >
-                <Box p={4} display={{ base: 'none', lg: 'block' }}>
-                    <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
-                </Box>
-                <Box>Archive Route</Box>
-            </Grid>
-        </>
+        <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+        />
     )
 }
 

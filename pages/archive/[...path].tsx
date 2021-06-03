@@ -3,12 +3,13 @@ import { GetStaticProps, GetStaticPaths } from "next"
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries";
 import { fetchContentful } from '@/hook/contentful'
 
-import { Box, Grid, Spinner } from '@chakra-ui/react';
+import { Box, Grid } from '@chakra-ui/react';
 import ArchiveDrawer from "@/components/ArchiveDrawer";
 import ArchiveSideNav from '@/components/ArchiveSideNav';
 
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
+import LodingSpinner from '@/components/Spinner';
 
 export default function ArchiveRoute({
     filteredData,
@@ -38,25 +39,9 @@ export default function ArchiveRoute({
 
     } else if (typeof window !== 'undefined') {
         router.push(`/archive`)
-        return (
-            <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-            />
-        )
+        return <LodingSpinner />
     }
-    return (
-        <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-        />
-    )
+    return <LodingSpinner />
 }
 
 

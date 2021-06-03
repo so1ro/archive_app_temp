@@ -3,7 +3,7 @@ import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons';
 import HeroArchiveLink from '@/components/HeroArchiveLink';
 import { dailyNum } from '@/utils/helpers';
-import useWindowSize from '@/utils/useWindowSizeHero';
+import useWindowSize from '@/utils/useWindowSize';
 
 export default function Hero({ allHeroImg }) {
     // Arrange Portrait First & Destructuring 

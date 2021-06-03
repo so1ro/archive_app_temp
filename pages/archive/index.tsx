@@ -1,32 +1,28 @@
-import { useState, useEffect } from "react"
 import { useRouter } from 'next/router'
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
-import { format, parseISO } from "date-fns"
 import { GetStaticProps } from "next"
 import { useMediaQuery } from '@/utils/useMediaQuery'
 
 import { fetchContentful } from "@/hook/contentful"
 import { query_allArchives, query_archivePricing } from "@/hook/contentful-queries"
-// import { postData } from "@/utils/helpers"
 
-import Image from "next/image"
-import { Heading, Grid, Box, List, ListItem, Container, VStack, Text, Spinner } from "@chakra-ui/react"
-import { css } from "@emotion/react"
+import { Heading, Box, Text } from "@chakra-ui/react"
+// import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps';
 import PriceList from '@/components/PriceList';
-// import { highlight_color } from '@/styles/colorModeValue';
-// import { CheckIcon } from '@/styles/icons'
 import ArchiveMeritList from "@/components/ArchiveMeritList"
 import VideoVimeo from "@/components/VideoVimeo"
 import PageShell from '@/components/PageShell'
+import LodingSpinner from '@/components/Spinner';
 
 export default function Archive(
-  { allArchives,
+  {
+    // allArchives,
     allPrices,
     landingPageText, }:
     {
-      allArchives: AllArchivesInterface[],
+      // allArchives: AllArchivesInterface[],
       allPrices: AllPrices[],
       landingPageText: LandingPageText[],
     }) {
@@ -73,35 +69,20 @@ export default function Archive(
     (user && (subscription_state === 'subscribe'))) {
     // Redirect to Archive Page ////
     if (typeof window !== 'undefined') router.push(`/archive/${encodeURI('すべて')}`)
-    return (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="red.500"
-        size="xl"
-      />
-      // アーカイブページへ遷移します
-    )
+    return <LodingSpinner />
   }
-  return <Spinner
-    thickness="4px"
-    speed="0.65s"
-    emptyColor="gray.200"
-    color="blue.500"
-    size="xl"
-  />
+  return <LodingSpinner />
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   // get Archivce data from Contentful
-  const archiveData = await fetchContentful(query_allArchives)
+  // const archiveData = await fetchContentful(query_allArchives)
   const allPrices = await fetchAllPrices()
   const landingPageText = await fetchContentful(query_archivePricing)
 
   return {
     props: {
-      allArchives: archiveData.kasumibroVideoCollection.items,
+      // allArchives: archiveData.kasumibroVideoCollection.items,
       allPrices: [...allPrices],
       landingPageText: landingPageText.archivePricingCollection.items
     },
@@ -109,8 +90,8 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-const imgBox = css`
-  img {
-    border-radius: 0.4rem;
-  }
-`
+// const imgBox = css`
+//   img {
+//     border-radius: 0.4rem;
+//   }
+// `

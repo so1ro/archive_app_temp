@@ -6,7 +6,7 @@ import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import NavModalSPTB from '@/components/NavModalSPTB'
 import Nav from '@/components/Nav';
 
-import { bg_color, text_color } from '@/styles/colorModeValue';
+import { bg_color } from '@/styles/colorModeValue';
 import Footer from '@/components/Footer';
 
 export default function Layout({ children }: { children: ReactNode }) {

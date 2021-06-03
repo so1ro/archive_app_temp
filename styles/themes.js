@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react"
+import { text_color } from '@/styles/colorModeValue';
 
 const theme = extendTheme({
     initialColorMode: "light",
@@ -15,7 +16,7 @@ const theme = extendTheme({
             // },
             body: {
                 // background: props.colorMode === "dark" ? "#1D2932" : "#edf2f7",
-                color: props.colorMode === "dark" ? "white" : "gray.600",
+                color: props.colorMode === "dark" ? text_color.d : text_color.l,
                 padding: 0,
                 margin: 0,
             },

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Center } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { useColorModeValue } from "@chakra-ui/react"
-import { text_color, bg_color_nav_top } from '@/styles/colorModeValue'
+import { text_BW, bg_color_nav_top } from '@/styles/colorModeValue'
 import { useRouter } from 'next/router'
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
@@ -47,7 +47,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
  .hamburger.is-active .hamburger-inner,
  .hamburger.is-active .hamburger-inner::before,
  .hamburger.is-active .hamburger-inner::after {
-   background-color: ${useColorModeValue(text_color.l, text_color.d)}; }
+   background-color: ${useColorModeValue(text_BW.l, text_BW.d)}; }
 
 .hamburger-box {
  width: ${hamburger_layer_width};
@@ -62,7 +62,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
  .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
    width: ${hamburger_layer_width};
    height: ${hamburger_layer_height};
-   background-color: ${useColorModeValue(text_color.l, text_color.d)};
+   background-color: ${useColorModeValue(text_BW.l, text_BW.d)};
    border-radius: 4px;
    position: absolute;
    transition-property: transform;

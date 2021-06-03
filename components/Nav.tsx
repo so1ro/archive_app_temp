@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Flex, Stack, Text, useColorModeValue, Link } from '@chakra-ui/react';
 import { } from "@chakra-ui/react"
 
-import { bg_color, bg_color_nav_top, text_color } from '@/styles/colorModeValue';
+import { bg_color, bg_color_nav_top, text_BW } from '@/styles/colorModeValue';
 import NavLinks from '@/components/NavLinks';
 import UserMenu from '@/components/UserMenu';
 import UserLoginSignup from '@/components/UserLoginSignup';
@@ -30,7 +30,7 @@ export default function Nav() {
             px={[4]}
             py={[1, 1, 2]}
             w='full'
-            color={useColorModeValue(text_color.l, text_color.d)}
+            color={useColorModeValue(text_BW.l, text_BW.d)}
             bg={bgColor}
             pos={isTop ? 'absolute' : 'relative'}
             top={isTop ? 0 : null}

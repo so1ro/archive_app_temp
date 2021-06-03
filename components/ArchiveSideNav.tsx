@@ -9,8 +9,10 @@ import {
     AccordionPanel,
     AccordionIcon,
     Link,
+    useColorModeValue
 } from "@chakra-ui/react"
 import { css } from "@emotion/react"
+import { highlight_color, text_color } from '@/styles/colorModeValue';
 
 export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
@@ -23,6 +25,8 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
         const indexOfFisrtAccordion = _.findIndex(pathObj, (o) => !!o.paths)
         defaultIndex = indexOfRouteMatchPath - indexOfFisrtAccordion
     }
+
+    const highLighColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
         <Accordion allowToggle css={accordingCss} defaultIndex={defaultIndex}>
@@ -39,8 +43,13 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 else return (
                     <AccordionItem borderTopWidth={0} borderBottomWidth={0} key={i}>
                         <h2>
-                            <AccordionButton px={0} pt={0} pb={3} >
-                                <Box flex="1" textAlign="left"> {obj.categoryName} </Box>
+                            <AccordionButton px={0} pt={0} pb={3} _expanded={{ color: highLighColor }}>
+                                <Box
+                                    flex="1"
+                                    textAlign="left"
+                                    color={useColorModeValue(text_color.l, text_color.d)}>
+                                    {obj.categoryName}
+                                </Box>
                                 <AccordionIcon />
                             </AccordionButton>
                         </h2>

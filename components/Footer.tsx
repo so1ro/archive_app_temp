@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Grid, GridItem, Stack, VStack, Heading, Text } from '@chakra-ui/react';
-import { bg_color, text_color } from '@/styles/colorModeValue';
+import { bg_color, text_BW } from '@/styles/colorModeValue';
 import SnsIcons from '@/components/SnsIcons';
 import NavLinks from '@/components/NavLinks';
 
@@ -14,7 +14,7 @@ export default function Footer() {
             align={{ base: "center", lg: "flex-start" }}
             justify='space-between'
             bg={bg_color}
-            color={text_color}
+            color={text_BW}
             p={{ base: 4, lg: 9 }}>
             <VStack spacing={1} align={{ base: "center", lg: "flex-start" }} order={{ base: 2, lg: 1 }}>
                 <Text fontSize={{ base: "xl", lg: "2xl" }} isTruncated>カスブラ</Text>

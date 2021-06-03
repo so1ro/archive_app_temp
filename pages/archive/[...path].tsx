@@ -1,23 +1,24 @@
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
-import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries";
+import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
 
-import { Box, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import ArchiveDrawer from "@/components/ArchiveDrawer";
-import ArchiveSideNav from '@/components/ArchiveSideNav';
+import { Box, Flex, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue } from '@chakra-ui/react'
+import { ChevronRightIcon } from '@chakra-ui/icons'
+import ArchiveDrawer from "@/components/ArchiveDrawer"
+import ArchiveSideNav from '@/components/ArchiveSideNav'
 
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
-import LodingSpinner from '@/components/Spinner';
+import LodingSpinner from '@/components/Spinner'
+import { archiveSideNav_bg_color } from '@/styles/colorModeValue'
 
 export default function ArchiveRoute({
     filteredData,
     currentPaths,
     pathObj }: {
         filteredData: AllArchivesInterface[],
-        currentPaths: string[];
+        currentPaths: string[],
         pathObj: ArchivePath[]
     }) {
     console.log('currentPaths:', currentPaths)
@@ -37,20 +38,25 @@ export default function ArchiveRoute({
         return (
             <>
                 <ArchiveDrawer pathObj={pathObj} />
-                <Grid templateColumns={{ base: '1fr', lg: '240px 1fr' }} >
-                    <Box p={4} display={{ base: 'none', lg: 'block' }}>
-                        <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
-                    </Box>
-                    <Box>
-                        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} fontSize='sm'>
-                            {breadCrumbPaths().map((path, i) => (
-                                <BreadcrumbItem key={i}>
-                                    <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
-                                </BreadcrumbItem>
-                            ))}
-                        </Breadcrumb>
-                    </Box>
-                </Grid>
+                <Flex flexGrow={1} direction='row'>
+                    <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }}>
+                        <Box
+                            p={8}
+                            display={{ base: 'none', lg: 'block' }}
+                            bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}>
+                            <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
+                        </Box>
+                        <Box>
+                            <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} fontSize='sm'>
+                                {breadCrumbPaths().map((path, i) => (
+                                    <BreadcrumbItem key={i}>
+                                        <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
+                                    </BreadcrumbItem>
+                                ))}
+                            </Breadcrumb>
+                        </Box>
+                    </Grid>
+                </Flex>
             </>
         )
 

@@ -35,7 +35,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 if (!obj.paths) return (
                     <ArchiveActiveLink href={`/archive/${obj.categoryName}`} key={i}>
                         <Link onClick={onCloseDrawer}>
-                            <Box pb={3}>{obj.categoryName}</Box>
+                            <Box pb={5}>{obj.categoryName}</Box>
                         </Link>
                     </ArchiveActiveLink>)
 
@@ -43,7 +43,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 else return (
                     <AccordionItem borderTopWidth={0} borderBottomWidth={0} key={i}>
                         <h2>
-                            <AccordionButton px={0} pt={0} pb={3} _expanded={{ color: highLighColor }}>
+                            <AccordionButton px={0} pt={0} pb={5} _expanded={{ color: highLighColor }}>
                                 <Box
                                     flex="1"
                                     textAlign="left"
@@ -56,7 +56,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                         {obj.paths.map(p => (
                             <ArchiveActiveLink href={`/archive/${obj.id}/${p}`} key={`${obj.id}/${p}`}>
                                 <Link onClick={onCloseDrawer}>
-                                    <AccordionPanel py={2}>{p}</AccordionPanel>
+                                    <AccordionPanel pt={0} pb={5} isTruncated>{p}</AccordionPanel>
                                 </Link>
                             </ArchiveActiveLink>))}
                     </AccordionItem>)

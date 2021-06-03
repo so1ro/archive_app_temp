@@ -80,7 +80,7 @@ export const Test2Icon = createIcon({
     ),
 })
 
-export const ArchiveSideMenu = createIcon({
+export const ArchiveSideMenuIcon = createIcon({
     displayName: "ArchiveSideMenu",
     viewBox: "0 0 32 25",
     path: (

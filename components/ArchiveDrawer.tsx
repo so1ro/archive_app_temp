@@ -37,7 +37,8 @@ export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
                 justifyContent='flex-end'
                 bg={useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d)}
                 _hover={{ bg: useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d) }}
-                display={{ base: 'inline-flex', lg: 'none' }}>
+                display={{ base: 'inline-flex', lg: 'none' }}
+                zIndex='2'>
                 <ArchiveSideMenuIcon w={8} h={8} />
             </Button>
             <Drawer

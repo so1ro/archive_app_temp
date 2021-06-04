@@ -12,7 +12,7 @@ export const query_allArchives =
         id
       }
       thumbnail {
-        url
+        url(transform: { resizeStrategy: FILL, cornerRadius: 20, quality: 90,format: PNG })
       }
       title
       publishDate

@@ -16,6 +16,7 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
+import ArchiveSearch from '@/components/ArchiveSearch';
 
 export default function ArchiveRoute({
     filteredDescArchive,
@@ -33,10 +34,13 @@ export default function ArchiveRoute({
     // State
     const isVideoMode = !!router.query.v
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
+    const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
     const filteredArchive = isArchiveDesc ? filteredDescArchive : filteredAscArchive
+    const searchedArchive = searchedArchiveResult?.map(archive => archive.item)
+    const selectedArchive = searchedArchive.length === 0 ? filteredArchive : searchedArchive
 
     // Effect
     useEffect(() => {
@@ -83,19 +87,23 @@ export default function ArchiveRoute({
                                         </BreadcrumbItem>
                                     ))}
                                 </Breadcrumb>
-                                <HStack>
-                                    <ChevronDownIcon
-                                        onClick={() => sortHandler('desc')}
-                                        w={arrowSize} h={arrowSize}
-                                        color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
-                                    <ChevronUpIcon
-                                        onClick={() =>
-                                            sortHandler('asc')} w={arrowSize} h={arrowSize}
-                                        color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                <HStack spacing={8}>
+                                    <HStack>
+                                        <ChevronDownIcon
+                                            onClick={() => sortHandler('desc')}
+                                            w={arrowSize} h={arrowSize}
+                                            color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                        <ChevronUpIcon
+                                            onClick={() =>
+                                                sortHandler('asc')} w={arrowSize} h={arrowSize}
+                                            mr={8}
+                                            color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                    </HStack>
+                                    <ArchiveSearch filteredArchive={filteredArchive} setSearchedArchiveResult={setSearchedArchiveResult} />
                                 </HStack>
                             </Flex>
-                            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
-                                {filteredArchive.map((archive) => (
+                            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }} w='full'>
+                                {selectedArchive.map((archive) => (
                                     <Grid
                                         key={archive.sys.id}
                                         templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}

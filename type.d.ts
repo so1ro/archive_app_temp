@@ -66,6 +66,12 @@ interface AllArchivesInterface {
   place: string[] | null;
   season: string[] | null;
 }
+
+interface SearchedArchiveResultInterface {
+  item: AllArchivesInterface;
+  matches: Array | null;
+  refIndex: number | null;
+}
 interface LandingPageText {
   sys: { id: string };
   message: string | null;

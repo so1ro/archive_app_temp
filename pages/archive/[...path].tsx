@@ -1,9 +1,13 @@
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
+import Image from "next/image"
+import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 
-import { Box, Flex, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue } from '@chakra-ui/react'
+import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack } from '@chakra-ui/react'
+import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
@@ -11,52 +15,115 @@ import ArchiveSideNav from '@/components/ArchiveSideNav'
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import LodingSpinner from '@/components/Spinner'
-import { archiveSideNav_bg_color } from '@/styles/colorModeValue'
+import { highlight_color } from '@/styles/colorModeValue'
 
 export default function ArchiveRoute({
-    filteredData,
+    filteredDescArchive,
     currentPaths,
     pathObj }: {
-        filteredData: AllArchivesInterface[],
+        filteredDescArchive: AllArchivesInterface[],
         currentPaths: string[],
         pathObj: ArchivePath[]
     }) {
-    console.log('currentPaths:', currentPaths)
-    console.log('paths:', pathObj)
-    // console.log('filteredData:', filteredData)
 
     const { user, error, isLoading } = useUser()
     const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
     const router = useRouter()
 
+    // State
+    const isVideoMode = !!router.query.v
+    const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
+
+    // Archive Filtering
+    const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
+    const filteredArchive = isArchiveDesc ? filteredDescArchive : filteredAscArchive
+
+    // Effect
+    useEffect(() => {
+        console.log('router.query.v:', router.query.v)
+    }, [router.query.v])
+
+    // Functions
+    const sortHandler = async (direction) => {
+        direction === 'desc' ? setIsArchiveDesc({ isArchiveDesc: true }) : setIsArchiveDesc({ isArchiveDesc: false })
+    }
+
+    // miscellaneous
+    const currentRoot = currentPaths.join('/')
     const breadCrumbPaths = () => {
         if (currentPaths.length === 2) return [pathObj.find(obj => obj.id === currentPaths[0]).categoryName, currentPaths[1]]
         return currentPaths
     }
+    const arrowSize = 8
+
 
     if (user && (subscription_state === 'subscribe')) {
         return (
             <>
-                <ArchiveDrawer pathObj={pathObj} />
-                <Flex flexGrow={1} direction='row'>
+                {!isVideoMode && <ArchiveDrawer pathObj={pathObj} />}
+                {!isVideoMode && <Flex flexGrow={1} direction='row'>
                     <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }}>
                         <Box
                             p={8}
                             display={{ base: 'none', lg: 'block' }}
-                            bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}>
+                        // bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}
+                        >
                             <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
                         </Box>
-                        <Box>
-                            <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} fontSize='sm'>
-                                {breadCrumbPaths().map((path, i) => (
-                                    <BreadcrumbItem key={i}>
-                                        <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
-                                    </BreadcrumbItem>
+                        {/* Contennt */}
+                        <VStack spacing={8} p={{ base: 4, md: 8 }}>
+                            <Flex justify='space-between' w='full' align='center'>
+                                <Breadcrumb
+                                    spacing="8px"
+                                    separator={<ChevronRightIcon color="gray.500" />}
+                                    fontSize='md'>
+                                    {breadCrumbPaths().map((path, i) => (
+                                        <BreadcrumbItem key={i}>
+                                            <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                    ))}
+                                </Breadcrumb>
+                                <HStack>
+                                    <ChevronDownIcon
+                                        onClick={() => sortHandler('desc')}
+                                        w={arrowSize} h={arrowSize}
+                                        color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                    <ChevronUpIcon
+                                        onClick={() =>
+                                            sortHandler('asc')} w={arrowSize} h={arrowSize}
+                                        color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                </HStack>
+                            </Flex>
+                            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
+                                {filteredArchive.map((archive) => (
+                                    <Grid
+                                        key={archive.sys.id}
+                                        templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
+                                        gap={{ base: 4, md: 1 }}
+                                        onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
+                                    >
+                                        <Box overflow="hidden">
+                                            <Image
+                                                src={archive.thumbnail.url}
+                                                alt="Picture of the author"
+                                                width={640}
+                                                height={360}
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
+                                                <ListItem>{archive.title}</ListItem>
+                                                <ListItem color="#585858" size="10px">
+                                                    {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
+                                                </ListItem>
+                                            </List>
+                                        </Box>
+                                    </Grid>
                                 ))}
-                            </Breadcrumb>
-                        </Box>
+                            </Grid>
+                        </VStack>
                     </Grid>
-                </Flex>
+                </Flex>}
             </>
         )
 
@@ -86,22 +153,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const { kasumibroVideoCollection: { items: allArchives } } = await fetchContentful(query_allArchives)
     const { archivePathCollection: { items } } = await fetchContentful(query_archiveRoute)
 
-    let filteredData
+    let filteredDescArchive
     // ex: archive/season/春
     if (params.path.length === 2) {
         const key = params.path[0]
         const value = params.path[1]
-        filteredData = allArchives.filter(data => data[key]?.includes(value))
+        filteredDescArchive = allArchives.filter(data => data[key]?.includes(value))
     }
     if (params.path.length === 1) {
         // archive/すべて
-        if (params.path[0] === 'すべて') filteredData = allArchives
+        if (params.path[0] === 'すべて') filteredDescArchive = allArchives
         // ex: archive/名人
-        else filteredData = allArchives.filter(data => data.category?.includes(params.path[0]))
+        else filteredDescArchive = allArchives.filter(data => data.category?.includes(params.path[0]))
     }
 
     return {
-        props: { filteredData, currentPaths: params.path, pathObj: items[0].archiveRouteArray },
+        props: { filteredDescArchive, currentPaths: params.path, pathObj: items[0].archiveRouteArray },
         revalidate: 1,
     }
 }

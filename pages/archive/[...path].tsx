@@ -6,7 +6,7 @@ import { fetchContentful } from '@/hook/contentful'
 import Image from "next/image"
 import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 
-import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack } from '@chakra-ui/react'
+import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center } from '@chakra-ui/react'
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
@@ -35,12 +35,13 @@ export default function ArchiveRoute({
     const isVideoMode = !!router.query.v
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
+    const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
     const filteredArchive = isArchiveDesc ? filteredDescArchive : filteredAscArchive
     const searchedArchive = searchedArchiveResult?.map(archive => archive.item)
-    const selectedArchive = searchedArchive.length === 0 ? filteredArchive : searchedArchive
+    const selectedArchive = !isSeaching ? filteredArchive : searchedArchive
 
     // Effect
     useEffect(() => {
@@ -58,80 +59,90 @@ export default function ArchiveRoute({
         if (currentPaths.length === 2) return [pathObj.find(obj => obj.id === currentPaths[0]).categoryName, currentPaths[1]]
         return currentPaths
     }
-    const arrowSize = 8
+    const arrowSize = { base: 6, md: 8 }
 
 
     if (user && (subscription_state === 'subscribe')) {
         return (
             <>
                 {!isVideoMode && <ArchiveDrawer pathObj={pathObj} />}
-                {!isVideoMode && <Flex flexGrow={1} direction='row'>
-                    <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }}>
-                        <Box
-                            p={8}
-                            display={{ base: 'none', lg: 'block' }}
-                        // bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}
-                        >
-                            <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
-                        </Box>
-                        {/* Contennt */}
-                        <VStack spacing={8} p={{ base: 4, md: 8 }}>
-                            <Flex justify='space-between' w='full' align='center'>
-                                <Breadcrumb
-                                    spacing="8px"
-                                    separator={<ChevronRightIcon color="gray.500" />}
-                                    fontSize='md'>
-                                    {breadCrumbPaths().map((path, i) => (
-                                        <BreadcrumbItem key={i}>
-                                            <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
-                                        </BreadcrumbItem>
-                                    ))}
-                                </Breadcrumb>
-                                <HStack spacing={8}>
-                                    <HStack>
-                                        <ChevronDownIcon
-                                            onClick={() => sortHandler('desc')}
-                                            w={arrowSize} h={arrowSize}
-                                            color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
-                                        <ChevronUpIcon
-                                            onClick={() =>
-                                                sortHandler('asc')} w={arrowSize} h={arrowSize}
-                                            mr={8}
-                                            color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                {!isVideoMode &&
+                    <Flex flexGrow={1} direction='row'>
+                        <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
+                            <Box
+                                p={8}
+                                display={{ base: 'none', lg: 'block' }}
+                            // bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}
+                            >
+                                <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
+                            </Box>
+                            {/* Contennt */}
+                            <VStack spacing={8} p={{ base: 4, md: 8 }} >
+                                <Flex justify={{ base: 'none', sm: 'space-between' }} flexDirection={{ base: 'column', sm: 'row' }} w='full' align='center'>
+                                    <Breadcrumb
+                                        spacing="8px"
+                                        separator={<ChevronRightIcon color="gray.500" />}
+                                        fontSize='md'
+                                        mb={{ base: 3, sm: 0 }}>
+                                        {breadCrumbPaths().map((path, i) => (
+                                            <BreadcrumbItem key={i}>
+                                                <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
+                                            </BreadcrumbItem>
+                                        ))}
+                                    </Breadcrumb>
+                                    <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
+                                        <HStack>
+                                            <ChevronDownIcon
+                                                onClick={() => sortHandler('desc')}
+                                                w={arrowSize} h={arrowSize}
+                                                color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                            <ChevronUpIcon
+                                                onClick={() => sortHandler('asc')}
+                                                w={arrowSize} h={arrowSize}
+                                                mr={8}
+                                                color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                        </HStack>
+                                        <ArchiveSearch
+                                            filteredArchive={filteredArchive}
+                                            setSearchedArchiveResult={setSearchedArchiveResult}
+                                            setIsSeaching={setIsSeaching} />
                                     </HStack>
-                                    <ArchiveSearch filteredArchive={filteredArchive} setSearchedArchiveResult={setSearchedArchiveResult} />
-                                </HStack>
-                            </Flex>
-                            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }} w='full'>
-                                {selectedArchive.map((archive) => (
+                                </Flex>
+                                {!!selectedArchive.length ?
                                     <Grid
-                                        key={archive.sys.id}
-                                        templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
-                                        gap={{ base: 4, md: 1 }}
-                                        onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
-                                    >
-                                        <Box overflow="hidden">
-                                            <Image
-                                                src={archive.thumbnail.url}
-                                                alt="Picture of the author"
-                                                width={640}
-                                                height={360}
-                                            />
-                                        </Box>
-                                        <Box>
-                                            <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
-                                                <ListItem>{archive.title}</ListItem>
-                                                <ListItem color="#585858" size="10px">
-                                                    {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
-                                                </ListItem>
-                                            </List>
-                                        </Box>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </VStack>
-                    </Grid>
-                </Flex>}
+                                        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }}
+                                        gap={{ base: 4, md: 6 }}>
+                                        {selectedArchive.map((archive) => (
+                                            <Grid
+                                                key={archive.sys.id}
+                                                templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
+                                                gap={{ base: 4, md: 1 }}
+                                                onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
+                                            >
+                                                <Box overflow="hidden">
+                                                    <Image
+                                                        src={archive.thumbnail.url}
+                                                        alt="Picture of the author"
+                                                        width={640}
+                                                        height={360}
+                                                    />
+                                                </Box>
+                                                <Box>
+                                                    <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
+                                                        <ListItem>{archive.title}</ListItem>
+                                                        <ListItem color="#585858" size="10px">
+                                                            {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
+                                                        </ListItem>
+                                                    </List>
+                                                </Box>
+                                            </Grid>
+                                        ))}
+                                    </Grid> :
+                                    <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
+                                }
+                            </VStack>
+                        </Grid>
+                    </Flex>}
             </>
         )
 

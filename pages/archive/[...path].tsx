@@ -34,7 +34,7 @@ export default function ArchiveRoute({
     const router = useRouter()
 
     // State
-    const isVideoMode = !!router.query.v
+    const [{ isVideoMode }, setIsVideoMode] = useState<{ isVideoMode: boolean }>({ isVideoMode: false })
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
     const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
@@ -47,8 +47,9 @@ export default function ArchiveRoute({
 
     // Effect
     useEffect(() => {
-        console.log('router.query.v:', router.query.v)
+        setIsVideoMode({ isVideoMode: !!router.query.v })
     }, [router.query.v])
+
 
     // Functions
     const sortHandler = async (direction) => {
@@ -62,6 +63,7 @@ export default function ArchiveRoute({
         return currentPaths
     }
     const arrowSize = { base: 6, md: 8 }
+    const arrowColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
 
     if (user && (subscription_state === 'subscribe')) {
@@ -74,11 +76,9 @@ export default function ArchiveRoute({
                             <Box
                                 p={8}
                                 display={{ base: 'none', lg: 'block' }}
-                            // bg={useColorModeValue(archiveSideNav_bg_color.l, archiveSideNav_bg_color.d)}
                             >
                                 <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
                             </Box>
-                            {/* Contennt */}
                             <VStack spacing={8} p={{ base: 4, md: 8 }} >
                                 <Flex justify={{ base: 'none', sm: 'space-between' }} flexDirection={{ base: 'column', sm: 'row' }} w='full' align='center'>
                                     <Breadcrumb
@@ -97,12 +97,12 @@ export default function ArchiveRoute({
                                             <ChevronDownIcon
                                                 onClick={() => sortHandler('desc')}
                                                 w={arrowSize} h={arrowSize}
-                                                color={isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                                color={isArchiveDesc && arrowColor} />
                                             <ChevronUpIcon
                                                 onClick={() => sortHandler('asc')}
                                                 w={arrowSize} h={arrowSize}
                                                 mr={8}
-                                                color={!isArchiveDesc && useColorModeValue(highlight_color.l, highlight_color.d)} />
+                                                color={!isArchiveDesc && arrowColor} />
                                         </HStack>
                                         <ArchiveSearch
                                             filteredArchive={filteredArchive}
@@ -148,14 +148,25 @@ export default function ArchiveRoute({
             </>
         )
 
-    } else if (typeof window !== 'undefined') {
+    }
+    else if (isLoading || isMetadataLoading) {
         return (
-            <Box px={4} py={32}>
-                <Text>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Text>
-            </Box>
+            <LodingSpinner />
+        )
+    } else {
+        return (
+            <>
+                {(subscription_state !== 'subscribe') &&
+                    <Flex flexGrow={1} direction='row'>
+                        <Center w='full' px={6}>
+                            <Box>
+                                アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。
+                            </Box>
+                        </Center>
+                    </Flex>}
+            </>
         )
     }
-    return (<LodingSpinner />)
 }
 
 

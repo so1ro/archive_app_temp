@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
+import NextLink from 'next/link'
+
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
 import Image from "next/image"
 import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 
-import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center } from '@chakra-ui/react'
+import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Text } from '@chakra-ui/react'
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
@@ -147,10 +149,13 @@ export default function ArchiveRoute({
         )
 
     } else if (typeof window !== 'undefined') {
-        router.push(`/archive`)
-        return <LodingSpinner />
+        return (
+            <Box px={4} py={32}>
+                <Text>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Text>
+            </Box>
+        )
     }
-    return <LodingSpinner />
+    return (<LodingSpinner />)
 }
 
 

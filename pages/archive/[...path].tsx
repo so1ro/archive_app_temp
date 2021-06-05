@@ -65,7 +65,72 @@ export default function ArchiveRoute({
     const arrowSize = { base: 6, md: 8 }
     const arrowColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
+    // Components
+    const BreadcrumbNav = ({ paths }) => (
+        <Breadcrumb
+            spacing="8px"
+            separator={<ChevronRightIcon color="gray.500" />}
+            fontSize='md'
+            mb={{ base: 3, sm: 0 }}>
+            {paths.map((path, i) => (
+                <BreadcrumbItem key={i}>
+                    <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
+                </BreadcrumbItem>
+            ))}
+        </Breadcrumb>
+    )
 
+
+    const SortArrow = () => (
+        <HStack>
+            <ChevronDownIcon
+                onClick={() => sortHandler('desc')}
+                w={arrowSize} h={arrowSize}
+                color={isArchiveDesc && arrowColor} />
+            <ChevronUpIcon
+                onClick={() => sortHandler('asc')}
+                w={arrowSize} h={arrowSize}
+                mr={8}
+                color={!isArchiveDesc && arrowColor} />
+        </HStack>
+    )
+
+
+    const VideoThumnail = ({ archive }) => (
+        <Grid
+            key={archive.sys.id}
+            templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
+            gap={{ base: 4, md: 1 }}
+            onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
+        >
+            <Box overflow="hidden">
+                <Image
+                    src={archive.thumbnail.url}
+                    alt="Picture of the author"
+                    width={640}
+                    height={360}
+                />
+            </Box>
+            <Box>
+                <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
+                    <ListItem>{archive.title}</ListItem>
+                    <ListItem color="#585858" size="10px">
+                        {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
+                    </ListItem>
+                </List>
+            </Box>
+        </Grid>
+    )
+
+
+    const ErrowMessage = () => (
+        <Center w='full' px={6}>
+            <Box>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Box>
+        </Center>
+    )
+
+
+    // Main Component
     if (user && (subscription_state === 'subscribe')) {
         return (
             <>
@@ -73,37 +138,14 @@ export default function ArchiveRoute({
                 {!isVideoMode &&
                     <Flex flexGrow={1} direction='row'>
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
-                            <Box
-                                p={8}
-                                display={{ base: 'none', lg: 'block' }}
-                            >
+                            <Box p={8} display={{ base: 'none', lg: 'block' }}>
                                 <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
                             </Box>
                             <VStack spacing={8} p={{ base: 4, md: 8 }} >
                                 <Flex justify={{ base: 'none', sm: 'space-between' }} flexDirection={{ base: 'column', sm: 'row' }} w='full' align='center'>
-                                    <Breadcrumb
-                                        spacing="8px"
-                                        separator={<ChevronRightIcon color="gray.500" />}
-                                        fontSize='md'
-                                        mb={{ base: 3, sm: 0 }}>
-                                        {breadCrumbPaths().map((path, i) => (
-                                            <BreadcrumbItem key={i}>
-                                                <BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
-                                            </BreadcrumbItem>
-                                        ))}
-                                    </Breadcrumb>
+                                    <BreadcrumbNav paths={breadCrumbPaths()} />
                                     <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
-                                        <HStack>
-                                            <ChevronDownIcon
-                                                onClick={() => sortHandler('desc')}
-                                                w={arrowSize} h={arrowSize}
-                                                color={isArchiveDesc && arrowColor} />
-                                            <ChevronUpIcon
-                                                onClick={() => sortHandler('asc')}
-                                                w={arrowSize} h={arrowSize}
-                                                mr={8}
-                                                color={!isArchiveDesc && arrowColor} />
-                                        </HStack>
+                                        <SortArrow />
                                         <ArchiveSearch
                                             filteredArchive={filteredArchive}
                                             setSearchedArchiveResult={setSearchedArchiveResult}
@@ -111,36 +153,10 @@ export default function ArchiveRoute({
                                     </HStack>
                                 </Flex>
                                 {!!selectedArchive.length ?
-                                    <Grid
-                                        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }}
-                                        gap={{ base: 4, md: 6 }}>
-                                        {selectedArchive.map((archive) => (
-                                            <Grid
-                                                key={archive.sys.id}
-                                                templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
-                                                gap={{ base: 4, md: 1 }}
-                                                onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
-                                            >
-                                                <Box overflow="hidden">
-                                                    <Image
-                                                        src={archive.thumbnail.url}
-                                                        alt="Picture of the author"
-                                                        width={640}
-                                                        height={360}
-                                                    />
-                                                </Box>
-                                                <Box>
-                                                    <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
-                                                        <ListItem>{archive.title}</ListItem>
-                                                        <ListItem color="#585858" size="10px">
-                                                            {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
-                                                        </ListItem>
-                                                    </List>
-                                                </Box>
-                                            </Grid>
-                                        ))}
-                                    </Grid> :
-                                    <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
+                                    <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
+                                        {selectedArchive.map((archive) => <VideoThumnail archive={archive} />)}
+                                    </Grid>
+                                    : <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
                                 }
                             </VStack>
                         </Grid>
@@ -158,11 +174,7 @@ export default function ArchiveRoute({
             <>
                 {(subscription_state !== 'subscribe') &&
                     <Flex flexGrow={1} direction='row'>
-                        <Center w='full' px={6}>
-                            <Box>
-                                アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。
-                            </Box>
-                        </Center>
+                        <ErrowMessage />
                     </Flex>}
             </>
         )

@@ -23,6 +23,7 @@ export const query_allArchives =
       casts
       place
       season
+      timestamp
     }
   }
 }

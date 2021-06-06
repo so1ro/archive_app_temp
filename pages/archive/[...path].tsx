@@ -7,9 +7,10 @@ import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries
 import { fetchContentful } from '@/hook/contentful'
 import Image from "next/image"
 import { format, parseISO, compareAsc, compareDesc } from "date-fns"
+import TimeFormat from 'hh-mm-ss'
 
-import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Text } from '@chakra-ui/react'
-import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack } from '@chakra-ui/react'
+import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
@@ -19,6 +20,7 @@ import { useUserMetadata } from "@/context/useUserMetadata"
 import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch';
+import VideoVimeo from '@/components/VideoVimeo';
 
 export default function ArchiveRoute({
     filteredDescArchive,
@@ -38,6 +40,7 @@ export default function ArchiveRoute({
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
     const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
+    const [{ currentDisplayArchive }, setCurrentDisplayArchive] = useState<{ currentDisplayArchive: AllArchivesInterface | {} }>({ currentDisplayArchive: {} })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -63,7 +66,7 @@ export default function ArchiveRoute({
         return currentPaths
     }
     const arrowSize = { base: 6, md: 8 }
-    const arrowColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     // Components
     const BreadcrumbNav = ({ paths }) => (
@@ -86,22 +89,24 @@ export default function ArchiveRoute({
             <ChevronDownIcon
                 onClick={() => sortHandler('desc')}
                 w={arrowSize} h={arrowSize}
-                color={isArchiveDesc && arrowColor} />
+                color={isArchiveDesc && highLightColor} />
             <ChevronUpIcon
                 onClick={() => sortHandler('asc')}
                 w={arrowSize} h={arrowSize}
                 mr={8}
-                color={!isArchiveDesc && arrowColor} />
+                color={!isArchiveDesc && highLightColor} />
         </HStack>
     )
 
 
     const VideoThumnail = ({ archive }) => (
         <Grid
-            key={archive.sys.id}
             templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
             gap={{ base: 4, md: 1 }}
-            onClick={() => { router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true }) }}
+            onClick={() => {
+                router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true })
+                setCurrentDisplayArchive({ currentDisplayArchive: archive })
+            }}
         >
             <Box overflow="hidden">
                 <Image
@@ -129,6 +134,86 @@ export default function ArchiveRoute({
         </Center>
     )
 
+    const Video = ({ currentDisplayArchive }) => {
+        console.log('currentDisplayArchive:', currentDisplayArchive)
+
+        // How to solve "Invalide time value" error when refreshing page with params
+        // const router = useRouter()
+        // const withoutParamPath = Array.isArray(router.query.path) && router.query.path.join('/')
+        // if (!currentDisplayArchive) router.push(`archive/${withoutParamPath}`)
+
+        //State
+        const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
+        const [{ isQuitVideo }, setIsQuitVideo] = useState<{ isQuitVideo: boolean }>({ isQuitVideo: false })
+        const publishedDate = format(parseISO(currentDisplayArchive.publishDate), "yyyy/MM/dd")
+
+
+        return (
+            <>
+                <HStack mb={1}>
+                    <ChevronLeftIcon
+                        w={8} h={8}
+                        onClick={() => {
+                            router.back()
+                            setIsVideoMode({ isVideoMode: false })
+                        }} />
+                </HStack>
+                <Grid templateColumns={{ base: '1fr' }}>
+                    <VideoVimeo
+                        vimeoId={currentDisplayArchive?.vimeoUrl}
+                        aspect={null}
+                        autoplay={true}
+                        borderRadius={0}
+                        skipTime={skipTime}
+                        isQuitVideo={isQuitVideo} />
+                </Grid>
+                <Grid
+                    templateColumns={{ base: "auto 40px" }}
+                    gap={{ base: 4, md: 1 }}
+                    px={2}
+                    py={4}
+                >
+                    <Box>
+                        <List m={0} p={0}>
+                            <ListItem fontSize={['xl']}>{currentDisplayArchive.title}</ListItem>
+                            <ListItem color="#585858" size="10px" fontSize={['sm']} >
+                                {publishedDate}
+                            </ListItem>
+                        </List>
+                    </Box>
+                    <Box overflow="hidden">
+                        {/* Heart */}
+                        <Image
+                            src={currentDisplayArchive.thumbnail.url}
+                            alt="Picture of the author"
+                            width={640}
+                            height={360}
+                        />
+                    </Box>
+                </Grid>
+                {currentDisplayArchive?.timestamp && <Box px={2} pb={4}>
+                    {currentDisplayArchive.timestamp.map((stamp, i) => (
+                        <List fontSize={['md']} key={i}>
+                            <ListItem>
+                                <Link
+                                    mr={2}
+                                    color={highLightColor}
+                                    onClick={async () => {
+                                        setIsQuitVideo({ isQuitVideo: true })
+                                        await setSkipTime({ skipTime: TimeFormat.toS(stamp.time) })
+                                        setIsQuitVideo({ isQuitVideo: false })
+                                    }}
+                                >{stamp.time}</Link>
+                                {stamp.indexText}
+                            </ListItem>
+                        </List>
+                    ))}
+                </Box>}
+                {/* <Flex flexGrow={1} direction='row'></Flex> */}
+            </>
+        )
+    }
+
 
     // Main Component
     if (user && (subscription_state === 'subscribe')) {
@@ -154,13 +239,14 @@ export default function ArchiveRoute({
                                 </Flex>
                                 {!!selectedArchive.length ?
                                     <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
-                                        {selectedArchive.map((archive) => <VideoThumnail archive={archive} />)}
+                                        {selectedArchive.map((archive) => <VideoThumnail archive={archive} key={archive.sys.id} />)}
                                     </Grid>
                                     : <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
                                 }
                             </VStack>
                         </Grid>
                     </Flex>}
+                {isVideoMode && <Video currentDisplayArchive={currentDisplayArchive} />}
             </>
         )
 

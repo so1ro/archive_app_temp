@@ -12,7 +12,7 @@ import { Heading, Box, Text } from "@chakra-ui/react"
 import { fetchAllPrices } from '@/hook/getStaticProps';
 import PriceList from '@/components/PriceList';
 import ArchiveMeritList from "@/components/ArchiveMeritList"
-import VideoVimeo from "@/components/VideoVimeo"
+import VideoVimeoLT from "@/components/VideoVimeoLT"
 import PageShell from '@/components/PageShell'
 import LodingSpinner from '@/components/Spinner';
 
@@ -58,7 +58,7 @@ export default function Archive(
         </Box>
         <Box>
           <Text mb={6}>{explain}</Text>
-          <VideoVimeo vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} />
+          <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
         </Box>
         <PriceList user={user} allPrices={allPrices} annotation={annotation} />
       </PageShell>

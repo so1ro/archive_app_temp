@@ -65,6 +65,7 @@ interface AllArchivesInterface {
   casts: string[] | null;
   place: string[] | null;
   season: string[] | null;
+  timestamp: { time: string | null, indexText: string | null };
 }
 
 interface SearchedArchiveResultInterface {

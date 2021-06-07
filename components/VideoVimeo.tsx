@@ -8,7 +8,7 @@ export default function VideoVimeo({
     borderRadius,
     skipTime,
     isQuitVideo, }: {
-        vimeoId: string | null,
+        vimeoId: number | null,
         aspect: string | null,
         autoplay: boolean | null,
         borderRadius: number | null,

@@ -40,7 +40,6 @@ export default function ArchiveRoute({
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
     const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
-    const [{ currentDisplayArchive }, setCurrentDisplayArchive] = useState<{ currentDisplayArchive: AllArchivesInterface | {} }>({ currentDisplayArchive: {} })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -48,11 +47,18 @@ export default function ArchiveRoute({
     const searchedArchive = searchedArchiveResult?.map(archive => archive.item)
     const selectedArchive = !isSeaching ? filteredArchive : searchedArchive
 
-    // Effect
+    // Effect for setIsVideoMode
     useEffect(() => {
-        setIsVideoMode({ isVideoMode: !!router.query.v })
-    }, [router.query.v])
+        // Only when you find router.query.id changing route, set isVideoMode true 
+        router.query.id && setIsVideoMode({ isVideoMode: true })
+    }, [router.query.id])
 
+    useEffect(() => {
+        // Always before changing route, set isVideoMode false 
+        const handleHistoryChange = (url, { shallow }) => { setIsVideoMode({ isVideoMode: false }) }
+        router.events.on('routeChangeStart', handleHistoryChange)
+        return () => { router.events.off('routeChangeStart', handleHistoryChange) }
+    }, [])
 
     // Functions
     const sortHandler = async (direction) => {
@@ -104,8 +110,7 @@ export default function ArchiveRoute({
             templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
             gap={{ base: 4, md: 1 }}
             onClick={() => {
-                router.push(`${currentRoot}/?v=${archive.vimeoUrl}`, null, { shallow: true })
-                setCurrentDisplayArchive({ currentDisplayArchive: archive })
+                router.push(`${currentRoot}/?id=${archive.sys.id}`, null, { shallow: true })
             }}
         >
             <Box overflow="hidden">
@@ -134,13 +139,11 @@ export default function ArchiveRoute({
         </Center>
     )
 
-    const Video = ({ currentDisplayArchive }) => {
-        console.log('currentDisplayArchive:', currentDisplayArchive)
+    const Video = () => {
 
-        // How to solve "Invalide time value" error when refreshing page with params
-        // const router = useRouter()
-        // const withoutParamPath = Array.isArray(router.query.path) && router.query.path.join('/')
-        // if (!currentDisplayArchive) router.push(`archive/${withoutParamPath}`)
+        // Find Video
+        const currentId = router.query.id as string
+        const currentDisplayArchive = selectedArchive.find(archive => archive.sys.id === currentId)
 
         //State
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
@@ -246,10 +249,9 @@ export default function ArchiveRoute({
                             </VStack>
                         </Grid>
                     </Flex>}
-                {isVideoMode && <Video currentDisplayArchive={currentDisplayArchive} />}
+                {isVideoMode && <Video />}
             </>
         )
-
     }
     else if (isLoading || isMetadataLoading) {
         return (

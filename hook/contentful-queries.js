@@ -24,6 +24,9 @@ export const query_allArchives =
       place
       season
       timestamp
+      description{
+        json
+      }
     }
   }
 }

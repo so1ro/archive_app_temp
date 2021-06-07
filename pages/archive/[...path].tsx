@@ -9,7 +9,13 @@ import Image from "next/image"
 import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 import TimeFormat from 'hh-mm-ss'
 
-import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack } from '@chakra-ui/react'
+import {
+    VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack, Text, Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+} from '@chakra-ui/react'
 import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
@@ -21,6 +27,11 @@ import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch';
 import VideoVimeo from '@/components/VideoVimeo';
+
+//Contentful
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { BLOCKS, INLINES } from '@contentful/rich-text-types'
+
 
 export default function ArchiveRoute({
     filteredDescArchive,
@@ -144,16 +155,30 @@ export default function ArchiveRoute({
         // Find Video
         const currentId = router.query.id as string
         const currentDisplayArchive = selectedArchive.find(archive => archive.sys.id === currentId)
+        console.log('currentDisplayArchive.description.json:', currentDisplayArchive.description.json)
 
         //State
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
         const [{ isQuitVideo }, setIsQuitVideo] = useState<{ isQuitVideo: boolean }>({ isQuitVideo: false })
         const publishedDate = format(parseISO(currentDisplayArchive.publishDate), "yyyy/MM/dd")
 
+        // Contentful
+        const richtext_options = {
+            renderNode: {
+                [BLOCKS.PARAGRAPH]: (node, children) => {
+                    return <Text whiteSpace='pre-wrap' mb={4}>{children}</Text>
+                },
+                [INLINES.HYPERLINK]: (node, children) => {
+                    return <Link href={node.data.uri} color={highLightColor} isExternal>{children}</Link>
+                },
+            }
+        }
+
+
 
         return (
             <>
-                <HStack mb={1}>
+                <HStack mb={2}>
                     <ChevronLeftIcon
                         w={8} h={8}
                         onClick={() => {
@@ -212,6 +237,15 @@ export default function ArchiveRoute({
                         </List>
                     ))}
                 </Box>}
+                {/* Contentful */}
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <h2><AccordionButton><AccordionIcon /></AccordionButton></h2>
+                        <AccordionPanel pb={4}>
+                            {documentToReactComponents(currentDisplayArchive.description.json, richtext_options)}
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
                 {/* <Flex flexGrow={1} direction='row'></Flex> */}
             </>
         )

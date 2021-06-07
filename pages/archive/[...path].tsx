@@ -155,7 +155,6 @@ export default function ArchiveRoute({
         // Find Video
         const currentId = router.query.id as string
         const currentDisplayArchive = selectedArchive.find(archive => archive.sys.id === currentId)
-        console.log('currentDisplayArchive.description.json:', currentDisplayArchive.description.json)
 
         //State
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
@@ -219,7 +218,7 @@ export default function ArchiveRoute({
                         />
                     </Box>
                 </Grid>
-                {currentDisplayArchive?.timestamp && <Box px={2} pb={4}>
+                {currentDisplayArchive.timestamp && <Box px={2} pb={4}>
                     {currentDisplayArchive.timestamp.map((stamp, i) => (
                         <List fontSize={['md']} key={i}>
                             <ListItem>
@@ -238,14 +237,14 @@ export default function ArchiveRoute({
                     ))}
                 </Box>}
                 {/* Contentful */}
-                <Accordion allowToggle>
+                {currentDisplayArchive.description?.json && <Accordion allowToggle>
                     <AccordionItem>
                         <h2><AccordionButton><AccordionIcon /></AccordionButton></h2>
                         <AccordionPanel pb={4}>
                             {documentToReactComponents(currentDisplayArchive.description.json, richtext_options)}
                         </AccordionPanel>
                     </AccordionItem>
-                </Accordion>
+                </Accordion>}
                 {/* <Flex flexGrow={1} direction='row'></Flex> */}
             </>
         )
@@ -271,6 +270,7 @@ export default function ArchiveRoute({
                                         <ArchiveSearch
                                             filteredArchive={filteredArchive}
                                             setSearchedArchiveResult={setSearchedArchiveResult}
+                                            isSeaching={isSeaching}
                                             setIsSeaching={setIsSeaching} />
                                     </HStack>
                                 </Flex>

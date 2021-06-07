@@ -7,6 +7,7 @@ import Fuse from 'fuse.js'
 export default function ArchiveSearch(
     { filteredArchive,
         setSearchedArchiveResult,
+        isSeaching,
         setIsSeaching }
     // :{
     //     filteredArchive: AllArchivesInterface[],
@@ -25,6 +26,8 @@ export default function ArchiveSearch(
     const handleSearch = ({ currentTarget: { value: input } }) => {
 
         input ? setIsSeaching({ isSeaching: true }) : setIsSeaching({ isSeaching: false })
+        localStorage.setItem('archiveSearchValue', input);
+
         const options = {
             // isCaseSensitive: false,
             // includeScore: false,
@@ -59,6 +62,7 @@ export default function ArchiveSearch(
         searchInput.current.value = ""
         setHits({ hits: {} })
         setIsSeaching({ isSeaching: false })
+        localStorage.setItem('archiveSearchValue', '');
     }
 
     return (
@@ -73,10 +77,12 @@ export default function ArchiveSearch(
                 w={{ base: '220px', sm: '240px', md: '280px' }} fontSize={{ base: 'xs', md: 'sm' }}
                 borderWidth='1px'
                 bg={useColorModeValue('gray.200', '#172128')}
+                borderColor={isSeaching ? useColorModeValue(highlight_color.l, highlight_color.d) : useColorModeValue('gray.200', '#172128')}
                 focusBorderColor={useColorModeValue(highlight_color.l, highlight_color.d)}
                 // Fuction
                 onChange={handleSearch}
                 ref={searchInput}
+                value={localStorage.getItem('archiveSearchValue')}
             />
             <InputRightElement
                 cursor='pointer'

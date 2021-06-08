@@ -6,6 +6,7 @@ export const ArchiveStateProvider = (props) => {
 
   // State
   const [{ isAutoplay }, setIsAutoplay] = useState<{ isAutoplay: boolean }>({ isAutoplay: false })
+  const [{ searchKeyword }, setSearchKeyword] = useState<{ searchKeyword: string }>({ searchKeyword: null })
 
   useEffect(() => {
 
@@ -13,7 +14,9 @@ export const ArchiveStateProvider = (props) => {
 
   const value = {
     isAutoplay,
-    setIsAutoplay
+    setIsAutoplay,
+    searchKeyword,
+    setSearchKeyword,
   }
   return <ArchiveStateContext.Provider value={value} {...props} />;
 };

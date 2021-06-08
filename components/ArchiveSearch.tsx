@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useArchiveState } from "@/context/useArchiveState"
 import { Input, InputGroup, InputLeftElement, InputRightElement, useColorModeValue } from "@chakra-ui/react"
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons"
 import { highlight_color, text_color } from '@/styles/colorModeValue'
@@ -15,6 +16,8 @@ export default function ArchiveSearch(
     // }
 
 ) {
+    // Hook
+    const { searchKeyword, setSearchKeyword } = useArchiveState()
 
     // useState
     const [{ hits }, setHits] = useState<{ hits: AllArchivesInterface[] | {} }>({ hits: {} })
@@ -26,7 +29,7 @@ export default function ArchiveSearch(
     const handleSearch = ({ currentTarget: { value: input } }) => {
 
         input ? setIsSeaching({ isSeaching: true }) : setIsSeaching({ isSeaching: false })
-        localStorage.setItem('archiveSearchValue', input);
+        setSearchKeyword({ searchKeyword: input })
 
         const options = {
             // isCaseSensitive: false,
@@ -59,10 +62,11 @@ export default function ArchiveSearch(
     }
 
     const clear = () => {
+        // Could Ref be in Context???
         searchInput.current.value = ""
         setHits({ hits: {} })
         setIsSeaching({ isSeaching: false })
-        localStorage.setItem('archiveSearchValue', '')
+        setSearchKeyword({ searchKeyword: null })
     }
 
     return (
@@ -82,7 +86,7 @@ export default function ArchiveSearch(
                 // Fuction
                 onChange={handleSearch}
                 ref={searchInput}
-                value={localStorage.getItem('archiveSearchValue')}
+                value={searchKeyword}
             />
             <InputRightElement
                 cursor='pointer'

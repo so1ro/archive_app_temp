@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { useRouter } from 'next/router'
+import { useArchiveState } from "@/context/useArchiveState"
 import ArchiveActiveLink from '@/components/ArchiveActiveLink';
 import {
     Box,
@@ -17,6 +18,7 @@ import { highlight_color, text_color } from '@/styles/colorModeValue';
 export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
     const router = useRouter()
+    // const { searchKeyword, setSearchKeyword } = useArchiveState()
 
     // For routes which need Accordion to be opened.
     let defaultIndex: number | null = null
@@ -34,7 +36,10 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 // ex: archive/名人
                 if (!obj.paths) return (
                     <ArchiveActiveLink href={`/archive/${obj.categoryName}`} key={i}>
-                        <Link onClick={onCloseDrawer}>
+                        <Link onClick={() => {
+                            onCloseDrawer
+                            // setSearchKeyword({ searchKeyword: null })
+                        }}>
                             <Box pb={5}>{obj.categoryName}</Box>
                         </Link>
                     </ArchiveActiveLink>)
@@ -55,7 +60,10 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                         </h2>
                         {obj.paths.map(p => (
                             <ArchiveActiveLink href={`/archive/${obj.id}/${p}`} key={`${obj.id}/${p}`}>
-                                <Link onClick={onCloseDrawer}>
+                                <Link onClick={() => {
+                                    onCloseDrawer
+                                    // setSearchKeyword({ searchKeyword: null })
+                                }}>
                                     <AccordionPanel pt={0} pb={5} isTruncated>{p}</AccordionPanel>
                                 </Link>
                             </ArchiveActiveLink>))}

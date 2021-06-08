@@ -156,7 +156,6 @@ export default function ArchiveRoute({
 
         // Hook
         const { isAutoplay, setIsAutoplay } = useArchiveState()
-        console.log('isAutoplay:', isAutoplay)
 
         //State
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })

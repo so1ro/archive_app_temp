@@ -19,6 +19,7 @@ import ArchiveSideNav from '@/components/ArchiveSideNav'
 
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
+import { useArchiveState } from "@/context/useArchiveState"
 import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
@@ -48,7 +49,6 @@ export default function ArchiveRoute({
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
     const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
-    const [{ queryIsAutoplay }, setQueryIsAutoplay] = useState<{ queryIsAutoplay: boolean }>({ queryIsAutoplay: false })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -60,7 +60,6 @@ export default function ArchiveRoute({
     useEffect(() => {
         // Only when you find router.query.id changing route, set isVideoMode true 
         router.query.id && setIsVideoMode({ isVideoMode: true })
-        router.query.isAutoplay === 'true' && setQueryIsAutoplay({ queryIsAutoplay: true })
     }, [router.query.id])
 
     useEffect(() => {
@@ -149,17 +148,20 @@ export default function ArchiveRoute({
         </Center>
     )
 
-    const Video = ({ queryIsAutoplay }) => {
+    const Video = () => {
 
         // Find Video
         const currentId = router.query.id as string
         const currentDisplayArchive = selectedArchive.find(archive => archive.sys.id === currentId)
 
+        // Hook
+        const { isAutoplay, setIsAutoplay } = useArchiveState()
+        console.log('isAutoplay:', isAutoplay)
+
         //State
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
         const [{ isQuitVideo }, setIsQuitVideo] = useState<{ isQuitVideo: boolean }>({ isQuitVideo: false })
         const publishedDate = format(parseISO(currentDisplayArchive.publishDate), "yyyy/MM/dd")
-        const [{ isAutoplay }, setIsAutoplay] = useState<{ isAutoplay: boolean }>({ isAutoplay: queryIsAutoplay })
 
         // Contentful
         const richtext_options = {
@@ -310,7 +312,7 @@ export default function ArchiveRoute({
                             </VStack>
                         </Grid>
                     </Flex>}
-                {isVideoMode && <Video queryIsAutoplay={queryIsAutoplay} />}
+                {isVideoMode && <Video />}
             </>
         )
     }

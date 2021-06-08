@@ -45,7 +45,7 @@ export default function VideoVimeo({
                         autoplay={autoplay}
                         start={skipTime}
                         onEnd={() => {
-                            isAutoplay && router.push(`${currentRoot}/?id=${nextVideoId}&isAutoplay=${isAutoplay}`, null, { shallow: true })
+                            isAutoplay && router.push(`${currentRoot}/?id=${nextVideoId}`, null, { shallow: true })
                         }}
                     />
                 }

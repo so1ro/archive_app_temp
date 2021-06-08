@@ -5,31 +5,31 @@
 
 // All Archive
 export const query_allArchives =
-  ` {
-  kasumibroVideoCollection ( order : publishDate_DESC ) {
-    items {
-      sys {
-        id
-      }
-      thumbnail {
-        url(transform: { resizeStrategy: FILL, cornerRadius: 20, quality: 90,format: PNG })
-      }
-      title
-      publishDate
-      vimeoUrl
-      category
-      keyword
-      year
-      casts
-      place
-      season
-      timestamp
-      description{
-        json
+  `{
+    kasumibroVideoCollection ( order : publishDate_DESC ) {
+      items {
+        sys {
+          id
+        }
+        thumbnail {
+          url(transform: { resizeStrategy: FILL, cornerRadius: 20, quality: 90,format: PNG })
+        }
+        title
+        publishDate
+        vimeoUrl
+        category
+        keyword
+        year
+        casts
+        place
+        season
+        timestamp
+        description{
+          json
+        }
       }
     }
   }
-}
 `
 
 // Archive Dynamic Route Paths

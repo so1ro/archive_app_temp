@@ -4,6 +4,7 @@ import { AppProps } from 'next/app'
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata';
+import { ArchiveStateProvider } from '@/context/useArchiveState';
 import Layout from '@/components/Layout';
 
 // import '@/styles/globals.css'
@@ -15,9 +16,11 @@ function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <UserMetadataProvider>
         <ChakraProvider theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ArchiveStateProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ArchiveStateProvider>
         </ChakraProvider>
       </UserMetadataProvider>
     </UserProvider>

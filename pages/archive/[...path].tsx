@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
 import NextLink from 'next/link'
+import { useUser } from "@auth0/nextjs-auth0"
+import { useUserMetadata } from "@/context/useUserMetadata"
+import { useArchiveState } from "@/context/useArchiveState"
 
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
@@ -17,9 +20,6 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
 
-import { useUser } from "@auth0/nextjs-auth0"
-import { useUserMetadata } from "@/context/useUserMetadata"
-import { useArchiveState } from "@/context/useArchiveState"
 import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
@@ -43,12 +43,11 @@ export default function ArchiveRoute({
     const { user, error, isLoading } = useUser()
     const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
     const router = useRouter()
+    const { isSeaching, searchedArchiveResult } = useArchiveState()
 
     // State
     const [{ isVideoMode }, setIsVideoMode] = useState<{ isVideoMode: boolean }>({ isVideoMode: false })
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
-    const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
-    const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -295,11 +294,7 @@ export default function ArchiveRoute({
                                     <BreadcrumbNav paths={breadCrumbPaths()} />
                                     <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
                                         <SortArrow />
-                                        <ArchiveSearch
-                                            filteredArchive={filteredArchive}
-                                            setSearchedArchiveResult={setSearchedArchiveResult}
-                                            isSeaching={isSeaching}
-                                            setIsSeaching={setIsSeaching} />
+                                        <ArchiveSearch filteredArchive={filteredArchive} />
                                     </HStack>
                                 </Flex>
                                 {!!selectedArchive.length ?

@@ -1,15 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useArchiveState } from "@/context/useArchiveState"
 import { Input, InputGroup, InputLeftElement, InputRightElement, useColorModeValue } from "@chakra-ui/react"
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons"
 import { highlight_color, text_color } from '@/styles/colorModeValue'
 import Fuse from 'fuse.js'
 
-export default function ArchiveSearch(
-    { filteredArchive,
-        setSearchedArchiveResult,
-        isSeaching,
-        setIsSeaching }
+export default function ArchiveSearch({ filteredArchive, }
     // :{
     //     filteredArchive: AllArchivesInterface[],
     //     setSearchedArchive: () => void
@@ -17,13 +13,21 @@ export default function ArchiveSearch(
 
 ) {
     // Hook
-    const { searchKeyword, setSearchKeyword } = useArchiveState()
+    const {
+        searchKeyword,
+        setSearchKeyword,
+        isSeaching,
+        setIsSeaching,
+        setSearchedArchiveResult } = useArchiveState()
 
-    // useState
+    // State
     const [{ hits }, setHits] = useState<{ hits: AllArchivesInterface[] | {} }>({ hits: {} })
 
-    // useRef
-    const searchInput = React.useRef<HTMLInputElement>(null)
+    // Ref
+    const searchInput = useRef<HTMLInputElement>(null)
+
+    // Effect
+    useEffect(() => { if (!searchKeyword) clear() }, [searchKeyword])
 
     // Fuse-search
     const handleSearch = ({ currentTarget: { value: input } }) => {
@@ -66,7 +70,7 @@ export default function ArchiveSearch(
         searchInput.current.value = ""
         setHits({ hits: {} })
         setIsSeaching({ isSeaching: false })
-        setSearchKeyword({ searchKeyword: null })
+        setSearchKeyword({ searchKeyword: '' })
     }
 
     return (

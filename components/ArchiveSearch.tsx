@@ -62,7 +62,7 @@ export default function ArchiveSearch(
         searchInput.current.value = ""
         setHits({ hits: {} })
         setIsSeaching({ isSeaching: false })
-        localStorage.setItem('archiveSearchValue', '');
+        localStorage.setItem('archiveSearchValue', '')
     }
 
     return (

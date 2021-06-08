@@ -12,7 +12,7 @@ import TimeFormat from 'hh-mm-ss'
 import {
     VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
 } from '@chakra-ui/react'
-import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon } from '@chakra-ui/icons'
+import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
@@ -48,6 +48,7 @@ export default function ArchiveRoute({
     const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
     const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
     const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
+    const [{ queryIsAutoplay }, setQueryIsAutoplay] = useState<{ queryIsAutoplay: boolean }>({ queryIsAutoplay: false })
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -59,11 +60,12 @@ export default function ArchiveRoute({
     useEffect(() => {
         // Only when you find router.query.id changing route, set isVideoMode true 
         router.query.id && setIsVideoMode({ isVideoMode: true })
+        router.query.isAutoplay === 'true' && setQueryIsAutoplay({ queryIsAutoplay: true })
     }, [router.query.id])
 
     useEffect(() => {
         // Always before changing route, set isVideoMode false 
-        const handleHistoryChange = (url, { shallow }) => { setIsVideoMode({ isVideoMode: false }) }
+        const handleHistoryChange = (url, { shallow }) => { !url.includes('id=') && setIsVideoMode({ isVideoMode: false }) }
         router.events.on('routeChangeStart', handleHistoryChange)
         return () => { router.events.off('routeChangeStart', handleHistoryChange) }
     }, [])
@@ -147,7 +149,7 @@ export default function ArchiveRoute({
         </Center>
     )
 
-    const Video = () => {
+    const Video = ({ queryIsAutoplay }) => {
 
         // Find Video
         const currentId = router.query.id as string
@@ -157,6 +159,7 @@ export default function ArchiveRoute({
         const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
         const [{ isQuitVideo }, setIsQuitVideo] = useState<{ isQuitVideo: boolean }>({ isQuitVideo: false })
         const publishedDate = format(parseISO(currentDisplayArchive.publishDate), "yyyy/MM/dd")
+        const [{ isAutoplay }, setIsAutoplay] = useState<{ isAutoplay: boolean }>({ isAutoplay: queryIsAutoplay })
 
         // Contentful
         const richtext_options = {
@@ -175,13 +178,22 @@ export default function ArchiveRoute({
         const scrollThumbnailRef = useRef(null);
         useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, []);
 
+        // Function
+        const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: AllArchivesInterface) => {
+            const index = arr.indexOf(currentData);
+            let nextData
+            if (index >= 0 && index < arr.length - 1) return nextData = arr[index + 1]
+            else return nextData = arr[0]
+        }
+
         return (
             <>
                 <HStack mb={2}>
                     <ChevronLeftIcon
                         w={8} h={8}
                         onClick={() => {
-                            router.back()
+                            const paths = router.query.path as string[]
+                            router.push(`/archive/${encodeURI(paths.join('/'))}`)
                             setIsVideoMode({ isVideoMode: false })
                         }} />
                 </HStack>
@@ -192,7 +204,10 @@ export default function ArchiveRoute({
                         autoplay={true}
                         borderRadius={0}
                         skipTime={skipTime}
-                        isQuitVideo={isQuitVideo} />
+                        isQuitVideo={isQuitVideo}
+                        isAutoplay={isAutoplay}
+                        nextVideoId={arrayProceedHandler(selectedArchive, currentDisplayArchive).sys.id}
+                        currentRoot={currentRoot} />
                 </Grid>
 
                 <Box px={4} py={4}>
@@ -209,14 +224,12 @@ export default function ArchiveRoute({
                                 </ListItem>
                             </List>
                         </Box>
-                        <Box overflow="hidden">
+                        <Box overflow="hidden" textAlign='right' >
                             {/* Heart */}
-                            <Image
-                                src={currentDisplayArchive.thumbnail.url}
-                                alt="Picture of the author"
-                                width={640}
-                                height={360}
-                            />
+                            <RepeatIcon
+                                width={5} height={5} mt={1}
+                                onClick={() => setIsAutoplay({ isAutoplay: !isAutoplay })}
+                                color={isAutoplay && highLightColor} />
                         </Box>
                     </Grid>
                     {currentDisplayArchive.timestamp && <Box pb={4}>
@@ -252,7 +265,7 @@ export default function ArchiveRoute({
                             let refFlag = null
                             if (archive.sys.id === currentDisplayArchive.sys.id) refFlag = scrollThumbnailRef
                             return (
-                                <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} ref={refFlag}>
+                                <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
                                     <VideoThumnail archive={archive} inVideoCompo={true} key={archive.sys.id} />
                                 </ListItem>
                             )
@@ -297,7 +310,7 @@ export default function ArchiveRoute({
                             </VStack>
                         </Grid>
                     </Flex>}
-                {isVideoMode && <Video />}
+                {isVideoMode && <Video queryIsAutoplay={queryIsAutoplay} />}
             </>
         )
     }

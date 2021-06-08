@@ -29,7 +29,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
     const highLighColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
-        <Accordion allowToggle css={accordingCss} defaultIndex={defaultIndex}>
+        <Accordion allowToggle css={accordionCss} defaultIndex={defaultIndex}>
             {pathObj.map((obj, i) => {
                 // ex: archive/名人
                 if (!obj.paths) return (
@@ -65,7 +65,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
     );
 }
 
-const accordingCss = css`
+const accordionCss = css`
     .chakra-accordion__item:last-of-type {
         border-bottom-width: 0;
     }

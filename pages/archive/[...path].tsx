@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
 import NextLink from 'next/link'
@@ -10,11 +10,7 @@ import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 import TimeFormat from 'hh-mm-ss'
 
 import {
-    VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack, Text, Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
+    VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
 } from '@chakra-ui/react'
 import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -25,8 +21,9 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import LodingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
-import ArchiveSearch from '@/components/ArchiveSearch';
-import VideoVimeo from '@/components/VideoVimeo';
+import ArchiveSearch from '@/components/ArchiveSearch'
+import VideoVimeo from '@/components/VideoVimeo'
+import { css } from "@emotion/react"
 
 //Contentful
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -116,9 +113,9 @@ export default function ArchiveRoute({
     )
 
 
-    const VideoThumnail = ({ archive }) => (
+    const VideoThumnail = ({ archive, inVideoCompo }) => (
         <Grid
-            templateColumns={{ base: "repeat(2, 1fr)", md: "1fr" }}
+            templateColumns={!inVideoCompo ? { base: "repeat(2, 1fr)", md: "1fr" } : { base: "1fr" }}
             gap={{ base: 4, md: 1 }}
             onClick={() => {
                 router.push(`${currentRoot}/?id=${archive.sys.id}`, null, { shallow: true })
@@ -134,10 +131,10 @@ export default function ArchiveRoute({
             </Box>
             <Box>
                 <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
-                    <ListItem>{archive.title}</ListItem>
-                    <ListItem color="#585858" size="10px">
+                    <ListItem fontSize={inVideoCompo && 'xs'}>{archive.title}</ListItem>
+                    {!inVideoCompo && <ListItem color="#585858" size="10px">
                         {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
-                    </ListItem>
+                    </ListItem>}
                 </List>
             </Box>
         </Grid>
@@ -173,7 +170,10 @@ export default function ArchiveRoute({
             }
         }
 
-
+        // Initial position of Thumbnail in Video
+        const thumbnailWrap = useRef(null);
+        const scrollThumbnailRef = useRef(null);
+        useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, []);
 
         return (
             <>
@@ -194,58 +194,72 @@ export default function ArchiveRoute({
                         skipTime={skipTime}
                         isQuitVideo={isQuitVideo} />
                 </Grid>
-                <Grid
-                    templateColumns={{ base: "auto 40px" }}
-                    gap={{ base: 4, md: 1 }}
-                    px={2}
-                    py={4}
-                >
-                    <Box>
-                        <List m={0} p={0}>
-                            <ListItem fontSize={['xl']}>{currentDisplayArchive.title}</ListItem>
-                            <ListItem color="#585858" size="10px" fontSize={['sm']} >
-                                {publishedDate}
-                            </ListItem>
-                        </List>
-                    </Box>
-                    <Box overflow="hidden">
-                        {/* Heart */}
-                        <Image
-                            src={currentDisplayArchive.thumbnail.url}
-                            alt="Picture of the author"
-                            width={640}
-                            height={360}
-                        />
-                    </Box>
-                </Grid>
-                {currentDisplayArchive.timestamp && <Box px={2} pb={4}>
-                    {currentDisplayArchive.timestamp.map((stamp, i) => (
-                        <List fontSize={['md']} key={i}>
-                            <ListItem>
-                                <Link
-                                    mr={2}
-                                    color={highLightColor}
-                                    onClick={async () => {
-                                        setIsQuitVideo({ isQuitVideo: true })
-                                        await setSkipTime({ skipTime: TimeFormat.toS(stamp.time) })
-                                        setIsQuitVideo({ isQuitVideo: false })
-                                    }}
-                                >{stamp.time}</Link>
-                                {stamp.indexText}
-                            </ListItem>
-                        </List>
-                    ))}
-                </Box>}
-                {/* Contentful */}
-                {currentDisplayArchive.description?.json && <Accordion allowToggle>
-                    <AccordionItem>
-                        <h2><AccordionButton><AccordionIcon /></AccordionButton></h2>
-                        <AccordionPanel pb={4}>
-                            {documentToReactComponents(currentDisplayArchive.description.json, richtext_options)}
-                        </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>}
-                {/* <Flex flexGrow={1} direction='row'></Flex> */}
+
+                <Box px={4} py={4}>
+                    <Grid
+                        templateColumns={{ base: "auto 40px" }}
+                        gap={{ base: 4, md: 1 }}
+                        pb={4}
+                    >
+                        <Box>
+                            <List m={0} p={0}>
+                                <ListItem fontSize={['xl']}>{currentDisplayArchive.title}</ListItem>
+                                <ListItem color="#585858" size="10px" fontSize={['sm']} >
+                                    {publishedDate}
+                                </ListItem>
+                            </List>
+                        </Box>
+                        <Box overflow="hidden">
+                            {/* Heart */}
+                            <Image
+                                src={currentDisplayArchive.thumbnail.url}
+                                alt="Picture of the author"
+                                width={640}
+                                height={360}
+                            />
+                        </Box>
+                    </Grid>
+                    {currentDisplayArchive.timestamp && <Box pb={4}>
+                        {currentDisplayArchive.timestamp.map((stamp, i) => (
+                            <List fontSize={['md']} key={i}>
+                                <ListItem>
+                                    <Link
+                                        mr={2}
+                                        color={highLightColor}
+                                        onClick={async () => {
+                                            setIsQuitVideo({ isQuitVideo: true })
+                                            await setSkipTime({ skipTime: TimeFormat.toS(stamp.time) })
+                                            setIsQuitVideo({ isQuitVideo: false })
+                                        }}
+                                    >{stamp.time}</Link>
+                                    {stamp.indexText}
+                                </ListItem>
+                            </List>
+                        ))}
+                    </Box>}
+                    {/* Contentful */}
+                    {currentDisplayArchive.description?.json && <Accordion css={accordionCss} allowToggle>
+                        <AccordionItem mb={4} borderTopWidth={0} borderBottomWidth={0} >
+                            <h2><AccordionButton p={0} justifyContent='center'><AccordionIcon /></AccordionButton></h2>
+                            <AccordionPanel pb={4} px={0}>
+                                {documentToReactComponents(currentDisplayArchive.description.json, richtext_options)}
+                            </AccordionPanel>
+                        </AccordionItem>
+                    </Accordion>}
+                    {/* Thumbnails in Category */}
+                    <List overflowX='auto' whiteSpace='nowrap' pb={4} borderTopWidth='0' ref={thumbnailWrap}>
+                        {selectedArchive.map((archive) => {
+                            let refFlag = null
+                            if (archive.sys.id === currentDisplayArchive.sys.id) refFlag = scrollThumbnailRef
+                            return (
+                                <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} ref={refFlag}>
+                                    <VideoThumnail archive={archive} inVideoCompo={true} key={archive.sys.id} />
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                    {/* <Flex flexGrow={1} direction='row'></Flex> */}
+                </Box>
             </>
         )
     }
@@ -276,7 +290,7 @@ export default function ArchiveRoute({
                                 </Flex>
                                 {!!selectedArchive.length ?
                                     <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
-                                        {selectedArchive.map((archive) => <VideoThumnail archive={archive} key={archive.sys.id} />)}
+                                        {selectedArchive.map((archive) => <VideoThumnail archive={archive} inVideoCompo={false} key={archive.sys.id} />)}
                                     </Grid>
                                     : <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
                                 }
@@ -341,3 +355,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         revalidate: 1,
     }
 }
+
+const accordionCss = css`
+    .chakra-accordion__item:last-of-type {
+        border-bottom-width: 0;
+    }
+`

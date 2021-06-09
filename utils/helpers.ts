@@ -45,3 +45,10 @@ export const dailyNum = (array) => {
   const number = array.length;
   return days % number;
 }
+
+export const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: AllArchivesInterface) => {
+  const index = arr.indexOf(currentData);
+  let nextData
+  if (index >= 0 && index < arr.length - 1) return nextData = arr[index + 1]
+  else return nextData = arr[0]
+}

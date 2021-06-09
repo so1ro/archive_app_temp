@@ -11,6 +11,7 @@ import { fetchContentful } from '@/hook/contentful'
 import Image from "next/image"
 import { format, parseISO, compareAsc, compareDesc } from "date-fns"
 import TimeFormat from 'hh-mm-ss'
+import { arrayProceedHandler } from '@/utils/helpers'
 
 import {
     VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, baseStyle, HStack, Center, Link, Stack, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
@@ -174,17 +175,9 @@ export default function ArchiveRoute({
         }
 
         // Initial position of Thumbnail in Video
-        const thumbnailWrap = useRef(null);
-        const scrollThumbnailRef = useRef(null);
-        useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, []);
-
-        // Function
-        const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: AllArchivesInterface) => {
-            const index = arr.indexOf(currentData);
-            let nextData
-            if (index >= 0 && index < arr.length - 1) return nextData = arr[index + 1]
-            else return nextData = arr[0]
-        }
+        const thumbnailWrap = useRef(null)
+        const scrollThumbnailRef = useRef(null)
+        useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, [])
 
         return (
             <>

@@ -9,21 +9,15 @@ export default function VideoVimeo({
     borderRadius,
     skipTime,
     isQuitVideo,
-    isAutoplay,
-    nextVideoId,
-    currentRoot }: {
+    onRouterPush }: {
         vimeoId: number | null,
         aspect: string | null,
         autoplay: boolean | null,
         borderRadius: number | null,
         skipTime: number | null,
         isQuitVideo: boolean | null,
-        isAutoplay: boolean | null,
-        nextVideoId: string | null,
-        currentRoot: string | null,
+        onRouterPush: () => void,
     }) {
-
-    const router = useRouter()
 
     return (
         // aspect ex) '52.7%' or null, default '56.25%'
@@ -44,9 +38,7 @@ export default function VideoVimeo({
                         width="100%"
                         autoplay={autoplay}
                         start={skipTime}
-                        onEnd={() => {
-                            isAutoplay && router.push(`${currentRoot}/?id=${nextVideoId}`, null, { shallow: true })
-                        }}
+                        onEnd={() => onRouterPush()}
                     />
                 }
             </Box>

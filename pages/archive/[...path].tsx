@@ -179,6 +179,12 @@ export default function ArchiveRoute({
         const scrollThumbnailRef = useRef(null)
         useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, [])
 
+        // Functions
+        const routerPushHandler = () => {
+            const nextVideoId = arrayProceedHandler(selectedArchive, currentDisplayArchive).sys.id
+            isAutoplay && router.push(`${currentRoot}/?id=${nextVideoId}`, null, { shallow: true })
+        }
+
         return (
             <>
                 <HStack mb={2}>
@@ -198,9 +204,7 @@ export default function ArchiveRoute({
                         borderRadius={0}
                         skipTime={skipTime}
                         isQuitVideo={isQuitVideo}
-                        isAutoplay={isAutoplay}
-                        nextVideoId={arrayProceedHandler(selectedArchive, currentDisplayArchive).sys.id}
-                        currentRoot={currentRoot} />
+                        onRouterPush={routerPushHandler} />
                 </Grid>
 
                 <Box px={4} py={4}>

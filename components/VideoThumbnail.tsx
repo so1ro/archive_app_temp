@@ -2,10 +2,12 @@ import Image from "next/image"
 import { Box, Grid, List, ListItem } from '@chakra-ui/react'
 import { format, parseISO } from "date-fns"
 import { useRouter } from 'next/router'
+import { useArchiveState } from '@/context/useArchiveState';
 
 export default function VideoThumbnail({ archive, inVideoCompo, currentRoot, setSkipTime }) {
 
     const router = useRouter()
+    const { setCurrentDisplayArchive } = useArchiveState()
 
     return (
         <Grid
@@ -13,6 +15,7 @@ export default function VideoThumbnail({ archive, inVideoCompo, currentRoot, set
             gap={{ base: 4, md: 1 }}
             onClick={() => {
                 setSkipTime !== null && setSkipTime({ skipTime: 0 })
+                setCurrentDisplayArchive({ currentDisplayArchive: archive })
                 router.push(`${currentRoot}/?id=${archive.sys.id}`, null, { shallow: true })
             }}
         >

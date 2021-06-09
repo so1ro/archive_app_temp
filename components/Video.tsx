@@ -25,19 +25,25 @@ export default function Video({
     currentRoot,
 }) {
 
-    const router = useRouter()
-
-    // Find Video
-    const currentId = router.query.id as string
-    const currentDisplayArchive = selectedArchive.find(archive => archive.sys.id === currentId)
-
     // Hook
-    const { isAutoplay, setIsAutoplay, setIsVideoMode, } = useArchiveState()
+    const router = useRouter()
+    const {
+        isAutoplay,
+        setIsAutoplay,
+        setIsVideoMode,
+        currentDisplayArchive,
+        setCurrentDisplayArchive,
+    } = useArchiveState()
+
+    // When refreshing browser, currentDisplayArchive is missing. 
+    // Fallback here with router query.
+    const currentId = router.query.id as string
+    const displayingArchive = currentDisplayArchive ?? selectedArchive.find(archive => archive.sys.id === currentId)
 
     //State
     const [{ skipTime }, setSkipTime] = useState<{ skipTime: number }>({ skipTime: 0 })
     const [{ isQuitVideo }, setIsQuitVideo] = useState<{ isQuitVideo: boolean }>({ isQuitVideo: false })
-    const publishedDate = format(parseISO(currentDisplayArchive.publishDate), "yyyy/MM/dd")
+    const publishedDate = format(parseISO(displayingArchive.publishDate), "yyyy/MM/dd")
 
     // Contentful
     const richtext_options = {
@@ -56,15 +62,18 @@ export default function Video({
     const scrollThumbnailRef = useRef(null)
     useLayoutEffect(() => {
         thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft
-    }, [])
+    }, [displayingArchive])
 
     // Functions
     const routerPushHandler = () => {
-        const nextVideoId = arrayProceedHandler(selectedArchive, currentDisplayArchive).sys.id
+        const nextVideo = arrayProceedHandler(selectedArchive, displayingArchive)
+        const nextVideoId = arrayProceedHandler(selectedArchive, displayingArchive).sys.id
         setSkipTime({ skipTime: 0 })
-        isAutoplay && router.push(`${currentRoot}/?id=${nextVideoId}`, null, { shallow: true })
+        if (isAutoplay) {
+            setCurrentDisplayArchive({ currentDisplayArchive: nextVideo })
+            router.push(`${currentRoot}/?id=${nextVideoId}`, null, { shallow: true })
+        }
     }
-
 
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
@@ -81,7 +90,7 @@ export default function Video({
             </HStack>
             <Grid templateColumns={{ base: '1fr' }}>
                 <VideoVimeo
-                    vimeoId={currentDisplayArchive?.vimeoUrl}
+                    vimeoId={displayingArchive?.vimeoUrl}
                     aspect={null}
                     autoplay={true}
                     borderRadius={0}
@@ -98,7 +107,7 @@ export default function Video({
                 >
                     <Box>
                         <List m={0} p={0}>
-                            <ListItem fontSize={['xl']}>{currentDisplayArchive.title}</ListItem>
+                            <ListItem fontSize={['xl']}>{displayingArchive.title}</ListItem>
                             <ListItem color="#585858" size="10px" fontSize={['sm']} >
                                 {publishedDate}
                             </ListItem>
@@ -112,8 +121,8 @@ export default function Video({
                             color={isAutoplay && highLightColor} />
                     </Box>
                 </Grid>
-                {currentDisplayArchive.timestamp && <Box pb={4}>
-                    {currentDisplayArchive.timestamp.map((stamp, i) => (
+                {displayingArchive.timestamp && <Box pb={4}>
+                    {displayingArchive.timestamp.map((stamp, i) => (
                         <List fontSize={['md']} key={i}>
                             <ListItem>
                                 <Link
@@ -131,11 +140,11 @@ export default function Video({
                     ))}
                 </Box>}
                 {/* Contentful */}
-                {currentDisplayArchive.description?.json && <Accordion css={accordionCss} allowToggle>
+                {displayingArchive.description?.json && <Accordion css={accordionCss} allowToggle>
                     <AccordionItem mb={4} borderTopWidth={0} borderBottomWidth={0} >
                         <h2><AccordionButton p={0} justifyContent='center'><AccordionIcon /></AccordionButton></h2>
                         <AccordionPanel pb={4} px={0}>
-                            {documentToReactComponents(currentDisplayArchive.description.json, richtext_options)}
+                            {documentToReactComponents(displayingArchive.description.json, richtext_options)}
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>}
@@ -143,7 +152,7 @@ export default function Video({
                 <List overflowX='auto' whiteSpace='nowrap' pb={4} borderTopWidth='0' ref={thumbnailWrap}>
                     {selectedArchive.map((archive) => {
                         let refFlag = null
-                        if (archive.sys.id === currentDisplayArchive.sys.id) refFlag = scrollThumbnailRef
+                        if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailRef
                         return (
                             <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
                                 <VideoThumbnail

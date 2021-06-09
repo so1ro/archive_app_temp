@@ -9,6 +9,8 @@ export const ArchiveStateProvider = (props) => {
   const [{ searchKeyword }, setSearchKeyword] = useState<{ searchKeyword: string }>({ searchKeyword: '' })
   const [{ isSeaching }, setIsSeaching] = useState<{ isSeaching: boolean }>({ isSeaching: false })
   const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
+  const [{ isVideoMode }, setIsVideoMode] = useState<{ isVideoMode: boolean }>({ isVideoMode: false })
+  const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
 
   // Effect
   // useEffect(() => { }, []);
@@ -21,7 +23,11 @@ export const ArchiveStateProvider = (props) => {
     isSeaching,
     setIsSeaching,
     searchedArchiveResult,
-    setSearchedArchiveResult
+    setSearchedArchiveResult,
+    isVideoMode,
+    setIsVideoMode,
+    isArchiveDesc,
+    setIsArchiveDesc,
   }
   return <ArchiveStateContext.Provider value={value} {...props} />;
 };

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useLayoutEffect } from 'react'
 import { useArchiveState } from "@/context/useArchiveState"
 import { Input, InputGroup, InputLeftElement, InputRightElement, useColorModeValue } from "@chakra-ui/react"
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons"
@@ -27,7 +27,7 @@ export default function ArchiveSearch({ filteredArchive, }
     const searchInput = useRef<HTMLInputElement>(null)
 
     // Effect
-    useEffect(() => { if (!searchKeyword) clear() }, [searchKeyword])
+    useLayoutEffect(() => { if (!searchKeyword) clear() }, [searchKeyword])
 
     // Fuse-search
     const handleSearch = ({ currentTarget: { value: input } }) => {

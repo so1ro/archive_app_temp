@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticProps, GetStaticPaths } from "next"
 import NextLink from 'next/link'
@@ -177,7 +177,9 @@ export default function ArchiveRoute({
         // Initial position of Thumbnail in Video
         const thumbnailWrap = useRef(null)
         const scrollThumbnailRef = useRef(null)
-        useEffect(() => { thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft }, [])
+        useLayoutEffect(() => {
+            thumbnailWrap.current.scrollLeft = scrollThumbnailRef.current.offsetLeft - thumbnailWrap.current.offsetLeft
+        }, [])
 
         // Functions
         const routerPushHandler = () => {

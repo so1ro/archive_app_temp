@@ -7,9 +7,9 @@ import TimeFormat from 'hh-mm-ss'
 import { arrayProceedHandler } from '@/utils/helpers'
 
 import {
-    Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue
+    Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack,
 } from '@chakra-ui/react'
-import { highlight_color } from '@/styles/colorModeValue';
+import { highlight_color, bg_color } from '@/styles/colorModeValue';
 
 import VideoVimeo from '@/components/VideoVimeo'
 import VideoThumbnail from '@/components/VideoThumbnail';
@@ -75,104 +75,150 @@ export default function Video({
         }
     }
 
+    // Miscellaneous
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const bgColor = useColorModeValue(bg_color.l, bg_color.d)
+    const accordionCss = css`
+        .chakra-accordion__item:last-of-type {
+        border-bottom-width: 0;
+        }
+    `
+    const thumbnailAreaScrollCss = css`
+        /* height */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background:  ${bgColor};
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius : 4px
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: ${highLightColor};
+        }
+    `
+
 
     return (
         <>
-            <HStack mb={2}>
-                <ChevronLeftIcon
-                    w={8} h={8}
-                    onClick={() => {
-                        const paths = router.query.path as string[]
-                        router.push(`/archive/${encodeURI(paths.join('/'))}`)
-                        setIsVideoMode({ isVideoMode: false })
-                    }} />
+            <HStack
+                mb={2} spacing='0' align='center' cursor='pointer'
+                onClick={() => {
+                    const paths = router.query.path as string[]
+                    router.push(`/archive/${encodeURI(paths.join('/'))}`)
+                    setIsVideoMode({ isVideoMode: false })
+                }}>
+                <ChevronLeftIcon w={8} h={8} />
+                <Text d={{ base: 'none', xl: 'inline-block' }}>戻る</Text>
             </HStack>
-            <Grid templateColumns={{ base: '1fr' }}>
-                <VideoVimeo
-                    vimeoId={displayingArchive?.vimeoUrl}
-                    aspect={null}
-                    autoplay={true}
-                    borderRadius={0}
-                    skipTime={skipTime}
-                    isQuitVideo={isQuitVideo}
-                    onRouterPush={routerPushHandler} />
-            </Grid>
+            <Stack direction={{ base: 'column' }} align='center' >
+                <Box w='full' maxW={{ base: '1280px' }}>
+                    {/* <Grid> */}
+                    <VideoVimeo
+                        vimeoId={displayingArchive?.vimeoUrl}
+                        aspect={null}
+                        autoplay={true}
+                        borderRadius={0}
+                        skipTime={skipTime}
+                        isQuitVideo={isQuitVideo}
+                        onRouterPush={routerPushHandler} />
+                    {/* </Grid> */}
 
-            <Box px={4} py={4}>
-                <Grid
-                    templateColumns={{ base: "auto 40px" }}
-                    gap={{ base: 4, md: 1 }}
-                    pb={4}
-                >
-                    <Box>
-                        <List m={0} p={0}>
-                            <ListItem fontSize={['xl']}>{displayingArchive.title}</ListItem>
-                            <ListItem color="#585858" size="10px" fontSize={['sm']} >
-                                {publishedDate}
-                            </ListItem>
+                    <Box px={{ base: 4, 'xl': 0 }} py={4}>
+                        <Grid
+                            templateColumns={{ base: "auto 40px" }}
+                            gap={{ base: 4, md: 1 }}
+                            pb={4}
+                        >
+                            <Box>
+                                <List m={0} p={0}>
+                                    <ListItem fontSize={{ base: 'xl', lg: '2xl' }}>{displayingArchive.title}</ListItem>
+                                    <ListItem color="#585858" size="10px" fontSize={['sm']} >
+                                        {publishedDate}
+                                    </ListItem>
+                                </List>
+                            </Box>
+                            <Box overflow="hidden" textAlign='right' >
+                                {/* Heart */}
+                                <RepeatIcon
+                                    width={5} height={5} mt={1}
+                                    onClick={() => setIsAutoplay({ isAutoplay: !isAutoplay })}
+                                    color={isAutoplay && highLightColor} />
+                            </Box>
+                        </Grid>
+                        {/* Timestamps */}
+                        {displayingArchive.timestamp && <Box pb={4}>
+                            {displayingArchive.timestamp.map((stamp, i) => (
+                                <List fontSize={['md']} key={i} >
+                                    <ListItem fontSize={{ base: 'sm', lg: 'md' }}>
+                                        <Link
+                                            mr={2}
+                                            color={highLightColor}
+                                            onClick={async () => {
+                                                setIsQuitVideo({ isQuitVideo: true })
+                                                await setSkipTime({ skipTime: TimeFormat.toS(stamp.time) })
+                                                setIsQuitVideo({ isQuitVideo: false })
+                                            }}
+                                        >{stamp.time}</Link>
+                                        {stamp.indexText}
+                                    </ListItem>
+                                </List>
+                            ))}
+                        </Box>}
+                        {/* Description with Contentful */}
+                        {displayingArchive.description?.json && <Accordion css={accordionCss} allowToggle>
+                            <AccordionItem mb={8} borderTopWidth={0} borderBottomWidth={0} >
+                                <h2><AccordionButton p={0} justifyContent='center'><AccordionIcon /></AccordionButton></h2>
+                                <AccordionPanel pb={4} px={0} fontSize={{ base: 'sm', lg: 'md' }}>
+                                    {documentToReactComponents(displayingArchive.description.json, richtext_options)}
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>}
+                        {/* Thumbnails in Category ROW*/}
+                        <List overflowX='auto' whiteSpace='nowrap' mt={8} pb={4} borderTopWidth='0' ref={thumbnailWrap} css={thumbnailAreaScrollCss}>
+                            {selectedArchive.map((archive) => {
+                                let refFlag = null
+                                if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailRef
+                                return (
+                                    <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
+                                        <VideoThumbnail
+                                            archive={archive}
+                                            inVideoCompo={true}
+                                            currentRoot={currentRoot}
+                                            setSkipTime={setSkipTime}
+                                            key={archive.sys.id} />
+                                    </ListItem>)
+                            })}
                         </List>
                     </Box>
-                    <Box overflow="hidden" textAlign='right' >
-                        {/* Heart */}
-                        <RepeatIcon
-                            width={5} height={5} mt={1}
-                            onClick={() => setIsAutoplay({ isAutoplay: !isAutoplay })}
-                            color={isAutoplay && highLightColor} />
-                    </Box>
-                </Grid>
-                {displayingArchive.timestamp && <Box pb={4}>
-                    {displayingArchive.timestamp.map((stamp, i) => (
-                        <List fontSize={['md']} key={i}>
-                            <ListItem>
-                                <Link
-                                    mr={2}
-                                    color={highLightColor}
-                                    onClick={async () => {
-                                        setIsQuitVideo({ isQuitVideo: true })
-                                        await setSkipTime({ skipTime: TimeFormat.toS(stamp.time) })
-                                        setIsQuitVideo({ isQuitVideo: false })
-                                    }}
-                                >{stamp.time}</Link>
-                                {stamp.indexText}
-                            </ListItem>
-                        </List>
-                    ))}
-                </Box>}
-                {/* Contentful */}
-                {displayingArchive.description?.json && <Accordion css={accordionCss} allowToggle>
-                    <AccordionItem mb={4} borderTopWidth={0} borderBottomWidth={0} >
-                        <h2><AccordionButton p={0} justifyContent='center'><AccordionIcon /></AccordionButton></h2>
-                        <AccordionPanel pb={4} px={0}>
-                            {documentToReactComponents(displayingArchive.description.json, richtext_options)}
-                        </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>}
-                {/* Thumbnails in Category */}
-                <List overflowX='auto' whiteSpace='nowrap' pb={4} borderTopWidth='0' ref={thumbnailWrap}>
-                    {selectedArchive.map((archive) => {
-                        let refFlag = null
-                        if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailRef
-                        return (
-                            <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
-                                <VideoThumbnail
-                                    archive={archive}
-                                    inVideoCompo={true}
-                                    currentRoot={currentRoot}
-                                    setSkipTime={setSkipTime}
-                                    key={archive.sys.id} />
-                            </ListItem>
-                        )
-                    })}
-                </List>
-                {/* <Flex flexGrow={1} direction='row'></Flex> */}
-            </Box>
+                </Box>
+                {/* Thumbnails in Category ROW*/}
+                {/* <Box d={{ base: 'none', xl: 'block' }}>
+                    <List overflowY='auto' whiteSpace='nowrap' pb={4} borderTopWidth='0' ref={thumbnailWrapColumn}>
+                        {selectedArchive.map((archive) => {
+                            let refFlag = null
+                            if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailColumnRef
+                            return (
+                                <ListItem d='block' w='full' ref={refFlag} key={archive.sys.id}>
+                                    <VideoThumbnail
+                                        archive={archive}
+                                        inVideoCompo={true}
+                                        currentRoot={currentRoot}
+                                        setSkipTime={setSkipTime}
+                                        key={archive.sys.id} />
+                                </ListItem>)
+                        })}
+                    </List>
+                </Box> */}
+            </Stack>
         </>
     )
 }
-
-const accordionCss = css`
-    .chakra-accordion__item:last-of-type {
-        border-bottom-width: 0;
-    }
-`

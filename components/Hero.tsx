@@ -3,12 +3,12 @@ import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons';
 import HeroArchiveLink from '@/components/HeroArchiveLink';
 import { dailyNum } from '@/utils/helpers';
-import useWindowSize from '@/utils/useWindowSize';
+import { useWindowSizeOrientation } from '@/utils/useWindowSize';
 
 export default function Hero({ allHeroImg }) {
     // Arrange Portrait First & Destructuring 
     const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
-    const { height: innerHeight } = useWindowSize();
+    const { height: innerHeight } = useWindowSizeOrientation();
 
     return (
         <Box pos='relative'>

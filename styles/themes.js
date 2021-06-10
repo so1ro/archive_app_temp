@@ -1,7 +1,19 @@
 import { extendTheme } from "@chakra-ui/react"
-import { text_color } from '@/styles/colorModeValue';
+import { text_color } from '@/styles/colorModeValue'
+import { createBreakpoints } from "@chakra-ui/theme-tools"
+
+const breakpoints = createBreakpoints({
+    sm: "480px",
+    md: "768px",
+    lg: "992px",
+    xl: "1280px",
+    "2xl": "1480px",
+    "3xl": "1536px",
+    "4xl": "1680px",
+})
 
 const theme = extendTheme({
+    breakpoints,
     initialColorMode: "light",
     useSystemColorMode: false,
     styles: {
@@ -44,14 +56,6 @@ const theme = extendTheme({
 });
 
 export default theme;
-
-{/* Chakra UI Breakpoints
-  sm: "30em" :  480px,
-  md: "48em" :  768px,
-  lg: "62em" :  992px,
-  xl: "80em" :  1280px,
-  "2xl": "96em":  1536px
-*/}
 
 //// FontSize Basic /////
 // fontSize={{ base: 'md', lg: 'xl' }}

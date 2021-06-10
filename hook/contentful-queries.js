@@ -54,17 +54,17 @@ export const query_allHeroImg =
         items{
           sys{
             id
-                  }
-                  title
-                  fileName
-                  url
-                  width
-                }
+              }
+                title
+                fileName
+                url(transform: { quality: 30 })
+                width
               }
             }
           }
         }
-    `
+      }
+  `
 
 // Top / Introduction
 export const query_topIntro = `{

@@ -69,7 +69,7 @@ export default function ArchiveRoute({
         direction === 'desc' ? setIsArchiveDesc({ isArchiveDesc: true }) : setIsArchiveDesc({ isArchiveDesc: false })
     }
 
-    // miscellaneous
+    // Miscellaneous
     const currentRoot = currentPaths.join('/')
     const breadCrumbPaths = () => {
         if (currentPaths.length === 2) return [pathObj.find(obj => obj.id === currentPaths[0]).categoryName, currentPaths[1]]
@@ -134,7 +134,7 @@ export default function ArchiveRoute({
                                     </HStack>
                                 </Flex>
                                 {!!selectedArchive.length ?
-                                    <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '2xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }}>
+                                    <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '3xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }} cursor='pointer'>
                                         {selectedArchive.map((archive) => <VideoThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} />)}
                                     </Grid>
                                     : <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>

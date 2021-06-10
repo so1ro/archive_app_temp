@@ -135,7 +135,7 @@ export default function ArchiveRoute({
                                 </Flex>
                                 {!!selectedArchive.length ?
                                     <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '3xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }} cursor='pointer'>
-                                        {selectedArchive.map((archive) => <VideoThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} />)}
+                                        {selectedArchive.map((archive) => <VideoThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} playing={false} />)}
                                     </Grid>
                                     : <Flex flexGrow={1}><Center>該当する動画は見つかりませんでした。</Center></Flex>
                                 }

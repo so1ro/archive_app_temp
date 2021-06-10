@@ -7,7 +7,7 @@ import TimeFormat from 'hh-mm-ss'
 import { arrayProceedHandler } from '@/utils/helpers'
 
 import {
-    Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack,
+    Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
 } from '@chakra-ui/react'
 import { highlight_color, bg_color } from '@/styles/colorModeValue';
 
@@ -34,6 +34,7 @@ export default function Video({
         currentDisplayArchive,
         setCurrentDisplayArchive,
     } = useArchiveState()
+    const toast = useToast()
 
     // When refreshing browser, currentDisplayArchive is missing. 
     // Fallback here with router query.
@@ -150,7 +151,16 @@ export default function Video({
                                 {/* Heart */}
                                 <RepeatIcon
                                     width={5} height={5} mt={1}
-                                    onClick={() => setIsAutoplay({ isAutoplay: !isAutoplay })}
+                                    onClick={() => {
+                                        setIsAutoplay({ isAutoplay: !isAutoplay })
+                                        toast({
+                                            // title: "Account created.",
+                                            description: !isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。',
+                                            status: "success",
+                                            duration: 5000,
+                                        })
+                                    }
+                                    }
                                     color={isAutoplay && highLightColor} />
                             </Box>
                         </Grid>
@@ -182,42 +192,29 @@ export default function Video({
                                 </AccordionPanel>
                             </AccordionItem>
                         </Accordion>}
-                        {/* Thumbnails in Category ROW*/}
+                        {/* Thumbnails in Category*/}
                         <List overflowX='auto' whiteSpace='nowrap' mt={8} pb={4} borderTopWidth='0' ref={thumbnailWrap} css={thumbnailAreaScrollCss}>
                             {selectedArchive.map((archive) => {
                                 let refFlag = null
-                                if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailRef
+                                let styleFlag: boolean = false
+                                if (archive.sys.id === displayingArchive.sys.id) {
+                                    refFlag = scrollThumbnailRef
+                                    styleFlag = true
+                                }
                                 return (
                                     <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
                                         <VideoThumbnail
+                                            key={archive.sys.id}
                                             archive={archive}
                                             inVideoCompo={true}
                                             currentRoot={currentRoot}
                                             setSkipTime={setSkipTime}
-                                            key={archive.sys.id} />
+                                            playing={styleFlag} />
                                     </ListItem>)
                             })}
                         </List>
                     </Box>
                 </Box>
-                {/* Thumbnails in Category ROW*/}
-                {/* <Box d={{ base: 'none', xl: 'block' }}>
-                    <List overflowY='auto' whiteSpace='nowrap' pb={4} borderTopWidth='0' ref={thumbnailWrapColumn}>
-                        {selectedArchive.map((archive) => {
-                            let refFlag = null
-                            if (archive.sys.id === displayingArchive.sys.id) refFlag = scrollThumbnailColumnRef
-                            return (
-                                <ListItem d='block' w='full' ref={refFlag} key={archive.sys.id}>
-                                    <VideoThumbnail
-                                        archive={archive}
-                                        inVideoCompo={true}
-                                        currentRoot={currentRoot}
-                                        setSkipTime={setSkipTime}
-                                        key={archive.sys.id} />
-                                </ListItem>)
-                        })}
-                    </List>
-                </Box> */}
             </Stack>
         </>
     )

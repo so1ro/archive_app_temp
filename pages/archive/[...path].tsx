@@ -5,6 +5,7 @@ import NextLink from 'next/link'
 import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import { useArchiveState } from "@/context/useArchiveState"
+import { useMediaQuery } from '@/utils/useMediaQuery'
 
 import { query_archiveRoute, query_allArchives } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
@@ -35,6 +36,7 @@ export default function ArchiveRoute({
         pathObj: ArchivePath[]
     }) {
 
+    // Hook
     const { user, error, isLoading } = useUser()
     const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
     const router = useRouter()
@@ -44,6 +46,7 @@ export default function ArchiveRoute({
         setIsVideoMode,
         isArchiveDesc,
         setIsArchiveDesc } = useArchiveState()
+    const isLargerThan992 = useMediaQuery("(min-width: 992px)")
 
     // Archive Filtering
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
@@ -118,13 +121,13 @@ export default function ArchiveRoute({
     if (user && (subscription_state === 'subscribe')) {
         return (
             <>
-                {!isVideoMode && <ArchiveDrawer pathObj={pathObj} />}
+                {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}
                 {!isVideoMode &&
                     <Flex flexGrow={1} direction='row'>
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
-                            <Box p={8} display={{ base: 'none', lg: 'block' }}>
+                            {isLargerThan992 && <Box p={8} >
                                 <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
-                            </Box>
+                            </Box>}
                             <VStack spacing={8} p={{ base: 4, md: 8 }} >
                                 <Flex justify={{ base: 'none', sm: 'space-between' }} flexDirection={{ base: 'column', sm: 'row' }} w='full' align='center'>
                                     <BreadcrumbNav paths={breadCrumbPaths()} />

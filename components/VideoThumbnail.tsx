@@ -46,6 +46,5 @@ export default function VideoThumbnail({ archive, inVideoCompo, currentRoot, set
                 </List>
             </Box>
         </Grid>
-
-    );
+    )
 }

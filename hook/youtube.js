@@ -1,13 +1,18 @@
-const playList = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLISTID
+const playListId = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLISTID
 const accessToken = process.env.NEXT_PUBLIC_YOUTUBE_ACCESS_TOKEN
 const fields = 'id,media_type,media_url,owner,timestamp,permalink,like_count,comments_count,caption'
-const limit = 56
+const limit = 36
+
+// 以下を参照。将来の仕様変更に備え、作家さまにAPIキーを取得し提供してもらうこと
+// https://mamewaza.com/support/blog/get-youtube-videoid-list.html
+// 1. ”PlaylistId” をAPIキーとチャンネルIDから取得
+// 2. それらを使って、GETリクエスト
 
 export async function fetchYouTube() {
     // add a try / catch loop for nicer error handling
     try {
         const res = await fetch(
-            `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playList}&maxResults=${limit}&key=${accessToken}`
+            `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playListId}&maxResults=${limit}&key=${accessToken}`
         )
         const { items } = await res.json();
         return items;

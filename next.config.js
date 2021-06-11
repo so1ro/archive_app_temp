@@ -13,9 +13,10 @@
 // Develop without SW (Service Worker)
 module.exports = {
     images: {
-        domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com'],
+        domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com', 'i.ytimg.com'],
     },
 }
 
 // Twitter : 'pbs.twimg.com'
 // Contentful : 'images.ctfassets.net'
+// YouTube : 'i.ytimg.com'

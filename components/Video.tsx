@@ -9,7 +9,9 @@ import { arrayProceedHandler } from '@/utils/helpers'
 import {
     Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
 } from '@chakra-ui/react'
+import { CheckCircleIcon } from '@chakra-ui/icons'
 import { highlight_color, bg_color } from '@/styles/colorModeValue';
+import { css } from "@emotion/react"
 
 import VideoVimeo from '@/components/VideoVimeo'
 import VideoThumbnail from '@/components/VideoThumbnail';
@@ -18,7 +20,6 @@ import { ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 //Contentful
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
-import { css } from "@emotion/react"
 
 export default function Video({
     selectedArchive,
@@ -155,9 +156,13 @@ export default function Video({
                                         setIsAutoplay({ isAutoplay: !isAutoplay })
                                         toast({
                                             // title: "Account created.",
-                                            description: !isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。',
-                                            status: "success",
                                             duration: 5000,
+                                            render: () => (
+                                                <HStack color="white" p={4} bg="#69b578" borderRadius={6}>
+                                                    <CheckCircleIcon w={6} h={6} color="white" />
+                                                    <Box>{!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'}</Box>
+                                                </HStack>
+                                            )
                                         })
                                     }
                                     }

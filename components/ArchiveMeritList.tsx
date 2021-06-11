@@ -1,5 +1,5 @@
 import { Grid, GridItem, Heading, Text, useColorMode, useColorModeValue, HStack, Icon } from '@chakra-ui/react';
-import { CheckIcon, Test2Icon } from '@/styles/icons';
+import { CheckIcon, LibraryIcon, FunctionsIcon, HeartIcon } from '@/styles/icons';
 import { highlight_color } from '@/styles/colorModeValue';
 import { createIcon } from "@chakra-ui/icons"
 
@@ -19,7 +19,9 @@ export default function ArchiveMeritList({ meritListItems }) {
 
         const iconHandler = (icon) => {
             // Add Switch condition here...
-            return <Test2Icon w={12} h={12} />
+            if (icon === 'content') return LibraryIcon(32)
+            if (icon === 'functions') return FunctionsIcon(32)
+            else return HeartIcon(32)
         }
 
         return (
@@ -27,7 +29,6 @@ export default function ArchiveMeritList({ meritListItems }) {
                 <HStack align='center' mb={2}>
                     <Heading as='h3' fontSize='lg'>{title}</Heading>
                     {iconHandler(icon)}
-                    {/* <Test2Icon w={12} h={12} /> */}
                 </HStack>
                 {list.map((text, j) => (
                     <HStack align='baseline' key={j}>

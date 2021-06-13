@@ -76,7 +76,6 @@ const upsertSubscriptionRecord = async (event) => {
         cancel_at,
         canceled_at, } = event
 
-
     try {
         // const customerData = await stripe.customers.retrieve(customer_Id);
         // console.log('customerData:', customerData)

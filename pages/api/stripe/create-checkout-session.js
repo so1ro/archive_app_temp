@@ -5,7 +5,7 @@ import { parseJSON } from 'date-fns';
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
 const createCheckoutSession = async (req, res) => {
-  const { price, user_uuid, user_email } = JSON.parse(req.body);
+  const { price, user_uuid, user_email, criteriaOnePayPrice } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     // See https://stripe.com/docs/api/checkout/sessions/create
@@ -15,7 +15,8 @@ const createCheckoutSession = async (req, res) => {
       const customerData = {
         metadata: {
           price_Id: price,
-          auth0_UUID: user_uuid
+          auth0_UUID: user_uuid,
+          criteria_OnePay_price: criteriaOnePayPrice
         }
       };
       if (user_email) customerData.email = user_email;

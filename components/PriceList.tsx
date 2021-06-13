@@ -16,7 +16,7 @@ export default function PriceList({ user, allPrices, annotation }) {
     const oneTimeCardColor = '#e63946'
     const cardBorder = colorMode === 'light' ? '1px' : '0px'
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
-    const criteriaOnePayPrice = parseFloat(allPrices.find(price => price.type === 'one_time').unit_amount)
+    const criteriaOnePayPrice = allPrices.find(price => price.type === 'one_time').unit_amount
 
     const handleCheckout = async (price) => {
         // setPriceIdLoading(price.id)

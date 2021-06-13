@@ -70,23 +70,24 @@ const upsertSubscriptionRecord = async (event) => {
 
     const { id: subscription_Id,
         customer: customer_Id,
-        plan: { nickname: subscription_Name },
+        plan: { amount: subscription_Price, nickname: subscription_Description },
         status: subscription_Status,
         cancel_at_period_end,
         cancel_at,
         canceled_at, } = event
 
+
     try {
         // const customerData = await stripe.customers.retrieve(customer_Id);
         // console.log('customerData:', customerData)
         const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
-        console.log('criteria_OnePay_price:', criteria_OnePay_price)
         const auth0Token = await auth0AccessToken()
         const metadata = {
             Stripe_Customer_Detail: {
                 customer_Id,
                 price_Id,
-                subscription_Name,
+                subscription_Price,
+                subscription_Description,
                 subscription_Id,
                 subscription_Status,
                 cancel_at_period_end,

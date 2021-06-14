@@ -9,12 +9,12 @@ import { query_allArchives, query_archivePricing } from "@/hook/contentful-queri
 
 import { Heading, Box, Text } from "@chakra-ui/react"
 // import { css } from "@emotion/react"
-import { fetchAllPrices } from '@/hook/getStaticProps';
-import PriceList from '@/components/PriceList';
+import { fetchAllPrices } from '@/hook/getStaticProps'
+import PriceList from '@/components/PriceList'
 import ArchiveMeritList from "@/components/ArchiveMeritList"
 import VideoVimeoLT from "@/components/VideoVimeoLT"
 import PageShell from '@/components/PageShell'
-import LodingSpinner from '@/components/Spinner';
+import LoadingSpinner from '@/components/Spinner'
 
 export default function Archive(
   {
@@ -69,9 +69,9 @@ export default function Archive(
     (user && (subscription_state === 'subscribe'))) {
     // Redirect to Archive Page ////
     if (typeof window !== 'undefined') router.push(`/archive/${encodeURI('すべて')}`)
-    return <LodingSpinner />
+    return <LoadingSpinner />
   }
-  return <LodingSpinner />
+  return <LoadingSpinner />
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -92,6 +92,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
 // const imgBox = css`
 //   img {
-//     border-radius: 0.4rem;
+//     border-radius: 0.4rem
 //   }
 // `

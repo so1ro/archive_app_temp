@@ -9,6 +9,7 @@ import { price_card_color } from '@/styles/colorModeValue'
 import { highlight_color } from '@/styles/colorModeValue'
 
 export default function PriceList({ user, allPrices, annotation }) {
+    console.log('allPrices:', allPrices)
 
     const toast = useToast()
     const { colorMode } = useColorMode()
@@ -18,19 +19,21 @@ export default function PriceList({ user, allPrices, annotation }) {
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const criteriaOnePayPrice = allPrices.find(price => price.type === 'one_time').unit_amount
 
-    const handleCheckout = async (price) => {
+    const handleCheckout = async (price, type) => {
         // setPriceIdLoading(price.id)
         try {
             const { sessionId } = await postData({
                 url: '/api/stripe/create-checkout-session',
                 data: {
                     price,
+                    type,
                     user_uuid: user.sub,
                     user_email: user.email,
                     criteriaOnePayPrice
                 }
                 // token: session.access_token
             })
+            console.log('sessionId:', sessionId)
 
             const stripe = await getStripe()
             stripe.redirectToCheckout({ sessionId })
@@ -66,7 +69,7 @@ export default function PriceList({ user, allPrices, annotation }) {
                             duration: 9000,
                             isClosable: true,
                         })
-                        if (user) handleCheckout(price.id)
+                        if (user) handleCheckout(price.id, price.type)
                     }}>
                     {user ? '購入' : 'サインアップ・購入'}
                 </MotionButton>

@@ -5,27 +5,27 @@ import { parseJSON } from 'date-fns';
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
 const createCheckoutSession = async (req, res) => {
-  const { price, user_uuid, user_email, criteriaOnePayPrice } = JSON.parse(req.body);
+  const { price, type, user_uuid, user_email, criteriaOnePayPrice } = JSON.parse(req.body);
 
   if (req.method === 'POST') {
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
-
       const customerData = {
         metadata: {
           price_Id: price,
           auth0_UUID: user_uuid,
           criteria_OnePay_price: criteriaOnePayPrice
         }
-      };
+      }
       if (user_email) customerData.email = user_email;
       const customer = await stripe.customers.create(customerData)
 
+      // Mode
+      const mode = type === 'recurring' ? 'subscription' : 'payment'
       const session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
+        mode,
         payment_method_types: ['card'],
-        // billing_address_collection: 'required',
         customer: customer.id,
         line_items: [
           {
@@ -34,15 +34,13 @@ const createCheckoutSession = async (req, res) => {
           }
         ],
         allow_promotion_codes: true,
-        subscription_data: {
-          trial_from_plan: true,
-          // metadata
-        },
+        // billing_address_collection: 'required',
+        // subscription_data: {},
         success_url: `${domain}/account/?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${domain}/account/`
-      });
-      return res.status(200).json({ sessionId: session.id });
+      })
 
+      return res.status(200).json({ sessionId: session.id });
     } catch (e) {
       res.status(400);
       return res.send({

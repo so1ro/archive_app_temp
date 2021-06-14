@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, VStack, Center, Spinner, useColorModeValue, Flex } from '@chakra-ui/react';
 import { highlight_color } from '@/styles/colorModeValue';
 
-export default function LodingSpinner() {
+export default function LoadingSpinner() {
     return (
         <Flex flexGrow={1} direction='row'>
             <Center w='full'>

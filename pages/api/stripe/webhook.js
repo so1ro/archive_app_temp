@@ -25,7 +25,8 @@ const relevantEvents = new Set([
     // 'checkout.session.completed',
     // 'customer.subscription.created',
     'customer.subscription.updated',
-    'customer.subscription.deleted'
+    'customer.subscription.deleted',
+    'invoice.payment_succeeded',
 ]);
 
 // Match the raw body to content type application/json

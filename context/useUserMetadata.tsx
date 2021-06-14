@@ -32,6 +32,8 @@ export const UserMetadataProvider = (props) => {
           if (!user_metadata.Stripe_Customer_Detail) {
             setSubscriptionState({ subscription_state: 'unsubscribe' })
             setIsMetadataLoading({ isMetadataLoading: false })
+            const { ...User_Detail } = user_metadata
+            setUserDetail({ User_Detail })
           }
 
           if (user_metadata?.Stripe_Customer_Detail) {

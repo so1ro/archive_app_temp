@@ -22,7 +22,7 @@ import VideoThumbnail from '@/components/VideoThumbnail';
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
 
-import LodingSpinner from '@/components/Spinner'
+import LoadingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
 
@@ -151,7 +151,7 @@ export default function ArchiveRoute({
     }
     else if (isLoading || isMetadataLoading) {
         return (
-            <LodingSpinner />
+            <LoadingSpinner />
         )
     } else {
         return (

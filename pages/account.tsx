@@ -9,7 +9,7 @@ import PriceList from '@/components/PriceList'
 import { fetchContentful } from '@/hook/contentful'
 import { query_archivePricing } from '@/hook/contentful-queries'
 
-import { Button, Code, Box, Grid, Center } from '@chakra-ui/react'
+import { Button, Code, Box, Grid, Center, Text } from '@chakra-ui/react'
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
 
@@ -28,8 +28,8 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     setTemporaryCheckIsSubscribing,
   } = useUserMetadata()
 
-  console.log('allPrices:', allPrices)
-  console.log('Stripe_Customer_Detail:', Stripe_Customer_Detail)
+  // console.log('allPrices:', allPrices)
+  // console.log('Stripe_Customer_Detail:', Stripe_Customer_Detail)
   console.log('User_Detail:', User_Detail)
 
   const { annotation } = landingPageText[0]
@@ -70,6 +70,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   // Render
   if (error) return <div>{error.message}</div>
 
+  // サブスクリプション購入後
   if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe')) {
     return (
       <PageShell customPT={null} customSpacing={null}>
@@ -104,6 +105,30 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       </PageShell>)
   }
 
+  // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
+  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && User_Detail?.One_Pay_Permanent_Detail) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Box w='full' maxW='480px'>
+          <Box mb={4}>{user.email} 様</Box>
+          <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
+            <Box>プラン</Box>
+            <Box>{User_Detail.One_Pay_Permanent_Detail.title}</Box>
+            <Box>特典</Box>
+            <Box>期限なく、すべてのコンテンツをご視聴をいただけます。</Box>
+            <Box>永久ご視聴</Box>
+            <Box>○</Box>
+          </Grid>
+        </Box>
+        <Text>{User_Detail?.One_Pay_Permanent_Detail ? `サブスクリプションを開始することもできます。` : `購入ボタンを押すと、決済に進みます。`}</Text>
+        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!User_Detail.One_Pay_Permanent_Detail} />
+      </PageShell>)
+  }
+
+  // サインアップ後、サブスクリプション・ワンペイ永久ご視聴ともに未購入
+  //
+
+  // サブスクリプションのキャンセル後
   if (!isLoading && !isMetadataLoading &&
     (Stripe_Customer_Detail && Stripe_Customer_Detail.subscription_Status === 'canceled')) {
     return (
@@ -116,17 +141,10 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
               <Box>永久ご視聴</Box>
               <Box>○</Box></>}
           </Grid>
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} />
+          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
         </Box>
       </PageShell>
     )
-  }
-
-  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail) {
-    return (
-      <PageShell customPT={null} customSpacing={null}>
-        <PriceList user={user} allPrices={allPrices} annotation={annotation} />
-      </PageShell>)
   }
 
   return <LoadingSpinner />

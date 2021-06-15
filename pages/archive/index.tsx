@@ -60,7 +60,7 @@ export default function Archive(
           <Text mb={6}>{explain}</Text>
           <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
         </Box>
-        <PriceList user={user} allPrices={allPrices} annotation={annotation} />
+        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
       </PageShell>
     )
   }

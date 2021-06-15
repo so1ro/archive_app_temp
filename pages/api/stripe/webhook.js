@@ -1,6 +1,6 @@
 import { stripe } from '@/utils/stripe'
 import { postData } from '@/utils/helpers'
-import { upsertSubscriptionRecord, upsertChargeRecord } from '@/utils/useAuth0'
+import { upsertSubscriptionRecord, upsertChargeRecord, upsertOnePayRecord } from '@/utils/useAuth0'
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -21,6 +21,7 @@ async function buffer(readable) {
 
 const relevantEvents = new Set([
     'invoice.payment_succeeded',
+    'charge.succeeded',
     'charge.refunded',
     // 'checkout.session.completed',
     // 'customer.subscription.created',
@@ -69,9 +70,9 @@ const webhookHandler = async (req, res) => {
 
                     // Now working
                     case 'charge.succeeded':
-                        const chargeSucceededSeession = event.data.object
-                        console.log('chargeSucceededSeession:', chargeSucceededSeession)
-                        // await upsertChargeRecord(onePayPaymentSession)
+                        const chargeOnePayPaymentSession = event.data.object
+                        console.log('chargeOnePayPaymentSession:', chargeOnePayPaymentSession)
+                        await upsertOnePayRecord(chargeOnePayPaymentSession)
                         break
                     // Now working
 

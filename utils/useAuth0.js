@@ -83,6 +83,7 @@ const upsertSubscriptionRecord = async (event) => {
         const auth0Token = await auth0AccessToken()
         const metadata = {
             Stripe_Customer_Detail: {
+                title: 'サブスクリプション',
                 customer_Id,
                 price_Id,
                 subscription_Price,
@@ -105,14 +106,14 @@ const upsertSubscriptionRecord = async (event) => {
 };
 
 //// Send Charge (Payment Amount) record to Auth0
-const upsertChargeRecord = async (obj) => {
+const upsertChargeRecord = async (event) => {
 
-    const status = obj.object // 'invoice' or 'refund'
-    const customer_Id = obj.customer
+    const status = event.object // 'invoice' or 'refund'
+    const customer_Id = event.customer
 
     let amount
-    if (status === 'invoice') amount = obj.amount_paid
-    if (status === 'charge') amount = obj.amount_refunded * -1
+    if (status === 'invoice') amount = event.amount_paid
+    if (status === 'charge') amount = event.amount_refunded * -1
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
@@ -127,6 +128,34 @@ const upsertChargeRecord = async (obj) => {
     }
 };
 
+//// Send One-pay record to Auth0
+const upsertOnePayRecord = async (event) => {
+
+    const { amount, customer: customer_Id, created, } = event
+
+    try {
+        const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const auth0Token = await auth0AccessToken()
+        const metadata = {
+            One_Pay_Permanent_Detail: {
+                title: 'ワンペイ永久ご視聴',
+                price_Id,
+                created,
+                criteria_OnePay_price,
+            }
+        }
+
+        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const currentChargedFee = (past_charged_fee + amount) || 0
+
+        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
+        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
+
+    } catch (error) {
+        console.log('Error in upsertOnePayRecord:', error)
+        throw new Error(err)
+    }
+};
 ////////////////////////////////////////////////
 
 
@@ -134,4 +163,5 @@ export {
     getUserMetadata,
     upsertSubscriptionRecord,
     upsertChargeRecord,
+    upsertOnePayRecord,
 };

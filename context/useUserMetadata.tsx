@@ -11,7 +11,7 @@ export const UserMetadataProvider = (props) => {
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Subscription_Detail }, setStripeCustomerDetail] = useState<{ Subscription_Detail: object }>({ Subscription_Detail: null })
-  const [{ One_Pay_Permanent_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Permanent_Detail: object }>({ One_Pay_Permanent_Detail: null })
+  const [{ One_Pay_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Detail: object }>({ One_Pay_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
 
@@ -37,10 +37,10 @@ export const UserMetadataProvider = (props) => {
             setSubscriptionState({ subscription_state: 'unsubscribe' })
           }
 
-          // ワンペイ永久購入済み One_Pay_Permanent_Detailを取得
-          if (user_metadata.One_Pay_Permanent_Detail) {
-            const { One_Pay_Permanent_Detail } = user_metadata
-            setOnePayPermanentDetail({ One_Pay_Permanent_Detail })
+          // ワンペイ永久購入済み One_Pay_Detailを取得
+          if (user_metadata.One_Pay_Detail) {
+            const { One_Pay_Detail } = user_metadata
+            setOnePayPermanentDetail({ One_Pay_Detail })
           }
 
           // サブスクリプション購入済み Subscription_Detailを取得
@@ -81,7 +81,7 @@ export const UserMetadataProvider = (props) => {
     isMetadataLoading,
     subscription_state,
     Subscription_Detail,
-    One_Pay_Permanent_Detail,
+    One_Pay_Detail,
     error_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,

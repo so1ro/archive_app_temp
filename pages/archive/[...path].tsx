@@ -42,7 +42,7 @@ export default function ArchiveRoute({
     const {
         isMetadataLoading,
         subscription_state,
-        One_Pay_Permanent_Detail,
+        One_Pay_Detail,
         error_metadata } = useUserMetadata()
     const {
         isSeaching,
@@ -123,7 +123,7 @@ export default function ArchiveRoute({
     )
 
     // Main Component
-    if (user && ((subscription_state === 'subscribe') || !!One_Pay_Permanent_Detail)) {
+    if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
         return (
             <>
                 {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}

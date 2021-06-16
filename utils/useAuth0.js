@@ -141,7 +141,7 @@ const upsertOnePayRecord = async (event) => {
         const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
         const currentChargedFee = (past_charged_fee + amount) || 0
         const metadata = {
-            One_Pay_Permanent_Detail: {
+            One_Pay_Detail: {
                 title: 'ワンペイ永久ご視聴',
                 price_Id,
                 created,

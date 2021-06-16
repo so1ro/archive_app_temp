@@ -11,6 +11,7 @@ export const UserMetadataProvider = (props) => {
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
+  const [{ One_Pay_Permanent_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Permanent_Detail: object }>({ One_Pay_Permanent_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
 
@@ -29,19 +30,24 @@ export const UserMetadataProvider = (props) => {
             data: { user_id: user.sub }
           }).then(data => data)
 
-          if (!user_metadata.Stripe_Customer_Detail) {
-            setSubscriptionState({ subscription_state: 'unsubscribe' })
-            setIsMetadataLoading({ isMetadataLoading: false })
-            const { ...User_Detail } = user_metadata
+          // User_Detailを取得
+          if (user_metadata.User_Detail) {
+            const { User_Detail } = user_metadata
             setUserDetail({ User_Detail })
+            setSubscriptionState({ subscription_state: 'unsubscribe' })
           }
 
-          if (user_metadata?.Stripe_Customer_Detail) {
-            const { Stripe_Customer_Detail, ...User_Detail } = user_metadata
-            setUserDetail({ User_Detail })
+          // ワンペイ永久購入済み One_Pay_Permanent_Detailを取得
+          if (user_metadata.One_Pay_Permanent_Detail) {
+            const { One_Pay_Permanent_Detail } = user_metadata
+            setOnePayPermanentDetail({ One_Pay_Permanent_Detail })
+          }
+
+          // サブスクリプション購入済み Stripe_Customer_Detailを取得
+          if (user_metadata.Stripe_Customer_Detail) {
+            const { Stripe_Customer_Detail } = user_metadata
             setStripeCustomerDetail({ Stripe_Customer_Detail })
 
-            setIsMetadataLoading({ isMetadataLoading: false })
             Stripe_Customer_Detail.subscription_Status === ('active' || 'trialing') ?
               setSubscriptionState({ subscription_state: 'subscribe' }) :
               setSubscriptionState({ subscription_state: 'unsubscribe' })
@@ -56,6 +62,7 @@ export const UserMetadataProvider = (props) => {
               setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
             }
           }
+
         } catch (error) {
           setErrorMetadata({ error_metadata: error.message })
           throw new Error(error)
@@ -74,6 +81,7 @@ export const UserMetadataProvider = (props) => {
     isMetadataLoading,
     subscription_state,
     Stripe_Customer_Detail,
+    One_Pay_Permanent_Detail,
     error_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,

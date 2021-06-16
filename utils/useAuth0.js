@@ -118,9 +118,10 @@ const upsertChargeRecord = async (event) => {
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
-        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
         const currentChargedFee = (past_charged_fee + amount) || 0
-        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
+        const metadata = { User_Detail: { past_charged_fee: currentChargedFee } }
+        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
     } catch (error) {
         console.log('Error in upsertChargeRecord:', error)
@@ -136,20 +137,19 @@ const upsertOnePayRecord = async (event) => {
     try {
         const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
+
+        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const currentChargedFee = (past_charged_fee + amount) || 0
         const metadata = {
             One_Pay_Permanent_Detail: {
                 title: 'ワンペイ永久ご視聴',
                 price_Id,
                 created,
                 criteria_OnePay_price,
-            }
+            },
+            User_Detail: { past_charged_fee: currentChargedFee }
         }
-
-        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
-        const currentChargedFee = (past_charged_fee + amount) || 0
-
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
-        await patchUserMetadataToAuth0(auth0_UUID, auth0Token, { past_charged_fee: currentChargedFee })
 
     } catch (error) {
         console.log('Error in upsertOnePayRecord:', error)

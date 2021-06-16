@@ -38,9 +38,16 @@ export default function ArchiveRoute({
 
     // Hook
     const { user, error, isLoading } = useUser()
-    const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
     const router = useRouter()
-    const { isSeaching,
+    const {
+        User_Detail,
+        isMetadataLoading,
+        subscription_state,
+        Stripe_Customer_Detail,
+        One_Pay_Permanent_Detail,
+        error_metadata } = useUserMetadata()
+    const {
+        isSeaching,
         searchedArchiveResult,
         isVideoMode,
         setIsVideoMode,
@@ -118,7 +125,7 @@ export default function ArchiveRoute({
     )
 
     // Main Component
-    if (user && (subscription_state === 'subscribe')) {
+    if (user && ((subscription_state === 'subscribe') || !!One_Pay_Permanent_Detail)) {
         return (
             <>
                 {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}

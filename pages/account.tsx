@@ -22,6 +22,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     isMetadataLoading,
     subscription_state,
     Stripe_Customer_Detail,
+    One_Pay_Permanent_Detail,
     error_metadata,
     isBeforeCancelDate,
     temporaryCheckIsSubscribing,
@@ -64,7 +65,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   }
 
   const isPermanentView = (Stripe_Customer_Detail) => {
-    return (parseFloat(Stripe_Customer_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) < 0
+    return (parseFloat(Stripe_Customer_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) <= 0
   }
 
   // Render
@@ -106,27 +107,33 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   }
 
   // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
-  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && User_Detail?.One_Pay_Permanent_Detail) {
+  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && One_Pay_Permanent_Detail) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='480px'>
           <Box mb={4}>{user.email} 様</Box>
           <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
             <Box>プラン</Box>
-            <Box>{User_Detail.One_Pay_Permanent_Detail.title}</Box>
+            <Box>{One_Pay_Permanent_Detail.title}</Box>
             <Box>特典</Box>
             <Box>期限なく、すべてのコンテンツをご視聴をいただけます。</Box>
             <Box>永久ご視聴</Box>
             <Box>○</Box>
           </Grid>
         </Box>
-        <Text>{User_Detail?.One_Pay_Permanent_Detail ? `サブスクリプションを開始することもできます。` : `購入ボタンを押すと、決済に進みます。`}</Text>
-        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!User_Detail.One_Pay_Permanent_Detail} />
+        <Text>{One_Pay_Permanent_Detail ? `サブスクリプションを開始することもできます。` : `購入ボタンを押すと、決済に進みます。`}</Text>
+        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!One_Pay_Permanent_Detail} />
       </PageShell>)
   }
 
   // サインアップ後、サブスクリプション・ワンペイ永久ご視聴ともに未購入
-  //
+  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && !One_Pay_Permanent_Detail) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Text>{`ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。`}</Text>
+        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+      </PageShell>)
+  }
 
   // サブスクリプションのキャンセル後
   if (!isLoading && !isMetadataLoading &&

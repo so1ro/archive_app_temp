@@ -53,8 +53,6 @@ const webhookHandler = async (req, res) => {
             try {
                 // Handle the event
                 switch (event.type) {
-                    // case 'customer.created':
-                    // case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object
@@ -62,29 +60,27 @@ const webhookHandler = async (req, res) => {
                         await upsertSubscriptionRecord(subscriptionSession)
                         break
 
+                    // Subscription
                     case 'invoice.payment_succeeded':
                         const subscriptionPaymentSession = event.data.object
                         console.log('subscriptionPaymentSession', subscriptionPaymentSession)
                         await upsertChargeRecord(subscriptionPaymentSession)
                         break
 
-                    // Now working
+                    // One Pay
                     case 'charge.succeeded':
                         const chargeOnePayPaymentSession = event.data.object
                         console.log('chargeOnePayPaymentSession:', chargeOnePayPaymentSession)
                         await upsertOnePayRecord(chargeOnePayPaymentSession)
                         break
-                    // Now working
 
+                    // Refund
                     case 'charge.refunded':
                         const refundSession = event.data.object
                         console.log('refound:', refundSession)
                         await upsertChargeRecord(refundSession)
-
-                        // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                        // handlePaymentMethodAttached(paymentMethod)
                         break
-                    // ... handle other event types
+
                     default:
                         console.log(`Unhandled event type ${event.type}`)
                 }

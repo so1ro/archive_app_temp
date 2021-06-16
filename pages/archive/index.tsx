@@ -30,7 +30,7 @@ export default function Archive(
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
-  const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, error_metadata } = useUserMetadata()
+  const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, One_Pay_Permanent_Detail, error_metadata } = useUserMetadata()
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
   const router = useRouter()
@@ -38,10 +38,11 @@ export default function Archive(
   if (error) return <div>{error.message}</div>
   if (error_metadata) return <div>{error_metadata}</div>
 
+  //// Landing Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (!user || (!!subscription_state && (subscription_state === 'unsubscribe')))) {
-    //// Landing Page ////
+    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe')) && !One_Pay_Permanent_Detail))) {
+
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box>
@@ -64,10 +65,11 @@ export default function Archive(
       </PageShell>
     )
   }
+
+  //// Redirect to Archive Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (user && (subscription_state === 'subscribe'))) {
-    // Redirect to Archive Page ////
+    (user && ((subscription_state === 'subscribe') || !!One_Pay_Permanent_Detail))) {
     if (typeof window !== 'undefined') router.push(`/archive/${encodeURI('すべて')}`)
     return <LoadingSpinner />
   }
@@ -89,9 +91,3 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 30
   }
 }
-
-// const imgBox = css`
-//   img {
-//     border-radius: 0.4rem
-//   }
-// `

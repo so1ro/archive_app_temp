@@ -21,7 +21,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     User_Detail,
     isMetadataLoading,
     subscription_state,
-    Stripe_Customer_Detail,
+    Subscription_Detail,
     One_Pay_Permanent_Detail,
     error_metadata,
     isBeforeCancelDate,
@@ -30,7 +30,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   } = useUserMetadata()
 
   // console.log('allPrices:', allPrices)
-  // console.log('Stripe_Customer_Detail:', Stripe_Customer_Detail)
+  // console.log('Subscription_Detail:', Subscription_Detail)
   console.log('User_Detail:', User_Detail)
 
   const { annotation } = landingPageText[0]
@@ -64,8 +64,8 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     window.location.assign(url)
   }
 
-  const isPermanentView = (Stripe_Customer_Detail) => {
-    return (parseFloat(Stripe_Customer_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) <= 0
+  const isPermanentView = (Subscription_Detail) => {
+    return (parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) <= 0
   }
 
   // Render
@@ -79,35 +79,35 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
           <Box mb={4}>{user.email} 様</Box>
           <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
             <Box>プラン</Box>
-            <Box>{Stripe_Customer_Detail.subscription_Price}円／月</Box>
+            <Box>{Subscription_Detail.subscription_Price}円／月</Box>
             <Box>特典</Box>
-            <Box>{Stripe_Customer_Detail.subscription_Description}</Box>
+            <Box>{Subscription_Detail.subscription_Description}</Box>
             <Box>現在のステータス</Box>
-            <Box>{Stripe_Customer_Detail.subscription_Status}</Box>
-            {Stripe_Customer_Detail.criteria_OnePay_price && !isPermanentView(Stripe_Customer_Detail) && <>
+            <Box>{Subscription_Detail.subscription_Status}</Box>
+            {Subscription_Detail.criteria_OnePay_price && !isPermanentView(Subscription_Detail) && <>
               <Box>永久ご視聴まで残り</Box>
-              <Box>{parseFloat(Stripe_Customer_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee}円</Box></>}
-            {Stripe_Customer_Detail.criteria_OnePay_price && isPermanentView(Stripe_Customer_Detail) && <>
+              <Box>{parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee}円</Box></>}
+            {Subscription_Detail.criteria_OnePay_price && isPermanentView(Subscription_Detail) && <>
               <Box>永久ご視聴</Box>
               <Box>○</Box></>}
           </Grid>
           <Center>
-            <Button onClick={() => handleCustomerPortal(Stripe_Customer_Detail.customer_Id)}>
-              {!Stripe_Customer_Detail.cancel_at_period_end ?
+            <Button onClick={() => handleCustomerPortal(Subscription_Detail.customer_Id)}>
+              {!Subscription_Detail.cancel_at_period_end ?
                 `プランの変更・キャンセル ／ お支払い履歴` : `サブスクリプションの再開 ／ お支払い履歴`}
             </Button>
           </Center>
         </Box>
-        {Stripe_Customer_Detail?.cancel_at_period_end &&
+        {Subscription_Detail?.cancel_at_period_end &&
           <Code>
-            {`サブスクリプションは、${Stripe_Customer_Detail.cancel_at}` +
+            {`サブスクリプションは、${Subscription_Detail.cancel_at}` +
               (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
           </Code>}
       </PageShell>)
   }
 
   // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
-  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && One_Pay_Permanent_Detail) {
+  if (!isLoading && !isMetadataLoading && !Subscription_Detail && One_Pay_Permanent_Detail) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='480px'>
@@ -127,7 +127,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   }
 
   // サインアップ後、サブスクリプション・ワンペイ永久ご視聴ともに未購入
-  if (!isLoading && !isMetadataLoading && !Stripe_Customer_Detail && !One_Pay_Permanent_Detail) {
+  if (!isLoading && !isMetadataLoading && !Subscription_Detail && !One_Pay_Permanent_Detail) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Text>{`ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。`}</Text>
@@ -137,14 +137,14 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
 
   // サブスクリプションのキャンセル後
   if (!isLoading && !isMetadataLoading &&
-    (Stripe_Customer_Detail && Stripe_Customer_Detail.subscription_Status === 'canceled')) {
+    (Subscription_Detail && Subscription_Detail.subscription_Status === 'canceled')) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='480px'>
           <Box mb={4}>{user.email} 様</Box>
-          <Box>{Stripe_Customer_Detail.cancel_at}にキャンセルされました。</Box>
+          <Box>{Subscription_Detail.cancel_at}にキャンセルされました。</Box>
           <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
-            {isPermanentView(Stripe_Customer_Detail) && <>
+            {isPermanentView(Subscription_Detail) && <>
               <Box>永久ご視聴</Box>
               <Box>○</Box></>}
           </Grid>

@@ -82,7 +82,7 @@ const upsertSubscriptionRecord = async (event) => {
         const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
         const metadata = {
-            Stripe_Customer_Detail: {
+            Subscription_Detail: {
                 title: 'サブスクリプション',
                 customer_Id,
                 price_Id,

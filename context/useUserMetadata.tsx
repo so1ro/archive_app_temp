@@ -10,7 +10,7 @@ export const UserMetadataProvider = (props) => {
   const { user, isLoading } = useUser();
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
-  const [{ Stripe_Customer_Detail }, setStripeCustomerDetail] = useState<{ Stripe_Customer_Detail: object }>({ Stripe_Customer_Detail: null })
+  const [{ Subscription_Detail }, setStripeCustomerDetail] = useState<{ Subscription_Detail: object }>({ Subscription_Detail: null })
   const [{ One_Pay_Permanent_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Permanent_Detail: object }>({ One_Pay_Permanent_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
@@ -43,22 +43,22 @@ export const UserMetadataProvider = (props) => {
             setOnePayPermanentDetail({ One_Pay_Permanent_Detail })
           }
 
-          // サブスクリプション購入済み Stripe_Customer_Detailを取得
-          if (user_metadata.Stripe_Customer_Detail) {
-            const { Stripe_Customer_Detail } = user_metadata
-            setStripeCustomerDetail({ Stripe_Customer_Detail })
+          // サブスクリプション購入済み Subscription_Detailを取得
+          if (user_metadata.Subscription_Detail) {
+            const { Subscription_Detail } = user_metadata
+            setStripeCustomerDetail({ Subscription_Detail })
 
-            Stripe_Customer_Detail.subscription_Status === ('active' || 'trialing') ?
+            Subscription_Detail.subscription_Status === ('active' || 'trialing') ?
               setSubscriptionState({ subscription_state: 'subscribe' }) :
               setSubscriptionState({ subscription_state: 'unsubscribe' })
 
             // Check if Today is before the cancel day
-            if (Stripe_Customer_Detail.cancel_at) {
+            if (Subscription_Detail.cancel_at) {
               const today = new Date()
-              const cancel_at = fromUnixTime(Stripe_Customer_Detail.cancel_at)
-              const canceled_at = fromUnixTime(Stripe_Customer_Detail.canceled_at)
-              Stripe_Customer_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日 k時',)
-              Stripe_Customer_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
+              const cancel_at = fromUnixTime(Subscription_Detail.cancel_at)
+              const canceled_at = fromUnixTime(Subscription_Detail.canceled_at)
+              Subscription_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日 k時',)
+              Subscription_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
               setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
             }
           }
@@ -80,7 +80,7 @@ export const UserMetadataProvider = (props) => {
     User_Detail,
     isMetadataLoading,
     subscription_state,
-    Stripe_Customer_Detail,
+    Subscription_Detail,
     One_Pay_Permanent_Detail,
     error_metadata,
     isBeforeCancelDate,

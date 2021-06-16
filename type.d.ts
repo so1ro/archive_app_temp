@@ -2,7 +2,7 @@ interface UserMetadataContextInterface {
   User_Detail: object | null;
   isMetadataLoading: boolean | null;
   subscription_state: string | null;
-  Stripe_Customer_Detail: Stripe_Customer_Detail_Interface;
+  Subscription_Detail: Subscription_Detail_Interface;
   error_metadata: string | null;
   isBeforeCancelDate: boolean | null;
   temporaryCheckIsSubscribing: boolean | null;
@@ -29,7 +29,7 @@ interface ArchivePath {
   paths: string[] | null;
 };
 
-interface Stripe_Customer_Detail_Interface {
+interface Subscription_Detail_Interface {
   customer_Id: string | null;
   price_Id: string | null;
   subscription_Name: string | null;

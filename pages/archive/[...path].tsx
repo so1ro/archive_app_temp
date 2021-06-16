@@ -40,10 +40,8 @@ export default function ArchiveRoute({
     const { user, error, isLoading } = useUser()
     const router = useRouter()
     const {
-        User_Detail,
         isMetadataLoading,
         subscription_state,
-        Stripe_Customer_Detail,
         One_Pay_Permanent_Detail,
         error_metadata } = useUserMetadata()
     const {

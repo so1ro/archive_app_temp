@@ -30,7 +30,7 @@ export default function Archive(
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
-  const { User_Detail, isMetadataLoading, subscription_state, Stripe_Customer_Detail, One_Pay_Permanent_Detail, error_metadata } = useUserMetadata()
+  const { User_Detail, isMetadataLoading, subscription_state, One_Pay_Permanent_Detail, error_metadata } = useUserMetadata()
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
   const router = useRouter()

@@ -25,7 +25,7 @@ import ArchiveSideNav from '@/components/ArchiveSideNav'
 import LoadingSpinner from '@/components/Spinner'
 import { highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
-
+import { bg_color_content } from '@/styles/colorModeValue'
 
 export default function ArchiveRoute({
     filteredDescArchive,
@@ -85,6 +85,7 @@ export default function ArchiveRoute({
     }
     const arrowSize = { base: 6, md: 8 }
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const bgColor = useColorModeValue(bg_color_content.l, bg_color_content.d)
 
     // Components
     const BreadcrumbNav = ({ paths }) => (
@@ -128,7 +129,7 @@ export default function ArchiveRoute({
             <>
                 {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}
                 {!isVideoMode &&
-                    <Flex flexGrow={1} direction='row'>
+                    <Flex flexGrow={1} direction='row' bg={bgColor}>
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
                             {isLargerThan992 && <Box p={8} >
                                 <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />

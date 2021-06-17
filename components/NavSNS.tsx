@@ -32,6 +32,7 @@ export default function NavSNS({ items }: { items: NavItem[] }) {
                 alignSelf={{ base: 'center', lg: 'flex-end' }}
             >
                 {items.map(item => (
+                    // itemを統合し、Keyを入れる。 
                     (<NextLink href={`/${root}/${item.path}`} key={item.id} passHref>
                         <Link fontSize={{ base: 'sm', md: 'md' }} className={path === item.path ? 'active' : ''}>{item.name}</Link>
                     </NextLink>)

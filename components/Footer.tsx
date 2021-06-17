@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Grid, GridItem, Stack, VStack, Heading, Text } from '@chakra-ui/react';
+import { Flex, VStack, Text, useColorMode } from '@chakra-ui/react';
 import { bg_color, text_BW } from '@/styles/colorModeValue';
 import SnsIcons from '@/components/SnsIcons';
 import NavLinks from '@/components/NavLinks';
@@ -8,6 +8,9 @@ const date = new Date();
 const year = date.getFullYear();
 
 export default function Footer() {
+
+    const { colorMode } = useColorMode()
+
     return (
         <Flex
             direction={{ base: "column", lg: "row" }}
@@ -15,7 +18,8 @@ export default function Footer() {
             justify='space-between'
             bg={bg_color}
             color={text_BW}
-            p={{ base: 4, lg: 9 }}>
+            p={{ base: 4, lg: 9 }}
+            borderTop={colorMode === 'dark' ? `1px #2F4351 solid` : 0}>
             <VStack spacing={1} align={{ base: "center", lg: "flex-start" }} order={{ base: 2, lg: 1 }}>
                 <Text fontSize={{ base: "xl", lg: "2xl" }} isTruncated>カスブラ</Text>
                 <Text fontSize="xs">&#xA9; {year} カスミブラザーズ All rights reserved.</Text>

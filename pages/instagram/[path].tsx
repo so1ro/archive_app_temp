@@ -14,7 +14,7 @@ import FsLightbox from 'fslightbox-react'
 import PageShell from '@/components/PageShell'
 import 'react-static-tweets/styles.css'
 import { Grid, Box, useColorModeValue, Square, Portal, Heading, Text, Link, HStack } from '@chakra-ui/react'
-import { card_background_color, bg_color_sns, highlight_color } from '@/styles/colorModeValue'
+import { highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
 import { css } from "@emotion/react"
 
@@ -49,30 +49,28 @@ export default function Twitter({ items, images, path }: { items: InstagramItem[
     }
 
     return (
-        <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} flexGrow={1}>
-            <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
-                <NavSNS items={navItems} />
-                <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
-                    {images.map((img, i) => (
-                        <Square pos='relative' key={img.sys.id} onClick={() => openLightboxOnSlide(i + 1)}>
-                            <Image
-                                src={`${img.image.url}?w=660&h=660&fit=fill`}
-                                alt={`${img.id}のインスタグラム`}
-                                width={660} height={660} quality={100} />
-                        </Square>
-                    ))}
-                </Grid>
-                <Portal>
-                    <Box css={fslightboxCss}>
-                        <FsLightbox
-                            toggler={lightboxController.toggler}
-                            slide={lightboxController.slide}
-                            sources={imageSource}
-                            captions={captions}
-                        /></Box>
-                </Portal>
-            </PageShell>
-        </Box>
+        <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+            <NavSNS items={navItems} />
+            <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
+                {images.map((img, i) => (
+                    <Square pos='relative' key={img.sys.id} onClick={() => openLightboxOnSlide(i + 1)}>
+                        <Image
+                            src={`${img.image.url}?w=660&h=660&fit=fill`}
+                            alt={`${img.id}のインスタグラム`}
+                            width={660} height={660} quality={100} />
+                    </Square>
+                ))}
+            </Grid>
+            <Portal>
+                <Box css={fslightboxCss}>
+                    <FsLightbox
+                        toggler={lightboxController.toggler}
+                        slide={lightboxController.slide}
+                        sources={imageSource}
+                        captions={captions}
+                    /></Box>
+            </Portal>
+        </PageShell>
     )
 }
 

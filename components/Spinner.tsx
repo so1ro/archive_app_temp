@@ -1,10 +1,13 @@
 import React from 'react';
 import { Text, VStack, Center, Spinner, useColorModeValue, Flex } from '@chakra-ui/react';
-import { highlight_color } from '@/styles/colorModeValue';
+import { bg_color_content, highlight_color } from '@/styles/colorModeValue'
 
 export default function LoadingSpinner() {
+
+    const bgColor = useColorModeValue(bg_color_content.l, bg_color_content.d)
+
     return (
-        <Flex flexGrow={1} direction='row'>
+        <Flex flexGrow={1} direction='row' bg={bgColor}>
             <Center w='full'>
                 <VStack spacing={4}>
                     <Spinner thickness="4px"

@@ -10,7 +10,7 @@ import 'react-static-tweets/styles.css'
 import { css } from "@emotion/react"
 import { VStack, Box } from '@chakra-ui/react'
 import { useColorModeValue } from "@chakra-ui/react"
-import { card_background_color, bg_color_sns, highlight_color } from '@/styles/colorModeValue'
+import { card_background_color, highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
 
 export default function Twitter({ twitterAST, items }) {
@@ -43,41 +43,40 @@ export default function Twitter({ twitterAST, items }) {
 `
 
     return (
-        <Box bg={useColorModeValue(bg_color_sns.l, bg_color_sns.d)} css={twitterBlockquoteWrap}>
-            Twitter
-            {/* <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
-            <NavSNS items={navItems} />
+        <Box css={twitterBlockquoteWrap}>
+            <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
+                <NavSNS items={items} />
                 {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
-            </PageShell> */}
+            </PageShell>
         </Box>
     )
 }
 
-// export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
 
-//     const { twitterCollection } = await fetchContentful(query_twitter)
-//     const paths = twitterCollection.items.map((col) => ({
-//         params: { path: col.path }
-//     }))
+    const { twitterCollection } = await fetchContentful(query_twitter)
+    const paths = twitterCollection.items.map((col) => ({
+        params: { path: col.path }
+    }))
 
-//     return { paths, fallback: false }
-// }
+    return { paths, fallback: false }
+}
 
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
 
-//     const { twitterCollection } = await fetchContentful(query_twitter)
-//     const twitterItem = await twitterCollection.items.find(col => col.path === params.path)
-//     const { data } = await getTweets(twitterItem.twitterId)
-//     const allTweetId = data.map(t => t.id)
+    const { twitterCollection } = await fetchContentful(query_twitter)
+    const twitterItem = await twitterCollection.items.find(col => col.path === params.path)
+    const { data } = await getTweets(twitterItem.twitterId)
+    const allTweetId = data.map(t => t.id)
 
-//     let twitterAST = []
-//     for (const id of allTweetId) {
-//         const tweetAst = await fetchTweetAst(id)
-//         twitterAST.push({ id, tweetAst })
-//     }
+    let twitterAST = []
+    for (const id of allTweetId) {
+        const tweetAst = await fetchTweetAst(id)
+        twitterAST.push({ id, tweetAst })
+    }
 
-//     return {
-//         props: { twitterAST, items: twitterCollection.items },
-//         revalidate: 1,
-//     }
-// }
+    return {
+        props: { twitterAST, items: twitterCollection.items },
+        revalidate: 1,
+    }
+}

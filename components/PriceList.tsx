@@ -4,9 +4,9 @@ import { postData } from '@/utils/helpers'
 import { getStripe } from '@/utils/stripe-client'
 
 import { Grid, Box, VStack, Text, HStack, useToast, Center, useColorMode, useColorModeValue, Flex, Link } from '@chakra-ui/react'
+import { CheckCircleIcon } from '@chakra-ui/icons'
 import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
-import { price_card_color } from '@/styles/colorModeValue'
-import { highlight_color } from '@/styles/colorModeValue'
+import { price_card_color, highlight_color } from '@/styles/colorModeValue'
 
 export default function PriceList({ user, allPrices, annotation, isOnePayPermanent }) {
 
@@ -62,11 +62,15 @@ export default function PriceList({ user, allPrices, annotation, isOnePayPermane
                     whileHover={{ scale: 1.1 }}
                     onClick={(e) => {
                         toast({
-                            title: (user ? "チェックアウトセッションに移動中..." : "サインアップに移動中..."),
-                            description: "このまま少々お待ち下さい。",
-                            status: "success",
                             duration: 9000,
-                            isClosable: true,
+                            render: () => (
+                                <HStack color="white" p={4} bg="#69b578" borderRadius={6} align='flex-start' spacing={4}>
+                                    <CheckCircleIcon w={6} h={6} color="white" />
+                                    <Box whiteSpace='pre-wrap'>
+                                        {user ? "チェックアウトセッションに移動中..." : "サインアップに移動中..."}
+                                    </Box>
+                                </HStack>
+                            )
                         })
                         if (user) handleCheckout(price.id, price.type)
                     }}>
@@ -88,7 +92,7 @@ export default function PriceList({ user, allPrices, annotation, isOnePayPermane
 
     return (
         <div>
-            <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={6}>
+            <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={3}>
                 {allPrices.map(price => (
                     <Flex
                         direction='column'

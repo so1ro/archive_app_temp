@@ -28,7 +28,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
         defaultIndex = indexOfRouteMatchPath - indexOfFisrtAccordion
     }
 
-    const highLighColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
         <Accordion allowToggle css={accordionCss} defaultIndex={defaultIndex}>
@@ -48,7 +48,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 else return (
                     <AccordionItem borderTopWidth={0} borderBottomWidth={0} key={i}>
                         <h2>
-                            <AccordionButton px={0} pt={0} pb={5} _expanded={{ color: highLighColor }}>
+                            <AccordionButton px={0} pt={0} pb={5} _expanded={{ color: highLightColor }}>
                                 <Box
                                     flex="1"
                                     textAlign="left"

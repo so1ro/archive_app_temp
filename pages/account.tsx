@@ -13,7 +13,7 @@ import { Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeVa
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
 import { CheckCircleIcon } from '@chakra-ui/icons'
-import { border_color } from '@/styles/colorModeValue'
+import { bg_color, border_color } from '@/styles/colorModeValue'
 
 export default function Account({ allPrices, landingPageText }: { allPrices: AllPrices[], landingPageText: LandingPageText[], }) {
 
@@ -33,7 +33,9 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
 
   const { annotation } = landingPageText[0]
 
-  const tableSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
+
+  const bgColor = useColorModeValue(bg_color.l, bg_color.d)
 
 
   // useEffect
@@ -110,7 +112,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
           <Box mb={8}>{user.email} 様</Box>
-          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4}>
+          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
             <Table variant="striped" colorScheme="gray" size={tableSize}>
               <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
               <Tbody>
@@ -167,7 +169,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
           <Box mb={4}>{user.email} 様</Box>
-          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4}>
+          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
             <Table variant="striped" colorScheme="gray" size={tableSize}>
               <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
               <Tbody>

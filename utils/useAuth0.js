@@ -116,11 +116,18 @@ const upsertChargeRecord = async (event) => {
     if (status === 'charge') amount = event.amount_refunded * -1
 
     try {
-        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
         const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
+
         const currentChargedFee = (past_charged_fee + amount) || 0
-        const metadata = { User_Detail: { past_charged_fee: currentChargedFee } }
+
+        // if Refund for One Pay, remove One Pay record from Auth0
+        let metadata = {}
+        amount + parseFloat(criteria_OnePay_price) === 0 ?
+            metadata = { User_Detail: { past_charged_fee: currentChargedFee }, One_Pay_Detail: null } :
+            metadata = { User_Detail: { past_charged_fee: currentChargedFee } }
+
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
     } catch (error) {
@@ -138,7 +145,10 @@ const upsertOnePayRecord = async (event) => {
         const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
 
-        const { user_metadata: { past_charged_fee } } = await getUserMetadata(auth0_UUID, auth0Token)
+        // if it's subscription charge.succeeded, it returns here
+        if (amount !== parseFloat(criteria_OnePay_price)) return
+
+        const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
         const currentChargedFee = (past_charged_fee + amount) || 0
         const metadata = {
             One_Pay_Detail: {

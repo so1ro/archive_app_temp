@@ -74,7 +74,8 @@ const upsertSubscriptionRecord = async (event) => {
         status: subscription_Status,
         cancel_at_period_end,
         cancel_at,
-        canceled_at, } = event
+        canceled_at,
+        pause_collection, } = event
 
     try {
         // const customerData = await stripe.customers.retrieve(customer_Id);
@@ -94,6 +95,7 @@ const upsertSubscriptionRecord = async (event) => {
                 cancel_at,
                 canceled_at,
                 criteria_OnePay_price,
+                pause_collection,
             }
         }
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
@@ -134,7 +136,7 @@ const upsertChargeRecord = async (event) => {
         console.log('Error in upsertChargeRecord:', error)
         throw new Error(err)
     }
-};
+}
 
 //// Send One-pay record to Auth0
 const upsertOnePayRecord = async (event) => {

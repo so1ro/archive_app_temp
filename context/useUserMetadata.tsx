@@ -15,7 +15,7 @@ export const UserMetadataProvider = (props) => {
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
 
-  // Subscription State "subscribe" OR "unsubscribe"
+  // Subscription State "subscribe" OR "unsubscribe" OR "paused"
   const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: null })
   // Temporary check isSubscribing for after Payment and check via returning URL
   const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
@@ -52,14 +52,25 @@ export const UserMetadataProvider = (props) => {
               setSubscriptionState({ subscription_state: 'subscribe' }) :
               setSubscriptionState({ subscription_state: 'unsubscribe' })
 
-            // Check if Today is before the cancel day
+            // Convert Timestamps to readable one
             if (Subscription_Detail.cancel_at) {
               const today = new Date()
               const cancel_at = fromUnixTime(Subscription_Detail.cancel_at)
-              const canceled_at = fromUnixTime(Subscription_Detail.canceled_at)
               Subscription_Detail.cancel_at = format(cancel_at, 'yyyy年 M月 d日 k時',)
-              Subscription_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
+              // Check if Today is before the cancel day
               setIsBeforeCancelDate({ isBeforeCancelDate: isBefore(today, cancel_at) })
+            }
+
+            if (Subscription_Detail.canceled_at) {
+              const canceled_at = fromUnixTime(Subscription_Detail.canceled_at)
+              Subscription_Detail.canceled_at = format(canceled_at, 'yyyy年 M月 d日',)
+            }
+
+            // if subscription is Paused
+            if (Subscription_Detail.pause_collection) {
+              setSubscriptionState({ subscription_state: 'paused' })
+              const resumes_at = fromUnixTime(Subscription_Detail.pause_collection.resumes_at)
+              Subscription_Detail.pause_collection.resumes_at = format(resumes_at, 'yyyy年 M月 d日 k時',)
             }
           }
 

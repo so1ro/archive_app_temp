@@ -67,11 +67,32 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     window.location.assign(url)
   }
 
-  const isPermanentView = (Subscription_Detail) => {
+  const isPermanentSubscription = (Subscription_Detail) => {
     return (parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) <= 0
   }
 
   const indexBgColor = useColorModeValue(border_color.l, border_color.d)
+
+  // Component
+  const CustomerPortalButton = () => (
+    <Center>
+      <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} onClick={() => {
+        handleCustomerPortal(Subscription_Detail.customer_Id)
+        toast({
+          duration: 9000,
+          render: () => (
+            <HStack color="white" p={4} bg="#69b578" borderRadius={6} align='flex-start' spacing={4}>
+              <CheckCircleIcon w={6} h={6} color="white" />
+              <Box whiteSpace='pre-wrap'>{"カスタマーポータルに移動中..."}</Box>
+            </HStack>
+          )
+        })
+      }}>
+        {!Subscription_Detail.cancel_at_period_end ?
+          `プランの変更・キャンセル ／ お支払い履歴` : `サブスクリプションの再開 ／ お支払い履歴`}
+      </Button>
+    </Center>
+  )
 
   // Render
   if (error) return <div>{error.message}</div>
@@ -99,12 +120,17 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       {
         name: '永久ご視聴まで残り',
         value: `${parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee}円`,
-        display: !isPermanentView(Subscription_Detail)
+        display: !isPermanentSubscription(Subscription_Detail)
       },
       {
         name: '永久ご視聴',
         value: '○',
-        display: isPermanentView(Subscription_Detail)
+        display: isPermanentSubscription(Subscription_Detail)
+      },
+      {
+        name: 'キャンセル',
+        value: `このサブスクリプションは、\n${Subscription_Detail.cancel_at + (isBeforeCancelDate ? 'までご利用いただけます。' : 'にキャンセルされました。')}`,
+        display: Subscription_Detail.cancel_at_period_end
       },
     ]
 
@@ -113,36 +139,15 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         <Box w='full' maxW='640px'>
           <Box mb={8}>{user.email} 様</Box>
           <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
-            <Table variant="striped" colorScheme="gray" size={tableSize}>
+            <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
               <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
               <Tbody>
                 {status.map((s, i) => (s.display && (<Tr key={i}><Td>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
               </Tbody>
             </Table>
           </Box>
-          <Center>
-            <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} onClick={() => {
-              handleCustomerPortal(Subscription_Detail.customer_Id)
-              toast({
-                duration: 9000,
-                render: () => (
-                  <HStack color="white" p={4} bg="#69b578" borderRadius={6} align='flex-start' spacing={4}>
-                    <CheckCircleIcon w={6} h={6} color="white" />
-                    <Box whiteSpace='pre-wrap'>{"カスタマーポータルに移動中..."}</Box>
-                  </HStack>
-                )
-              })
-            }}>
-              {!Subscription_Detail.cancel_at_period_end ?
-                `プランの変更・キャンセル ／ お支払い履歴` : `サブスクリプションの再開 ／ お支払い履歴`}
-            </Button>
-          </Center>
+          <CustomerPortalButton />
         </Box>
-        {Subscription_Detail?.cancel_at_period_end &&
-          <Code>
-            {`サブスクリプションは、${Subscription_Detail.cancel_at}` +
-              (isBeforeCancelDate ? `までご利用いただけます。` : `にキャンセルされました。`)}
-          </Code>}
       </PageShell>)
   }
 
@@ -188,26 +193,45 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box>
-          <Text mb={10}>{`ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。`}</Text>
+          <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
           <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
         </Box>
       </PageShell>)
   }
 
   // サブスクリプションのキャンセル後
+  // 注：Stripe Dashboardからのキャンセルは、即日キャンセルになる
   if (!isLoading && !isMetadataLoading &&
     (Subscription_Detail && Subscription_Detail.subscription_Status === 'canceled')) {
     return (
       <PageShell customPT={null} customSpacing={null}>
-        <Box w='full' maxW='480px'>
+        <Box w='full' maxW='640px'>
           <Box mb={4}>{user.email} 様</Box>
-          <Box>{Subscription_Detail.cancel_at}にキャンセルされました。</Box>
-          <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
-            {isPermanentView(Subscription_Detail) && <>
-              <Box>永久ご視聴</Box>
-              <Box>○</Box></>}
-          </Grid>
+          <Box>{Subscription_Detail.cancel_at ?? Subscription_Detail.canceled_at}にキャンセルされました。</Box>
+          {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
+            <Box>永久ご視聴</Box>
+            <Box>○</Box>
+          </Grid>}
+          <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
           <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+        </Box>
+      </PageShell>
+    )
+  }
+
+  // サブスクリプションの一時停止 Paused
+  if (!isLoading && !isMetadataLoading &&
+    (Subscription_Detail && subscription_state === 'paused')) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Box w='full' maxW='640px'>
+          <Box mb={4}>{user.email} 様</Box>
+          <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box>
+          {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
+            <Box>永久ご視聴</Box>
+            <Box>○</Box>
+          </Grid>}
+          <CustomerPortalButton />
         </Box>
       </PageShell>
     )

@@ -68,9 +68,10 @@ export const UserMetadataProvider = (props) => {
             }
             setSubscriptionDetail({ Subscription_Detail })
 
-            Subscription_Detail.subscription_Status === ('active' || 'trialing') ?
-              setSubscriptionState({ subscription_state: 'subscribe' }) :
-              setSubscriptionState({ subscription_state: 'unsubscribe' })
+            !!Subscription_Detail.pause_collection ?
+              setSubscriptionState({ subscription_state: 'paused' }) :
+              (Subscription_Detail.subscription_Status === ('active' || 'trialing') ?
+                setSubscriptionState({ subscription_state: 'subscribe' }) : setSubscriptionState({ subscription_state: 'unsubscribe' }))
 
             // Convert Timestamps to readable one
             if (Subscription_Detail.cancel_at) {
@@ -88,7 +89,6 @@ export const UserMetadataProvider = (props) => {
 
             // if subscription is Paused
             if (Subscription_Detail.pause_collection) {
-              setSubscriptionState({ subscription_state: 'paused' })
               const resumes_at = fromUnixTime(Subscription_Detail.pause_collection.resumes_at)
               Subscription_Detail.pause_collection.resumes_at = format(resumes_at, 'yyyy年 M月 d日 k時',)
             }

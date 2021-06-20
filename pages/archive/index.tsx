@@ -3,11 +3,12 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import { GetStaticProps } from "next"
 import { useMediaQuery } from '@/utils/useMediaQuery'
+import NextLink from 'next/link'
 
 import { fetchContentful } from "@/hook/contentful"
 import { query_allArchives, query_archivePricing } from "@/hook/contentful-queries"
 
-import { Heading, Box, Text } from "@chakra-ui/react"
+import { Heading, Box, Text, Button } from "@chakra-ui/react"
 // import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps'
 import PriceList from '@/components/PriceList'
@@ -41,7 +42,7 @@ export default function Archive(
   //// Landing Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe')) && !One_Pay_Detail))) {
+    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe' || 'paused')) && !One_Pay_Detail))) {
 
     return (
       <PageShell customPT={null} customSpacing={null}>
@@ -61,7 +62,14 @@ export default function Archive(
           <Text mb={6}>{explain}</Text>
           <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
         </Box>
-        <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+        {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
+        {subscription_state === 'unsubscribe' &&
+          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />}
+        {/* サブスクリプションが一時停止の場合 */}
+        {subscription_state === 'paused' &&
+          <NextLink href={'/account'}>
+            <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} >アカウントページへ</Button>
+          </NextLink>}
       </PageShell>
     )
   }

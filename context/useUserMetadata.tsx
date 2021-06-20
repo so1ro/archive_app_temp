@@ -19,7 +19,7 @@ export const UserMetadataProvider = (props) => {
   // Subscription State "subscribe" OR "unsubscribe" OR "paused"
   const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: null })
   // Temporary check isSubscribing for after Payment and check via returning URL
-  const [{ temporaryCheckIsSubscribing }, setTemporaryCheckIsSubscribing] = useState<{ temporaryCheckIsSubscribing: boolean }>({ temporaryCheckIsSubscribing: false })
+  const [{ temporaryPaidCheck }, setTemporaryPaidCheck] = useState<{ temporaryPaidCheck: boolean }>({ temporaryPaidCheck: false })
 
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
@@ -115,8 +115,8 @@ export const UserMetadataProvider = (props) => {
     One_Pay_Detail,
     error_metadata,
     isBeforeCancelDate,
-    temporaryCheckIsSubscribing,
-    setTemporaryCheckIsSubscribing,
+    temporaryPaidCheck,
+    setTemporaryPaidCheck,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;
 };

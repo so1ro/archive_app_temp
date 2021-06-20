@@ -73,10 +73,10 @@ const upsertSubscriptionRecord = async (event) => {
     try {
         // const customerData = await stripe.customers.retrieve(customer_Id);
         // console.log('customerData:', customerData)
-        const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
         const metadata = {
-            Subscription_Detail: { subscription_Id, price_Id, criteria_OnePay_price, }
+            Subscription_Detail: { subscription_Id, criteria_OnePay_price, }
         }
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
@@ -124,7 +124,7 @@ const upsertOnePayRecord = async (event) => {
     const { amount, customer: customer_Id, created, } = event
 
     try {
-        const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
 
         // if it's subscription charge.succeeded, it returns here
@@ -135,7 +135,6 @@ const upsertOnePayRecord = async (event) => {
         const metadata = {
             One_Pay_Detail: {
                 title: 'ワンペイ永久ご視聴',
-                price_Id,
                 created,
                 criteria_OnePay_price,
             },

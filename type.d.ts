@@ -5,13 +5,13 @@ interface UserMetadataContextInterface {
   Subscription_Detail: Subscription_Detail_Interface;
   error_metadata: string | null;
   isBeforeCancelDate: boolean | null;
-  temporaryCheckIsSubscribing: boolean | null;
+  temporaryPaidCheck: boolean | null;
   // setUserDetail:any, 
   // setStripeCustomerDetail:any, 
   // setErrorMetadata:any, 
   // setIsBeforeCancelDate:any, 
   // setIsLoadingMetadata: ({ isLoading_metadata: boolean }) => void;
-  setTemporaryCheckIsSubscribing: ({ temporaryCheckIsSubscribing: boolean }) => void;
+  setTemporaryPaidCheck: ({ setTemporaryPaidCheck: boolean }) => void;
 }
 interface AllPrices {
   id: string | null;
@@ -48,8 +48,6 @@ interface Subscription_Detail_Interface {
 interface CustomerDataInterface {
   customer_email: string | null
   customer_auth0_UUID: string | null
-  customer_price_Id: string | null
-  isSubscribing: boolean | null
 }
 
 // Contentful queries

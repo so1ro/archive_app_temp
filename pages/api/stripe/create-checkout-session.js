@@ -13,7 +13,6 @@ const createCheckoutSession = async (req, res) => {
     try {
       const customerData = {
         metadata: {
-          price_Id: price,
           auth0_UUID: user_uuid,
           criteria_OnePay_price: criteriaOnePayPrice
         }

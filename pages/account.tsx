@@ -26,17 +26,14 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     One_Pay_Detail,
     error_metadata,
     isBeforeCancelDate,
-    temporaryCheckIsSubscribing,
-    setTemporaryCheckIsSubscribing,
+    temporaryPaidCheck,
+    setTemporaryPaidCheck,
   } = useUserMetadata()
+
   const toast = useToast()
-
   const { annotation } = landingPageText[0]
-
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
-
   const bgColor = useColorModeValue(bg_color.l, bg_color.d)
-
 
   // useEffect
   useEffect(() => {
@@ -50,7 +47,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         }).then(data => data)
 
         if (customerData.customer_email === user.email) {
-          setTemporaryCheckIsSubscribing({ temporaryCheckIsSubscribing: customerData.isSubscribing })
+          setTemporaryPaidCheck({ temporaryPaidCheck: true })
         }
       }
       checkSession()
@@ -188,17 +185,6 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       </PageShell>)
   }
 
-  // サインアップ後、サブスクリプション・ワンペイ永久ご視聴ともに未購入
-  if (!isLoading && !isMetadataLoading && !Subscription_Detail && !One_Pay_Detail) {
-    return (
-      <PageShell customPT={null} customSpacing={null}>
-        <Box>
-          <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
-        </Box>
-      </PageShell>)
-  }
-
   // サブスクリプションのキャンセル後
   // 注：Stripe Dashboardからのキャンセルは、即日キャンセルになる
   if (!isLoading && !isMetadataLoading &&
@@ -235,6 +221,34 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         </Box>
       </PageShell>
     )
+  }
+
+  // サインアップ後、サブスクリプション・ワンペイ永久ご視聴ともに未購入
+  if (!isLoading && !isMetadataLoading && !Subscription_Detail && !One_Pay_Detail && !temporaryPaidCheck) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Box>
+          <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
+          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+        </Box>
+      </PageShell>)
+  }
+
+  // サブスクリプション、ワンペイ永久ご視聴の情報もないが、購入成功のリターンURLの場合
+  if (!isLoading && !isMetadataLoading && !Subscription_Detail && !One_Pay_Detail && temporaryPaidCheck) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Box w='full' maxW='640px'>
+          <Box mb={8}>{user.email} 様</Box>
+          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
+            <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
+              <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
+              <Tbody><Tr><Td>状態</Td><Td>一時的に購入情報が取得できなくなっております。</Td></Tr></Tbody>
+            </Table>
+          </Box>
+          <CustomerPortalButton />
+        </Box>
+      </PageShell>)
   }
 
   return <LoadingSpinner />

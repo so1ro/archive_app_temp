@@ -2,6 +2,7 @@ import { useEffect, useState, createContext, useContext } from 'react';
 import { useUser } from '@auth0/nextjs-auth0';
 import { postData } from '@/utils/helpers';
 import { format, fromUnixTime, isBefore } from 'date-fns'
+import { stripe } from '@/utils/stripe'
 
 export const UserMetadataContext = createContext(null);
 
@@ -10,7 +11,7 @@ export const UserMetadataProvider = (props) => {
   const { user, isLoading } = useUser();
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
-  const [{ Subscription_Detail }, setStripeCustomerDetail] = useState<{ Subscription_Detail: object }>({ Subscription_Detail: null })
+  const [{ Subscription_Detail }, setSubscriptionDetail] = useState<{ Subscription_Detail: object }>({ Subscription_Detail: null })
   const [{ One_Pay_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Detail: object }>({ One_Pay_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
@@ -45,8 +46,27 @@ export const UserMetadataProvider = (props) => {
 
           // サブスクリプション購入済み Subscription_Detailを取得
           if (user_metadata.Subscription_Detail) {
-            const { Subscription_Detail } = user_metadata
-            setStripeCustomerDetail({ Subscription_Detail })
+            const { Subscription_Detail: { subscription_Id, criteria_OnePay_price } } = user_metadata
+
+            const { subscriptionsObj } = await postData({
+              url: '/api/stripe/retrieve-subscription',
+              data: { subscription_Id }
+            }).then(data => data)
+
+            const Subscription_Detail = {
+              customer_Id: subscriptionsObj.customer,
+              price_Id: subscriptionsObj.plan.id,
+              subscription_Price: subscriptionsObj.plan.amount,
+              subscription_Description: subscriptionsObj.plan.nickname,
+              subscription_Id: subscription_Id,
+              subscription_Status: subscriptionsObj.status,
+              cancel_at_period_end: subscriptionsObj.cancel_at_period_end,
+              cancel_at: subscriptionsObj.cancel_at,
+              canceled_at: subscriptionsObj.canceled_at,
+              criteria_OnePay_price,
+              pause_collection: subscriptionsObj.pause_collection,
+            }
+            setSubscriptionDetail({ Subscription_Detail })
 
             Subscription_Detail.subscription_Status === ('active' || 'trialing') ?
               setSubscriptionState({ subscription_state: 'subscribe' }) :

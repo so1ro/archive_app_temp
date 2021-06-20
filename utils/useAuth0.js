@@ -1,5 +1,5 @@
-import { stripe } from '@/utils/stripe';
-import axios from 'axios';
+import { stripe } from '@/utils/stripe'
+import axios from 'axios'
 
 const getAuth0URL = (id) => {
     return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`
@@ -68,14 +68,7 @@ const getUserMetadata = async (user_id, token) => {
 //// Send Subscription record to Auth0
 const upsertSubscriptionRecord = async (event) => {
 
-    const { id: subscription_Id,
-        customer: customer_Id,
-        plan: { amount: subscription_Price, nickname: subscription_Description },
-        status: subscription_Status,
-        cancel_at_period_end,
-        cancel_at,
-        canceled_at,
-        pause_collection, } = event
+    const { id: subscription_Id, customer: customer_Id } = event
 
     try {
         // const customerData = await stripe.customers.retrieve(customer_Id);
@@ -83,20 +76,7 @@ const upsertSubscriptionRecord = async (event) => {
         const { metadata: { price_Id, auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
         const auth0Token = await auth0AccessToken()
         const metadata = {
-            Subscription_Detail: {
-                title: 'サブスクリプション',
-                customer_Id,
-                price_Id,
-                subscription_Price,
-                subscription_Description,
-                subscription_Id,
-                subscription_Status,
-                cancel_at_period_end,
-                cancel_at,
-                canceled_at,
-                criteria_OnePay_price,
-                pause_collection,
-            }
+            Subscription_Detail: { subscription_Id, price_Id, criteria_OnePay_price, }
         }
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)

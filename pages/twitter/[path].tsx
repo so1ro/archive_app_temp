@@ -15,7 +15,7 @@ import NavSNS from '@/components/NavSNS'
 
 export default function Twitter({ twitterAST, items }) {
 
-    // const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
+    const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
     const twitterBlockquoteWrap = css`
     .static-tweet-body {
         background: ${useColorModeValue(card_background_color.l, card_background_color.d)};
@@ -41,11 +41,10 @@ export default function Twitter({ twitterAST, items }) {
         overflow: hidden;
     }
 `
-
     return (
         <Box css={twitterBlockquoteWrap}>
             <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
-                <NavSNS items={items} />
+                <NavSNS items={navItems} />
                 {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
             </PageShell>
         </Box>

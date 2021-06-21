@@ -22,6 +22,7 @@ export default function Twitter({ items, images, path }: { items: InstagramItem[
 
     const [lightboxController, setLightboxController] = useState({ toggler: false, slide: 1 })
     const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
+    console.log('navItems:', navItems)
 
     let imageSource = []
     for (const img of images) {

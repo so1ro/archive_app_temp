@@ -19,7 +19,7 @@ export default function UserMenu() {
                 _expanded={{ bg: "none" }}
                 _focus={{ bg: "none" }}
             />
-            <MenuList>
+            <MenuList zIndex='3'>
                 <MenuItem><NextLink href="/account" passHref><Link w='full'>アカウント</Link></NextLink></MenuItem>
                 <MenuItem><Link href="/api/auth/logout" w='full'>ログアウト</Link></MenuItem>
             </MenuList>

@@ -219,7 +219,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
           <Box mb={4}>{user.email} 様</Box>
           {Subscription_Detail.pause_collection.resumes_at ?
             <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box> :
-            <Box mb={6}>サブスクリプションは、再開は未定です。</Box>}
+            <Box mb={6}>サブスクリプションは、現在停止中です。次のボタンから再開することができます。</Box>}
           {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
             <Box>永久ご視聴</Box>
             <Box>○</Box>

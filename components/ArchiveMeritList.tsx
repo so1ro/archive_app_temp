@@ -1,7 +1,6 @@
 import { Grid, GridItem, Heading, Text, useColorMode, useColorModeValue, HStack, Icon } from '@chakra-ui/react';
 import { CheckIcon, LibraryIcon, FunctionsIcon, HeartIcon } from '@/styles/icons';
-import { highlight_color } from '@/styles/colorModeValue';
-import { createIcon } from "@chakra-ui/icons"
+import { card_background_color, highlight_color } from '@/styles/colorModeValue';
 
 export default function ArchiveMeritList({ meritListItems }) {
 
@@ -14,6 +13,8 @@ export default function ArchiveMeritList({ meritListItems }) {
     const { colorMode } = useColorMode()
     const boxShadowLight = '0px 4px 4px rgba(0, 0, 0, 0.15), 0px -2px 4px rgba(0, 0, 0, 0.15), 4px 0px 4px rgba(0, 0, 0, 0.15);'
     const boxShadowDark = '0px 4px 4px rgba(255, 255, 255, 0.15), 0px -4px 4px rgba(255, 255, 255, 0.15), -4px 0px 4px rgba(255, 255, 255, 0.15), 4px 0px 4px rgba(255, 255, 255, 0.15);'
+    const bgCardColor = useColorModeValue(card_background_color.l, card_background_color.d)
+    const checkIconColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     const MeritGridItem = ({ title, list, icon, num }: { title: string, list: string[], icon: string, num: number }) => {
 
@@ -32,7 +33,7 @@ export default function ArchiveMeritList({ meritListItems }) {
                 </HStack>
                 {list.map((text, j) => (
                     <HStack align='baseline' key={j}>
-                        <CheckIcon w={3} h={3} color={useColorModeValue(highlight_color.l, highlight_color.d)} />
+                        <CheckIcon w={3} h={3} color={checkIconColor} />
                         <Text color={colorMode === 'light' ? '#6c6c6c' : '#fff'}>{text}</Text>
                     </HStack>))}
             </GridItem>
@@ -47,7 +48,7 @@ export default function ArchiveMeritList({ meritListItems }) {
             gap={8}
             boxShadow={colorMode === 'light' ? boxShadowLight : boxShadowDark}
             borderRadius='2xl'
-            bg={colorMode === 'dark' && '#263743'}>
+            bg={bgCardColor}>
             {meritGroup.map((g, i) => <MeritGridItem title={g.title} list={g.list} icon={g.icon} num={i + 1} key={i} />)}
         </Grid>
     );

@@ -32,7 +32,6 @@ export default function PriceList({ user, allPrices, annotation, isOnePayPermane
                 }
                 // token: session.access_token
             })
-            console.log('sessionId:', sessionId)
 
             const stripe = await getStripe()
             stripe.redirectToCheckout({ sessionId })

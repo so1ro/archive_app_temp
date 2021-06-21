@@ -8,6 +8,7 @@ export const UserMetadataContext = createContext(null);
 
 export const UserMetadataProvider = (props) => {
 
+  // State
   const { user, isLoading } = useUser();
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
@@ -15,9 +16,8 @@ export const UserMetadataProvider = (props) => {
   const [{ One_Pay_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Detail: object }>({ One_Pay_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
-
-  // Subscription State "subscribe" OR "unsubscribe" OR "paused"
-  const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: null })
+  // Subscription State "subscribe" || "unsubscribe" || "paused"
+  const [{ subscription_state }, setSubscriptionState] = useState<{ subscription_state: string }>({ subscription_state: 'unsubscribe' })
   // Temporary check isSubscribing for after Payment and check via returning URL
   const [{ temporaryPaidCheck }, setTemporaryPaidCheck] = useState<{ temporaryPaidCheck: boolean }>({ temporaryPaidCheck: false })
 
@@ -35,7 +35,6 @@ export const UserMetadataProvider = (props) => {
           if (user_metadata.User_Detail) {
             const { User_Detail } = user_metadata
             setUserDetail({ User_Detail })
-            setSubscriptionState({ subscription_state: 'unsubscribe' })
           }
 
           // ワンペイ永久購入済み One_Pay_Detailを取得
@@ -68,10 +67,14 @@ export const UserMetadataProvider = (props) => {
             }
             setSubscriptionDetail({ Subscription_Detail })
 
-            !!Subscription_Detail.pause_collection ?
+            // Set Subscription_State
+            !!Subscription_Detail.pause_collection || (
+              Subscription_Detail.subscription_Status !== 'active' &&
+              Subscription_Detail.subscription_Status !== 'trialing' &&
+              Subscription_Detail.subscription_Status !== 'canceled'
+            ) ?
               setSubscriptionState({ subscription_state: 'paused' }) :
-              (Subscription_Detail.subscription_Status === ('active' || 'trialing') ?
-                setSubscriptionState({ subscription_state: 'subscribe' }) : setSubscriptionState({ subscription_state: 'unsubscribe' }))
+              ((Subscription_Detail.subscription_Status === 'active' || Subscription_Detail.subscription_Status === 'trialing') && setSubscriptionState({ subscription_state: 'subscribe' }))
 
             // Convert Timestamps to readable one
             if (Subscription_Detail.cancel_at) {
@@ -88,12 +91,11 @@ export const UserMetadataProvider = (props) => {
             }
 
             // if subscription is Paused
-            if (Subscription_Detail.pause_collection) {
+            if (Subscription_Detail?.pause_collection?.resumes_at) {
               const resumes_at = fromUnixTime(Subscription_Detail.pause_collection.resumes_at)
               Subscription_Detail.pause_collection.resumes_at = format(resumes_at, 'yyyy年 M月 d日 k時',)
             }
           }
-
         } catch (error) {
           setErrorMetadata({ error_metadata: error.message })
           throw new Error(error)
@@ -104,7 +106,6 @@ export const UserMetadataProvider = (props) => {
       }
       getUserMetadata();
     }
-    setSubscriptionState({ subscription_state: 'unsubscribe' })
   }, [user]);
 
   const value = {

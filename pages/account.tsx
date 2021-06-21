@@ -95,7 +95,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   if (error) return <div>{error.message}</div>
 
   // サブスクリプション購入後
-  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe')) {
+  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe' && !One_Pay_Detail)) {
 
     // Status Table contents
     const status = [
@@ -149,7 +149,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   }
 
   // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
-  if (!isLoading && !isMetadataLoading && !Subscription_Detail && One_Pay_Detail) {
+  if (!isLoading && !isMetadataLoading && One_Pay_Detail) {
 
     // Status Table contents
     const status = [
@@ -179,8 +179,13 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
               </Tbody>
             </Table>
           </Box>
-          <Text mb={4}>{One_Pay_Detail ? `サブスクリプションを開始することもできます。` : `購入ボタンを押すと、決済に進みます。`}</Text>
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!One_Pay_Detail} />
+          {subscription_state === 'unsubscribe' && <>
+            <Text mb={4}>サブスクリプションを開始することもできます。</Text>
+            <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!One_Pay_Detail} /></>}
+          {subscription_state !== 'unsubscribe' && <>
+            <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
+            <CustomerPortalButton />
+          </>}
         </Box>
       </PageShell>)
   }
@@ -188,7 +193,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   // サブスクリプションのキャンセル後
   // 注：Stripe Dashboardからのキャンセルは、即日キャンセルになる
   if (!isLoading && !isMetadataLoading &&
-    (Subscription_Detail && Subscription_Detail.subscription_Status === 'canceled')) {
+    (Subscription_Detail && Subscription_Detail.subscription_Status === 'canceled' && !One_Pay_Detail)) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
@@ -207,16 +212,30 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
 
   // サブスクリプションの一時停止 Paused
   if (!isLoading && !isMetadataLoading &&
-    (Subscription_Detail && subscription_state === 'paused')) {
+    (Subscription_Detail && subscription_state === 'paused' && Subscription_Detail.pause_collection && !One_Pay_Detail)) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
           <Box mb={4}>{user.email} 様</Box>
-          <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box>
+          {Subscription_Detail.pause_collection.resumes_at ?
+            <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box> :
+            <Box mb={6}>サブスクリプションは、再開は未定です。</Box>}
           {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
             <Box>永久ご視聴</Box>
             <Box>○</Box>
           </Grid>}
+          <CustomerPortalButton />
+        </Box>
+      </PageShell>
+    )
+  }
+  // サブスクリプション status が incomplete / incomplete_expired / incomplete_expired / past_due の場合
+  if (!isLoading && !isMetadataLoading &&
+    (Subscription_Detail && subscription_state === 'paused' && !Subscription_Detail.pause_collection && !One_Pay_Detail)) {
+    return (
+      <PageShell customPT={null} customSpacing={null}>
+        <Box w='full' maxW='640px'>
+          <Box mb={4}>{user.email} 様</Box>
           <CustomerPortalButton />
         </Box>
       </PageShell>

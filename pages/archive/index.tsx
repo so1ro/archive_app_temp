@@ -42,7 +42,7 @@ export default function Archive(
   //// Landing Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe' || 'paused')) && !One_Pay_Detail))) {
+    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe' || subscription_state === 'paused')) && !One_Pay_Detail))) {
 
     return (
       <PageShell customPT={null} customSpacing={null}>

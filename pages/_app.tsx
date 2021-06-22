@@ -1,3 +1,4 @@
+import React from "react"
 import dynamic from 'next/dynamic'
 import { AppProps } from 'next/app'
 
@@ -6,6 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata';
 import { ArchiveStateProvider } from '@/context/useArchiveState';
 import Layout from '@/components/Layout';
+import SimpleReactLightbox from 'simple-react-lightbox-pro'
 
 // import '@/styles/globals.css'
 import '@/styles/font.css'
@@ -17,9 +19,13 @@ function App({ Component, pageProps }: AppProps) {
       <UserMetadataProvider>
         <ChakraProvider theme={theme}>
           <ArchiveStateProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <React.StrictMode>
+              <SimpleReactLightbox>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </SimpleReactLightbox>
+            </React.StrictMode>
           </ArchiveStateProvider>
         </ChakraProvider>
       </UserMetadataProvider>

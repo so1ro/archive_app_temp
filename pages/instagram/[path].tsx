@@ -16,7 +16,10 @@ import { highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
 import { css } from "@emotion/react"
 
+import { SRLWrapper } from 'simple-react-lightbox-pro'
+
 export default function Instagram({ items, images, path }: { items: InstagramItem[], images: InstagramImage[], path: string }) {
+    console.log('images:', images)
 
     const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
 
@@ -26,22 +29,40 @@ export default function Instagram({ items, images, path }: { items: InstagramIte
     }
 
     const author = items.find(item => item.path === path)
+    console.log('author:', author)
+    const captions = images.map((img, i) => (
+        {
+            id: i, caption: (<HStack spacing={4} key={i}>
+                <Image className='avatar' width={32} height={32} src={`${author.avatar.url}`} />
+                <Heading as='h6' fontSize='sm' fontWeight='normal'>
+                    {/* <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text> */}
+                    {img.instagramUrl ?
+                        <Text className='SRLCustomCaption'>この写真のインスタグラムページは、<Link className='SRLCustomCaption' href={img.instagramUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text> :
+                        <Text className='SRLCustomCaption'>{author.name}のインスタグラムは、<Link className='SRLCustomCaption' href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text>}
+                </Heading>
+            </HStack>)
+        }
+    ))
+    console.log('captions:', captions)
 
     return (
         <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
             <NavSNS items={navItems} />
-            <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
-                {images.map((img) => (
-                    <Link href={img.instagramUrl ?? author.instagramTopUrl} key={img.sys.id} isExternal >
-                        <Square pos='relative' >
-                            <Image
-                                src={`${img.image.url}?w=660&h=660&fit=fill`}
-                                alt={`${img.id}のインスタグラム`}
-                                width={660} height={660} quality={100} />
-                        </Square>
-                    </Link>
-                ))}
-            </Grid>
+            <SRLWrapper customCaptions={captions}>
+                <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
+                    {images.map((img) => (
+                        <Link href={img.image.url} key={img.sys.id}>
+                            <Square pos='relative' >
+                                <Image
+                                    src={`${img.image.url}?w=660&h=660&fit=fill`}
+                                    alt={`${img.id}のインスタグラム`}
+                                    width={660} height={660} quality={70}
+                                    srl_gallery_image="true" />
+                            </Square>
+                        </Link>
+                    ))}
+                </Grid>
+            </SRLWrapper>
         </PageShell>
     )
 }
@@ -80,14 +101,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 }
 
 
-const fslightboxCss = css`
-    .fslightbox-caption {
-        z-index: 9;
-    }
-
-    .fslightbox-toolbar-button:nth-of-type(1), .fslightbox-toolbar-button:nth-of-type(4), .fslightbox-toolbar-button:nth-of-type(5) {
-        display: none;
-    }
-    
+const SRLCss = css`
     img.avatar { border-radius: 50%;}
 `

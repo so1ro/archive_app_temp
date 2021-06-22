@@ -142,7 +142,8 @@ export const query_instagram = `{
       path
       order
       avatar {
-        url(transform: { resizeStrategy: CROP, cornerRadius: -1 })
+        url(
+          transform: { format:PNG,resizeStrategy: CROP, cornerRadius: -1 })
       }
     }
   }

@@ -2,16 +2,10 @@ import React, { useState, useRef, useLayoutEffect } from 'react'
 import { useArchiveState } from "@/context/useArchiveState"
 import { Input, InputGroup, InputLeftElement, InputRightElement, useColorModeValue } from "@chakra-ui/react"
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons"
-import { highlight_color, text_color } from '@/styles/colorModeValue'
+import { card_background_color, highlight_color, text_color } from '@/styles/colorModeValue'
 import Fuse from 'fuse.js'
 
-export default function ArchiveSearch({ filteredArchive, }
-    // :{
-    //     filteredArchive: AllArchivesInterface[],
-    //     setSearchedArchive: () => void
-    // }
-
-) {
+export default function ArchiveSearch({ filteredArchive, }) {
     // Hook
     const {
         searchKeyword,
@@ -84,7 +78,7 @@ export default function ArchiveSearch({ filteredArchive, }
                 borderRadius='full'
                 w={{ base: '220px', sm: '240px', md: '280px' }} fontSize={{ base: 'xs', md: 'sm' }}
                 borderWidth='1px'
-                bg={useColorModeValue('gray.200', '#172128')}
+                bg={useColorModeValue(card_background_color.l, card_background_color.d)}
                 borderColor={isSeaching ? useColorModeValue(highlight_color.l, highlight_color.d) : useColorModeValue('gray.200', '#172128')}
                 focusBorderColor={useColorModeValue(highlight_color.l, highlight_color.d)}
                 // Fuction

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Center } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { useColorModeValue } from "@chakra-ui/react"
-import { text_BW, bg_color_nav_top } from '@/styles/colorModeValue'
+import { text_BW, archiveSideMenuButton_bg_color } from '@/styles/colorModeValue'
 import { useRouter } from 'next/router'
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
@@ -47,7 +47,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
  .hamburger.is-active .hamburger-inner,
  .hamburger.is-active .hamburger-inner::before,
  .hamburger.is-active .hamburger-inner::after {
-   background-color: ${useColorModeValue(text_BW.l, text_BW.d)}; }
+   background-color: ${useColorModeValue('#fff', text_BW.d)}; }
 
 .hamburger-box {
  width: ${hamburger_layer_width};
@@ -62,7 +62,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
  .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
    width: ${hamburger_layer_width};
    height: ${hamburger_layer_height};
-   background-color: ${useColorModeValue(text_BW.l, text_BW.d)};
+   background-color: ${useColorModeValue('#fff', text_BW.d)};
    border-radius: 4px;
    position: absolute;
    transition-property: transform;
@@ -131,7 +131,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
       h={14}
       pos="fixed"
       borderRadius='full'
-      bg={useColorModeValue(bg_color_nav_top.l, bg_color_nav_top.d)}
+      bg={useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d)}
       bottom={btnPosition}
       left={!isArvhiveContent && btnPosition}
       right={isArvhiveContent && btnPosition}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { GetStaticProps, GetStaticPaths } from "next"
 import {
@@ -14,41 +14,46 @@ import PageShell from '@/components/PageShell'
 import { Grid, Box, useColorModeValue, Square, Portal, Heading, Text, Link, HStack } from '@chakra-ui/react'
 import { highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
-import { css } from "@emotion/react"
 
 import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 export default function Instagram({ items, images, path }: { items: InstagramItem[], images: InstagramImage[], path: string }) {
-    console.log('images:', images)
 
+    const router = useRouter()
     const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
-
-    let imageSource = []
-    for (const img of images) {
-        imageSource.push(img.image.url)
-    }
-
     const author = items.find(item => item.path === path)
-    console.log('author:', author)
+    const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const captions = images.map((img, i) => (
         {
             id: i, caption: (<HStack spacing={4} key={i}>
                 <Image className='avatar' width={32} height={32} src={`${author.avatar.url}`} />
                 <Heading as='h6' fontSize='sm' fontWeight='normal'>
-                    {/* <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text> */}
+                    {/* <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={highLightColor} isExternal>こちら</Link></Text> */}
                     {img.instagramUrl ?
-                        <Text className='SRLCustomCaption'>この写真のインスタグラムページは、<Link className='SRLCustomCaption' href={img.instagramUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text> :
-                        <Text className='SRLCustomCaption'>{author.name}のインスタグラムは、<Link className='SRLCustomCaption' href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text>}
+                        <Text className='SRLCustomCaption'>この写真のインスタグラムページは、<Link className='SRLCustomCaption' href={img.instagramUrl} color={highLightColor} isExternal>こちら</Link></Text> :
+                        <Text className='SRLCustomCaption'>{author.name}のインスタグラムは、<Link className='SRLCustomCaption' href={author.instagramTopUrl} color={highLightColor} isExternal>こちら</Link></Text>}
                 </Heading>
             </HStack>)
         }
     ))
-    console.log('captions:', captions)
+    const options = {
+        settings: {
+            autoplaySpeed: 0,
+        },
+        buttons: {
+            showAutoplayButton: false,
+            showDownloadButton: false,
+            showFullscreenButton: false,
+            showThumbnailsButton: false,
+        },
+        caption: {
+        }
+    }
 
     return (
         <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
             <NavSNS items={navItems} />
-            <SRLWrapper customCaptions={captions}>
+            <SRLWrapper customCaptions={captions} options={options} key={router.asPath}>
                 <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
                     {images.map((img) => (
                         <Link href={img.image.url} key={img.sys.id}>
@@ -99,8 +104,3 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         revalidate: 1,
     }
 }
-
-
-const SRLCss = css`
-    img.avatar { border-radius: 50%;}
-`

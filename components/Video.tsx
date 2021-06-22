@@ -111,18 +111,18 @@ export default function Video({
 
     return (
         <>
-            <HStack
-                mb={2} spacing='0' align='center' cursor='pointer'
-                onClick={() => {
-                    const paths = router.query.path as string[]
-                    router.push(`/archive/${encodeURI(paths.join('/'))}`)
-                    setIsVideoMode({ isVideoMode: false })
-                }}>
-                <ChevronLeftIcon w={8} h={8} />
-                <Text d={{ base: 'none', xl: 'inline-block' }}>戻る</Text>
-            </HStack>
             <Stack direction={{ base: 'column' }} align='center' >
                 <Box w='full' maxW={{ base: '1280px' }}>
+                    <HStack
+                        mb={2} spacing='0' align='center' cursor='pointer' pt={2}
+                        onClick={() => {
+                            const paths = router.query.path as string[]
+                            router.push(`/archive/${encodeURI(paths.join('/'))}`)
+                            setIsVideoMode({ isVideoMode: false })
+                        }}>
+                        <ChevronLeftIcon w={8} h={8} />
+                        <Text d={{ base: 'none', xl: 'inline-block' }}>戻る</Text>
+                    </HStack>
                     {/* <Grid> */}
                     <VideoVimeo
                         vimeoId={displayingArchive?.vimeoUrl}

@@ -86,7 +86,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         })
       }}>
         {(Subscription_Detail.cancel_at_period_end || subscription_state === 'paused') ?
-          `サブスクリプションの再開 ／ お支払い履歴` : `プランの変更・キャンセル ／ お支払い履歴`}
+          `サブスクリプションの再開 ／ お支払い履歴` : `プランの変更・キャンセル・一時停止 ／ 履歴`}
       </Button>
     </Center>
   )

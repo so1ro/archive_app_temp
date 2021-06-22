@@ -18,11 +18,10 @@ import { highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
 import { css } from "@emotion/react"
 
-export default function Twitter({ items, images, path }: { items: InstagramItem[], images: InstagramImage[], path: string }) {
+export default function Instagram({ items, images, path }: { items: InstagramItem[], images: InstagramImage[], path: string }) {
 
     const [lightboxController, setLightboxController] = useState({ toggler: false, slide: 1 })
     const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
-    console.log('navItems:', navItems)
 
     let imageSource = []
     for (const img of images) {
@@ -30,8 +29,8 @@ export default function Twitter({ items, images, path }: { items: InstagramItem[
     }
 
     const author = items.find(item => item.path === path)
-    const captions = images.map((img) => (
-        <HStack spacing={4}>
+    const captions = images.map((img, i) => (
+        <HStack spacing={4} key={i}>
             <Image className='avatar' width={32} height={32} src={`${author.avatar.url}`} />
             <Heading as='h6' fontSize='sm' fontWeight='normal'>
                 <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text>
@@ -46,7 +45,7 @@ export default function Twitter({ items, images, path }: { items: InstagramItem[
         setLightboxController({
             toggler: !lightboxController.toggler,
             slide: number
-        });
+        })
     }
 
     return (

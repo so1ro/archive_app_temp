@@ -9,10 +9,8 @@ import {
     query_instagram_image_miyashi,
 } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
-import FsLightbox from 'fslightbox-react'
 
 import PageShell from '@/components/PageShell'
-import 'react-static-tweets/styles.css'
 import { Grid, Box, useColorModeValue, Square, Portal, Heading, Text, Link, HStack } from '@chakra-ui/react'
 import { highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
@@ -20,7 +18,6 @@ import { css } from "@emotion/react"
 
 export default function Instagram({ items, images, path }: { items: InstagramItem[], images: InstagramImage[], path: string }) {
 
-    const [lightboxController, setLightboxController] = useState({ toggler: false, slide: 1 })
     const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
 
     let imageSource = []
@@ -29,47 +26,22 @@ export default function Instagram({ items, images, path }: { items: InstagramIte
     }
 
     const author = items.find(item => item.path === path)
-    const captions = images.map((img, i) => (
-        <HStack spacing={4} key={i}>
-            <Image className='avatar' width={32} height={32} src={`${author.avatar.url}`} />
-            <Heading as='h6' fontSize='sm' fontWeight='normal'>
-                <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={useColorModeValue(highlight_color.l, highlight_color.d)} isExternal>こちら</Link></Text>
-                {/* 正しいリンクを貼ることができない {img.instagramUrl ?
-                    <Text>この写真のインスタグラムページは、<Link href={img.instagramUrl} isExternal>こちら</Link></Text> :
-                    <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} isExternal>こちら</Link></Text>} */}
-            </Heading>
-        </HStack>
-    ))
-
-    function openLightboxOnSlide(number) {
-        setLightboxController({
-            toggler: !lightboxController.toggler,
-            slide: number
-        })
-    }
 
     return (
         <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 10, lg: 12 }}>
             <NavSNS items={navItems} />
             <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
-                {images.map((img, i) => (
-                    <Square pos='relative' key={img.sys.id} onClick={() => openLightboxOnSlide(i + 1)}>
-                        <Image
-                            src={`${img.image.url}?w=660&h=660&fit=fill`}
-                            alt={`${img.id}のインスタグラム`}
-                            width={660} height={660} quality={100} />
-                    </Square>
+                {images.map((img) => (
+                    <Link href={img.instagramUrl ?? author.instagramTopUrl} key={img.sys.id} isExternal >
+                        <Square pos='relative' >
+                            <Image
+                                src={`${img.image.url}?w=660&h=660&fit=fill`}
+                                alt={`${img.id}のインスタグラム`}
+                                width={660} height={660} quality={100} />
+                        </Square>
+                    </Link>
                 ))}
             </Grid>
-            <Portal>
-                <Box css={fslightboxCss}>
-                    <FsLightbox
-                        toggler={lightboxController.toggler}
-                        slide={lightboxController.slide}
-                        sources={imageSource}
-                        captions={captions}
-                    /></Box>
-            </Portal>
         </PageShell>
     )
 }

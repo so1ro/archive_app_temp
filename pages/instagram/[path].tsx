@@ -56,11 +56,11 @@ export default function Instagram({ items, images, path }: { items: InstagramIte
             <SRLWrapper customCaptions={captions} options={options} key={router.asPath}>
                 <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={{ base: 1, lg: 4 }} >
                     {images.map((img) => (
-                        <Link href={img.image.url} key={img.sys.id}>
-                            <Square pos='relative'>
+                        <Square pos='relative' key={img.sys.id}>
+                            <a href={img.image.url}>
                                 <img src={`${img.image.url}?w=660&h=660&fit=fill`} alt={`${img.id}のインスタグラム`} />
-                            </Square>
-                        </Link>
+                            </a>
+                        </Square>
                     ))}
                 </Grid>
             </SRLWrapper>

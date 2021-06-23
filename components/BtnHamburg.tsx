@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Center } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { useColorModeValue } from "@chakra-ui/react"
-import { text_BW, archiveSideMenuButton_bg_color } from '@/styles/colorModeValue'
+import { text_BW, menuButton_bg_color } from '@/styles/colorModeValue'
 import { useRouter } from 'next/router'
 
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
@@ -131,7 +131,7 @@ export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => vo
       h={14}
       pos="fixed"
       borderRadius='full'
-      bg={useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d)}
+      bg={useColorModeValue(menuButton_bg_color.l, menuButton_bg_color.d)}
       bottom={btnPosition}
       left={!isArvhiveContent && btnPosition}
       right={isArvhiveContent && btnPosition}

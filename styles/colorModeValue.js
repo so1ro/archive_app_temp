@@ -12,5 +12,5 @@ export const border_color = { l: "#ddd", d: "#263743" }
 export const price_card_color = { l: "#69b578", d: "#f79f22" }
 
 // Archive Content
-export const archiveSideMenuButton_bg_color = { l: "#1d2932", d: "#000" }
+export const menuButton_bg_color = { l: "rgb(29, 41, 50, 0.86)", d: "rgb(0, 0, 0, 0.7)" }
 export const archiveSideNav_bg_color = { l: "#fff", d: "#263743" }

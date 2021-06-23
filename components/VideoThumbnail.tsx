@@ -39,8 +39,8 @@ export default function VideoThumbnail({ archive, inVideoCompo, currentRoot, set
             </Box>
             <Box>
                 <List m={0} p={0} fontSize={['xs', 'sm', 'md']}>
-                    <ListItem fontSize={inVideoCompo && 'xs'}>{archive.title}</ListItem>
-                    {!inVideoCompo && <ListItem color="#585858" size="10px">
+                    <ListItem fontSize={inVideoCompo && 'xs'} mb={1}>{archive.title}</ListItem>
+                    {!inVideoCompo && <ListItem color="#585858" fontSize='sm'>
                         {format(parseISO(archive.publishDate), "yyyy/MM/dd")}
                     </ListItem>}
                 </List>

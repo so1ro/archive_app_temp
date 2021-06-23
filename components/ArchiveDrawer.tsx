@@ -10,7 +10,7 @@ import {
     useDisclosure,
     useColorModeValue
 } from "@chakra-ui/react"
-import { archiveSideMenuButton_bg_color } from '@/styles/colorModeValue'
+import { menuButton_bg_color } from '@/styles/colorModeValue'
 import ArchiveSideNav from '@/components/ArchiveSideNav'
 import { ArchiveSideMenuIcon } from '@/styles/icons';
 
@@ -35,8 +35,8 @@ export default function ArchiveDrawer({ pathObj }: { pathObj: ArchivePath[] }) {
                 h={12}
                 borderRadius={10}
                 justifyContent='flex-end'
-                bg={useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d)}
-                _hover={{ bg: useColorModeValue(archiveSideMenuButton_bg_color.l, archiveSideMenuButton_bg_color.d) }}
+                bg={useColorModeValue(menuButton_bg_color.l, menuButton_bg_color.d)}
+                _hover={{ bg: useColorModeValue(menuButton_bg_color.l, menuButton_bg_color.d) }}
                 display={{ base: 'inline-flex', lg: 'none' }}
                 zIndex='2'>
                 <ArchiveSideMenuIcon w={8} h={8} />

@@ -56,7 +56,8 @@ interface AllArchivesInterface {
   thumbnail: { url: string | null };
   title: string | null;
   publishDate: string | null;
-  vimeoUrl: number | null;
+  vimeoId: number | null;
+  youtubeId: string | null;
   category: string[] | null;
   keyword: string[] | null;
   releasedYear: string[] | null;

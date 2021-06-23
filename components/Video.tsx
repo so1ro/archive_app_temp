@@ -14,6 +14,7 @@ import { highlight_color, bg_color } from '@/styles/colorModeValue';
 import { css } from "@emotion/react"
 
 import VideoVimeo from '@/components/VideoVimeo'
+import VideoYouTube from '@/components/VideoYouTube'
 import VideoThumbnail from '@/components/VideoThumbnail';
 import { ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 
@@ -28,6 +29,7 @@ export default function Video({
 
     // Hook
     const router = useRouter()
+    const route = router.pathname.split('/')[1]
     const {
         isAutoplay,
         setIsAutoplay,
@@ -117,21 +119,31 @@ export default function Video({
                         mb={2} spacing='0' align='center' cursor='pointer' pt={2}
                         onClick={() => {
                             const paths = router.query.path as string[]
-                            router.push(`/archive/${encodeURI(paths.join('/'))}`)
+                            router.push(`/${route}/${encodeURI(paths.join('/'))}`)
                             setIsVideoMode({ isVideoMode: false })
                         }}>
                         <ChevronLeftIcon w={8} h={8} />
                         <Text d={{ base: 'none', xl: 'inline-block' }}>戻る</Text>
                     </HStack>
                     {/* <Grid> */}
-                    <VideoVimeo
-                        vimeoId={displayingArchive?.vimeoUrl}
-                        aspect={null}
-                        autoplay={true}
-                        borderRadius={0}
-                        skipTime={skipTime}
-                        isQuitVideo={isQuitVideo}
-                        onRouterPush={routerPushHandler} />
+                    {route === 'archive' &&
+                        <VideoVimeo
+                            vimeoId={displayingArchive?.vimeoId}
+                            aspect={null}
+                            autoplay={true}
+                            borderRadius={0}
+                            skipTime={skipTime}
+                            isQuitVideo={isQuitVideo}
+                            onRouterPush={routerPushHandler} />}
+                    {route === 'youtube1' &&
+                        <VideoYouTube
+                            youtubeId={displayingArchive?.youtubeId}
+                            aspect={null}
+                            autoplay={true}
+                            borderRadius={0}
+                            skipTime={skipTime}
+                            isQuitVideo={isQuitVideo}
+                            onRouterPush={routerPushHandler} />}
                     {/* </Grid> */}
 
                     <Box px={{ base: 4, 'xl': 0 }} py={4}>
@@ -207,7 +219,14 @@ export default function Video({
                                     styleFlag = true
                                 }
                                 return (
-                                    <ListItem d='inline-block' w='180px' whiteSpace='pre-wrap' mr={3} _last={{ marginRight: 0 }} ref={refFlag} key={archive.sys.id}>
+                                    <ListItem
+                                        d='inline-block'
+                                        w='180px'
+                                        mr={3}
+                                        whiteSpace='pre-wrap'
+                                        cursor='pointer'
+                                        _last={{ marginRight: 0 }}
+                                        ref={refFlag} key={archive.sys.id}>
                                         <VideoThumbnail
                                             key={archive.sys.id}
                                             archive={archive}

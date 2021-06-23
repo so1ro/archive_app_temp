@@ -16,7 +16,8 @@ export const query_allArchives =
         }
         title
         publishDate
-        vimeoUrl
+        vimeoId
+        youtubeId
         category
         keyword
         year

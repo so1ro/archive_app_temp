@@ -18,6 +18,7 @@ import { highlight_color, text_color } from '@/styles/colorModeValue';
 export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
     const router = useRouter()
+    const route = router.pathname.split('/')[1]
     const { setSearchKeyword } = useArchiveState()
 
     // For routes which need Accordion to be opened.
@@ -35,7 +36,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
             {pathObj.map((obj, i) => {
                 // ex: archive/名人
                 if (!obj.paths) return (
-                    <ArchiveActiveLink href={`/archive/${obj.categoryName}`} key={i}>
+                    <ArchiveActiveLink href={`/${route}/${obj.categoryName}`} key={i}>
                         <Link onClick={() => {
                             if (onCloseDrawer !== null) onCloseDrawer()
                             setSearchKeyword({ searchKeyword: '' })
@@ -59,7 +60,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                             </AccordionButton>
                         </h2>
                         {obj.paths.map(p => (
-                            <ArchiveActiveLink href={`/archive/${obj.id}/${p}`} key={`${obj.id}/${p}`}>
+                            <ArchiveActiveLink href={`/${route}/${obj.id}/${p}`} key={`${obj.id}/${p}`}>
                                 <Link onClick={() => {
                                     if (onCloseDrawer !== null) onCloseDrawer()
                                     setSearchKeyword({ searchKeyword: '' })

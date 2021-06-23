@@ -9,7 +9,6 @@ import { fetchContentful } from "@/hook/contentful"
 import { query_allArchives, query_archivePricing } from "@/hook/contentful-queries"
 
 import { Heading, Box, Text, Button } from "@chakra-ui/react"
-// import { css } from "@emotion/react"
 import { fetchAllPrices } from '@/hook/getStaticProps'
 import PriceList from '@/components/PriceList'
 import ArchiveMeritList from "@/components/ArchiveMeritList"

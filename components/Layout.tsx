@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useColorMode, useColorModeValue } from "@chakra-ui/react"
 
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
@@ -11,11 +12,15 @@ import Footer from '@/components/Footer';
 
 export default function Layout({ children }: { children: ReactNode }) {
 
+    const router = useRouter()
+    const currentHeadData = headData.find(data=> data.path === router.pathname.split('/')[1] )
+
     return (
         <>
             <Head>
-                <title>{'タイトル'}</title>
                 <meta charSet="utf-8" />
+                <title>{currentHeadData.title}</title>
+                <meta property="og:title" content={currentHeadData.title} key="title" />
                 {/* <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' /> */}
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <link rel="preload" href="/fonts/RocknRollOne-Regular.woff2" as="font" crossOrigin="" />
@@ -29,3 +34,13 @@ export default function Layout({ children }: { children: ReactNode }) {
         </>
     );
 }
+
+const headData = [
+    { path : '', title : 'カスブラ' },
+    { path : 'archive', title : 'アーカイブ | カスブラ' },
+    { path : 'youtube1', title : 'YouTube1 | カスブラ' },
+    { path : 'youtube2', title : 'YouTube2 | カスブラ' },
+    { path : 'twitter', title : 'ツイッター | カスブラ' },
+    { path : 'instagram', title : 'インスタグラム | カスブラ' },
+    { path : 'account', title : 'アカウント | カスブラ' },
+]

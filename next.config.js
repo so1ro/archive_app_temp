@@ -3,7 +3,7 @@ const withPWA = require('next-pwa')
 
 module.exports = withPWA({
     images: {
-        domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com'],
+        domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com', 'i.ytimg.com'],
     },
     pwa: {
         dest: 'public'

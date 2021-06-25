@@ -13,7 +13,7 @@ import Footer from '@/components/Footer';
 export default function Layout({ children }: { children: ReactNode }) {
 
     const router = useRouter()
-    const currentHeadData = headData.find(data=> data.path === router.pathname.split('/')[1] )
+    const currentHeadData = headData.find(data=> data.path === router.pathname.split('/')[1] ) ?? { path : '404', title : '404 | カスブラ' }
 
     return (
         <>
@@ -43,4 +43,6 @@ const headData = [
     { path : 'twitter', title : 'ツイッター | カスブラ' },
     { path : 'instagram', title : 'インスタグラム | カスブラ' },
     { path : 'account', title : 'アカウント | カスブラ' },
+    { path : 'facebook', title : 'Facebook | カスブラ' },
+    { path : '404', title : '404 | カスブラ' },
 ]

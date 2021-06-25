@@ -7,7 +7,7 @@ import { Grid, GridItem, Box, List, ListItem } from "@chakra-ui/react"
 import { css } from '@emotion/react'
 
 const Facebook = ({ facebookData }) => {
-    console.log('facebookData:', facebookData)
+    // console.log('facebookData:', facebookData)
     return (
         <>
             <div>Facebook</div>

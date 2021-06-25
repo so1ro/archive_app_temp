@@ -24,7 +24,7 @@ export default function Home(
   const { user, error, isLoading } = useUser()
 
   return (
-    <main>
+    <>
       <Hero allHeroImg={allHeroImg} />
       <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} >
         <TopIntro introTextAvatar={introTextAvatar} />
@@ -34,7 +34,7 @@ export default function Home(
       {isLoading && <div>Loading...</div>}
       {error && <div>{error.message}</div>}
       {!user && <div><a href="/api/auth/login">Login</a></div>} */}
-    </main>
+    </>
   )
 }
 

@@ -127,7 +127,7 @@ export default function ArchiveRoute({
                         {isLargerThan992 && <Box p={8} >
                             <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />
                         </Box>}
-                        <VStack spacing={8} p={{ base: 4, md: 8 }} >
+                        <VStack spacing={8} p={{ base: 4, md: 8 }}>
                             <Flex justify={{ base: 'none', sm: 'space-between' }} flexDirection={{ base: 'column', sm: 'row' }} w='full' align='center'>
                                 <BreadcrumbNav paths={breadCrumbPaths()} />
                                 <HStack spacing={{ base: 3, sm: 6, md: 8 }}>

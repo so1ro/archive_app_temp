@@ -25,13 +25,13 @@ export default function Instagram({ items, images, path }: { items: InstagramIte
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const captions = images.map((img, i) => (
         {
-            id: i, caption: (<HStack spacing={2} key={i}>
+            id: i, caption: (<HStack spacing={3} key={i}>
                 <Image className='avatar' width={32} height={32} src={`${author.avatar.url}`} />
                 <Heading as='h6' fontSize='sm' fontWeight='normal'>
                     {/* <Text>{author.name}のインスタグラムは、<Link href={author.instagramTopUrl} color={highLightColor} isExternal>こちら</Link></Text> */}
                     {img.instagramUrl ?
-                        <Text className='SRLCustomCaption'>この写真のインスタグラムページは、<Link className='SRLCustomCaption' href={img.instagramUrl} color={highLightColor} isExternal>こちら</Link></Text> :
-                        <Text className='SRLCustomCaption'>{author.name}のインスタグラムは、<Link className='SRLCustomCaption' href={author.instagramTopUrl} color={highLightColor} isExternal>こちら</Link></Text>}
+                        <Box className='SRLCustomCaption'>この写真のインスタグラムページは、<Link className='SRLCustomCaption' href={img.instagramUrl} color={highLightColor} isExternal>こちら</Link></Box> :
+                        <Box className='SRLCustomCaption'>{author.name}のインスタグラムは、<Link className='SRLCustomCaption' href={author.instagramTopUrl} color={highLightColor} isExternal>こちら</Link></Box>}
                 </Heading>
             </HStack>)
         }

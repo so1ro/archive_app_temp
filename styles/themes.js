@@ -21,11 +21,6 @@ const theme = extendTheme({
             html: {
                 scrollBehavior: "smooth",
             },
-            // "#__next": {
-            //     display: "flex",
-            //     flexDirection: "column",
-            //     minHeight: "100vh",
-            // },
             body: {
                 // background: props.colorMode === "dark" ? "#1D2932" : "#edf2f7",
                 color: props.colorMode === "dark" ? text_color.d : text_color.l,
@@ -41,6 +36,9 @@ const theme = extendTheme({
             },
             "a:hover": {
                 textDecoration: "none!important",
+            },
+            "*:focus": {
+                boxShadow: "none!important" // Delete Blue border from all clickable elements
             }
         }),
     },

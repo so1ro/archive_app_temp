@@ -9,7 +9,7 @@ import { arrayProceedHandler } from '@/utils/helpers'
 import {
     Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
 } from '@chakra-ui/react'
-import { CheckCircleIcon } from '@chakra-ui/icons'
+import Toast from '@/components/Toast'
 import { highlight_color, bg_color } from '@/styles/colorModeValue';
 import { css } from "@emotion/react"
 
@@ -166,16 +166,7 @@ export default function Video({
                                     width={5} height={5} mt={1}
                                     onClick={() => {
                                         setIsAutoplay({ isAutoplay: !isAutoplay })
-                                        toast({
-                                            // title: "Account created.",
-                                            duration: 5000,
-                                            render: () => (
-                                                <HStack color="white" p={4} bg="#69b578" borderRadius={6}>
-                                                    <CheckCircleIcon w={6} h={6} color="white" />
-                                                    <Box>{!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'}</Box>
-                                                </HStack>
-                                            )
-                                        })
+                                        toast({ duration: 3000, render: () => (<Toast text={!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'} />) })
                                     }
                                     }
                                     color={isAutoplay && highLightColor} />

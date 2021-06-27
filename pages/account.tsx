@@ -6,13 +6,13 @@ import { useUserMetadata } from '@/context/useUserMetadata'
 import { fetchAllPrices } from '@/hook/getStaticProps'
 import { postData } from '@/utils/helpers'
 import PriceList from '@/components/PriceList'
+import Toast from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
 import { query_archivePricing } from '@/hook/contentful-queries'
 
 import { Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeValue, Table, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
-import { CheckCircleIcon } from '@chakra-ui/icons'
 import { bg_color, border_color } from '@/styles/colorModeValue'
 
 export default function Account({ allPrices, landingPageText }: { allPrices: AllPrices[], landingPageText: LandingPageText[], }) {
@@ -75,15 +75,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     <Center>
       <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} onClick={() => {
         handleCustomerPortal(Subscription_Detail.customer_Id)
-        toast({
-          duration: 9000,
-          render: () => (
-            <HStack color="white" p={4} bg="#69b578" borderRadius={6} align='flex-start' spacing={4}>
-              <CheckCircleIcon w={6} h={6} color="white" />
-              <Box whiteSpace='pre-wrap'>{"カスタマーポータルに移動中..."}</Box>
-            </HStack>
-          )
-        })
+        toast({ duration: 3000, render: () => (<Toast text={"カスタマーポータルに移動中..."} />) })
       }}>
         {(Subscription_Detail.cancel_at_period_end || subscription_state === 'paused') ?
           `サブスクリプションの再開 ／ お支払い履歴` : `プランの変更・キャンセル・一時停止 ／ 履歴`}

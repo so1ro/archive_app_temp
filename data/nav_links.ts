@@ -10,4 +10,5 @@ export const nav_links: {
         { key: "3", href: "/youtube2/", root: "youtube2", text: "YouTube2" },
         { key: "4", href: "/twitter/official", root: "twitter", text: "ツイッター" },
         { key: "5", href: "/instagram/official", root: "instagram", text: "インスタグラム" },
+        { key: "6", href: "/contact", root: "contact", text: "お問い合わせ" },
     ]

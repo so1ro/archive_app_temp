@@ -13,7 +13,7 @@ import Footer from '@/components/Footer';
 export default function Layout({ children }: { children: ReactNode }) {
 
     const router = useRouter()
-    const currentHeadData = headData.find(data=> data.path === router.pathname.split('/')[1] ) ?? { path : '404', title : '404 | カスブラ' }
+    const currentHeadData = headData.find(data => data.path === router.pathname.split('/')[1]) ?? { path: '404', title: '404 | カスブラ' }
 
     return (
         <>
@@ -36,13 +36,15 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 
 const headData = [
-    { path : '', title : 'カスブラ' },
-    { path : 'archive', title : 'アーカイブ | カスブラ' },
-    { path : 'youtube1', title : 'YouTube1 | カスブラ' },
-    { path : 'youtube2', title : 'YouTube2 | カスブラ' },
-    { path : 'twitter', title : 'ツイッター | カスブラ' },
-    { path : 'instagram', title : 'インスタグラム | カスブラ' },
-    { path : 'account', title : 'アカウント | カスブラ' },
-    { path : 'facebook', title : 'Facebook | カスブラ' },
-    { path : '404', title : '404 | カスブラ' },
+    { path: '', title: 'カスブラ' },
+    { path: 'archive', title: 'アーカイブ | カスブラ' },
+    { path: 'youtube1', title: 'YouTube1 | カスブラ' },
+    { path: 'youtube2', title: 'YouTube2 | カスブラ' },
+    { path: 'twitter', title: 'ツイッター | カスブラ' },
+    { path: 'instagram', title: 'インスタグラム | カスブラ' },
+    { path: 'account', title: 'アカウント | カスブラ' },
+    { path: 'facebook', title: 'Facebook | カスブラ' },
+    { path: 'contact', title: 'お問い合わせ | カスブラ' },
+    { path: 'contact_success', title: 'お問い合わせ | カスブラ' },
+    { path: '404', title: '404 | カスブラ' },
 ]

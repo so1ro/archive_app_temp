@@ -1,4 +1,4 @@
-const accessToken = process.env.NEXT_PUBLIC_FACEBOOK_ACCESS_TOKEN
+const accessToken = process.env.FACEBOOK_ACCESS_TOKEN
 const limit = 16
 const fields = 'message,created_time,permalink_url,full_picture,id'
 

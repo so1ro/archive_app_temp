@@ -1,5 +1,5 @@
-const playListId = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLISTID
-const accessToken = process.env.NEXT_PUBLIC_YOUTUBE_ACCESS_TOKEN
+const playListId = process.env.YOUTUBE_PLAYLISTID
+const accessToken = process.env.YOUTUBE_ACCESS_TOKEN
 const fields = 'id,media_type,media_url,owner,timestamp,permalink,like_count,comments_count,caption'
 const limit = 36
 

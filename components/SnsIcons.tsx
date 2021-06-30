@@ -19,13 +19,13 @@ export default function SnsIcons({ animation, type, onHandler }: { animation: bo
             variants={nav_link_variants}
         >
             <NextLink href={'/twitter/official'} passHref>
-                <TwitterIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
+                <TwitterIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
             </NextLink>
             <NextLink href={'/instagram/official'} passHref>
-                <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
+                <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
             </NextLink>
             <NextLink href={'/contact'} passHref>
-                <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
+                <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
             </NextLink>
         </MotionIconStack>
     );

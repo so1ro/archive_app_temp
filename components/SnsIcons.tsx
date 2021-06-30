@@ -24,7 +24,9 @@ export default function SnsIcons({ animation, type, onHandler }: { animation: bo
             <NextLink href={'/instagram/official'} passHref>
                 <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
             </NextLink>
-            <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
+            <NextLink href={'/contact'} passHref>
+                <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} />
+            </NextLink>
         </MotionIconStack>
     );
 }

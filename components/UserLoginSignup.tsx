@@ -1,7 +1,7 @@
 
 import { Box, Button, HStack, Link, Text, useBreakpointValue, useColorMode, useToast, useColorModeValue } from '@chakra-ui/react'
 import { highlight_color } from '@/styles/colorModeValue'
-import Toast from '@/components/Toast'
+import { Toast } from '@/components/Toast'
 
 export default function UserLoginSignup() {
 

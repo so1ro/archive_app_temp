@@ -6,7 +6,7 @@ import { useUserMetadata } from '@/context/useUserMetadata'
 import { fetchAllPrices } from '@/hook/getStaticProps'
 import { postData } from '@/utils/helpers'
 import PriceList from '@/components/PriceList'
-import Toast from '@/components/Toast'
+import { Toast } from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
 import { query_archivePricing } from '@/hook/contentful-queries'
 

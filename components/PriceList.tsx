@@ -6,7 +6,7 @@ import { getStripe } from '@/utils/stripe-client'
 import { Grid, Box, VStack, Text, HStack, useToast, Center, useColorMode, useColorModeValue, Flex, Link } from '@chakra-ui/react'
 import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
 import { price_card_color, highlight_color } from '@/styles/colorModeValue'
-import Toast from '@/components/Toast'
+import { Toast } from '@/components/Toast'
 
 export default function PriceList({ user, allPrices, annotation, isOnePayPermanent }) {
 

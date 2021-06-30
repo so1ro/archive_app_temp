@@ -1,10 +1,12 @@
-import React from 'react'
+import PageShell from "@/components/PageShell"
+import { Center } from "@chakra-ui/react"
 
 const Success = () => {
+
 	return (
-		<div>
-			<h2>お問い合わせメールが送信されました。</h2>
-		</div>
+		<PageShell customPT={null} customSpacing={null}>
+			<Center>メールが送信されました。<br />お返事いたしますので、少々お待ち下さい。</Center>
+		</PageShell>
 	)
 }
 

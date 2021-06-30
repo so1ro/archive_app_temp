@@ -9,7 +9,7 @@ import { arrayProceedHandler } from '@/utils/helpers'
 import {
     Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
 } from '@chakra-ui/react'
-import Toast from '@/components/Toast'
+import { Toast } from '@/components/Toast'
 import { highlight_color, bg_color } from '@/styles/colorModeValue';
 import { css } from "@emotion/react"
 

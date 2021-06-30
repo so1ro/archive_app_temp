@@ -1,27 +1,42 @@
 import { useState } from 'react'
 import Router from 'next/router'
 import PageShell from '@/components/PageShell'
-import { Box, Text, Heading } from '@chakra-ui/layout'
+import { Input, Textarea, Text, Box, Heading, useColorModeValue, Button, useToast } from '@chakra-ui/react'
+import { highlight_color } from '@/styles/colorModeValue'
+import { ToastError } from '@/components/Toast'
+// import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 const Contact = () => {
   const [contact, setContact] = useState({
     name: '',
     email: '',
-    subject: 'アーカイブアプリからお問い合わせ',
+    subject: '',
     honeypot: '',
     message: '',
     replyTo: 'masamichi.kagaya@gmail.com',
     accessKey: process.env.NEXT_PUBLIC_STATIC_FORMS_ACCESS_KEY,
   })
 
-  const [response, setResponse] = useState({
-    type: '',
-    message: '',
-  })
+  const [{ error }, setError] = useState({ error: { email: '' } })
+  const [response, setResponse] = useState({ type: '', message: '', })
+  const toast = useToast()
 
-  const handleChange = e =>
-    setContact({ ...contact, [e.target.name]: e.target.value })
+  const validate = (input) => {
+    if (input.target.name === 'email') {
+      if (input.target.value === '') { return setError({ error: { email: '' } }) }
+      if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(input.target.value)) {
+        setError({ error: { email: 'Emailアドレスをご入力ください。' } })
+      } else {
+        setError({ error: { email: '' } })
+      }
+    }
+  }
 
+  const handleChange = e => {
+    if (e.target.name === 'subject') setContact({ ...contact, [e.target.name]: `【アーカイブアプリ】${e.target.value}` })
+    else { setContact({ ...contact, [e.target.name]: e.target.value }) }
+    validate(e)
+  }
   const handleSubmit = async e => {
     e.preventDefault()
     try {
@@ -46,68 +61,79 @@ const Contact = () => {
       console.log('An error occurred', e)
       setResponse({
         type: 'error',
-        message: 'An error occured while submitting the form',
+        message: '送信中にエラーが発生しました。',
+      })
+      toast({
+        status: 'error',
+        isClosable: true,
+        duration: 9000,
+        render: () => (<ToastError text={"送信中にエラーが発生しました。"} />)
       })
     }
   }
+
+  const highlightColor = useColorModeValue(highlight_color.l, highlight_color.d)
+
   return (
     <PageShell customPT={null} customSpacing={null}>
       <Box w='full' maxW='640px'>
         <Text>{response.message}</Text>
         <Box>
-          <Heading as='h2' fontSize='2xl' mb={6}>お問い合わせフォーム</Heading>
+          <Heading as='h2' fontSize='2xl' mb={16}>お問い合わせ</Heading>
           <form
             action="https://api.staticforms.xyz/submit"
             method="post"
             onSubmit={handleSubmit}>
-            <div className="field">
-              <label>お名前</label>
-              <div>
-                <input
-                  type="text"
-                  placeholder="お名前"
-                  name="name"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <label>メールアドレス</label>
-              <div>
-                <input
-                  type="email"
-                  placeholder="メールアドレス"
-                  name="email"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <div style={{ display: 'none' }}>
-              <label className="label">Title</label>
-              <div className="control">
-                <input
-                  type="text"
-                  name="honeypot"
-                  style={{ display: 'none' }}
-                  onChange={handleChange}
-                />
-                <input type="hidden" name="subject" onChange={handleChange} />
-              </div>
-            </div>
-            <div>
-              <label>メッセージ</label>
-              <div>
-                <textarea
-                  placeholder="Your Message"
-                  name="message"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <button type="submit">メールアドレスを送信</button>
+            <Text mt={6} mb={0} >お名前</Text>
+            <Input
+              mb={3}
+              variant="flushed"
+              borderColor='gray.500'
+              focusBorderColor={highlightColor}
+              type="text"
+              name="name"
+              onChange={handleChange}
+              required
+            />
+            <Text mt={6} mb={0} >メールアドレス</Text>
+            <Input
+              mb={3}
+              variant="flushed"
+              borderColor='gray.500'
+              focusBorderColor={highlightColor}
+              type="email"
+              name="email"
+              onChange={handleChange}
+              required
+            />
+            {error.email && <Text color={highlightColor} fontSize='sm'>{error.email}</Text>}
+            <Text mt={6} mb={0}>件名</Text>
+            <Input
+              mb={3}
+              variant="flushed"
+              borderColor='gray.500'
+              focusBorderColor={highlightColor}
+              type="text"
+              name="subject"
+              onChange={handleChange}
+              required
+            />
+            {/* <Input type="hidden" name="subject" onChange={handleChange} /> */}
+            <Text mt={6} mb={3}>メッセージ</Text>
+            <Textarea
+              name="message"
+              borderColor='gray.500'
+              focusBorderColor={highlightColor}
+              onChange={handleChange}
+              size="xl"
+              rows={10}
+              px={4}
+              py={2}
+              lineHeight={1.6}
+              mb={10}
+              required
+            />
+            <Button color='white' bg='#69b578' size='sm' type="submit">送信</Button>
           </form>
         </Box>
       </Box>

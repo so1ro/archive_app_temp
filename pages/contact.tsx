@@ -13,8 +13,6 @@ const Contact = () => {
     subject: '',
     honeypot: '',
     message: '',
-    replyTo: 'masamichi.kagaya@gmail.com',
-    accessKey: process.env.NEXT_PUBLIC_STATIC_FORMS_ACCESS_KEY,
   })
 
   const [{ error }, setError] = useState({ error: { email: '' } })
@@ -40,37 +38,45 @@ const Contact = () => {
     else { setContact({ ...contact, [e.target.name]: e.target.value }) }
     validate(e)
   }
+
   const handleSubmit = async e => {
     e.preventDefault()
     try {
-      const res = await fetch('https://api.staticforms.xyz/submit', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         body: JSON.stringify(contact),
         headers: { 'Content-Type': 'application/json' },
       })
 
       const json = await res.json()
-
       if (json.success) {
         //成功したらsuccessページに飛ぶ
         Router.push('/contact_success')
       } else {
         setResponse({
           type: 'error',
-          message: json.message,
+          message: '送信中にエラーが発生しました。',
+        })
+        console.log('An error occurred', e)
+        toast({
+          status: 'error',
+          isClosable: true,
+          duration: 9000,
+          render: () => (<ToastError text={"送信中にエラーが発生しました。"} />)
         })
       }
+
     } catch (e) {
       console.log('An error occurred', e)
       setResponse({
         type: 'error',
-        message: '送信中にエラーが発生しました。',
+        message: 'メッセージは送信されませんでした。',
       })
       toast({
         status: 'error',
         isClosable: true,
         duration: 9000,
-        render: () => (<ToastError text={"送信中にエラーが発生しました。"} />)
+        render: () => (<ToastError text={"メッセージは送信されませんでした。"} />)
       })
     }
   }

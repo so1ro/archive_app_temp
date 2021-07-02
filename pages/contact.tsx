@@ -3,7 +3,7 @@ import Router from 'next/router'
 import PageShell from '@/components/PageShell'
 import { Input, Textarea, Text, Box, Heading, useColorModeValue, Button, useToast } from '@chakra-ui/react'
 import { highlight_color } from '@/styles/colorModeValue'
-import { ToastError } from '@/components/Toast'
+import { Toast, ToastError } from '@/components/Toast'
 // import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 const Contact = () => {
@@ -142,7 +142,14 @@ const Contact = () => {
               mb={10}
               required
             />
-            <Button color='white' bg='#69b578' size='sm' type="submit">送信</Button>
+            <Button
+              color='white'
+              bg='#69b578'
+              size='sm'
+              type="submit"
+              onClick={() => {
+                toast({ duration: 3000, render: () => (<Toast text={"メールを送信中..."} />) })
+              }}>送信</Button>
           </form>
         </Box>
       </Box>

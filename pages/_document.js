@@ -32,6 +32,7 @@ class MyDocument extends Document {
                     <link rel="apple-touch-icon" sizes="144x144" href="public/icons/apple-touch-icon-144x144.png" />
                     <link rel="apple-touch-icon" sizes="152x152" href="public/icons/apple-touch-icon-152x152.png" />
                     <link rel="apple-touch-icon" sizes="180x180" href="public/icons/apple-touch-icon-180x180.png" />
+                    <link rel="apple-touch-icon" sizes="192x192" href="public/icons/icon-192x192.png" />
 
                     <link rel='shortcut icon' href='/favicon.ico' />
                     <link rel='icon' type='image/png' sizes='32x32' href='/public/icons/favicon-32x32.png' />

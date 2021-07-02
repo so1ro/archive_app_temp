@@ -1,6 +1,6 @@
 {
     "name": "Archive app",
-    "short_name": "App",
+    "short_name": "Archive app",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone",

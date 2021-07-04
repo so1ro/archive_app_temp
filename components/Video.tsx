@@ -1,21 +1,22 @@
 import { useState, useRef, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useArchiveState } from '@/context/useArchiveState';
+import { useArchiveState } from '@/context/useArchiveState'
+import { useUser } from '@auth0/nextjs-auth0'
 
 import { format, parseISO } from "date-fns"
 import TimeFormat from 'hh-mm-ss'
-import { arrayProceedHandler } from '@/utils/helpers'
+import { arrayProceedHandler, postData } from '@/utils/helpers'
 
 import {
     Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
 } from '@chakra-ui/react'
-import { Toast } from '@/components/Toast'
-import { highlight_color, bg_color } from '@/styles/colorModeValue';
+import { Toast, ToastError } from '@/components/Toast'
+import { highlight_color, bg_color } from '@/styles/colorModeValue'
 import { css } from "@emotion/react"
 
 import VideoVimeo from '@/components/VideoVimeo'
 import VideoYouTube from '@/components/VideoYouTube'
-import VideoThumbnail from '@/components/VideoThumbnail';
+import VideoThumbnail from '@/components/VideoThumbnail'
 import { ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 
 //Contentful
@@ -38,6 +39,7 @@ export default function Video({
         setCurrentDisplayArchive,
     } = useArchiveState()
     const toast = useToast()
+    const { user } = useUser()
 
     // When refreshing browser, currentDisplayArchive is missing. 
     // Fallback here with router query.
@@ -167,6 +169,23 @@ export default function Video({
                                     onClick={() => {
                                         setIsAutoplay({ isAutoplay: !isAutoplay })
                                         toast({ duration: 3000, render: () => (<Toast text={!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'} />) })
+                                    }
+                                    }
+                                    color={isAutoplay && highLightColor} />
+                                {/* Heart */}
+                                <RepeatIcon
+                                    width={5} height={5} mt={1}
+                                    onClick={async () => {
+                                        toast({ duration: 3000, render: () => (<Toast text={'お気に入りに保存中...'} />) })
+                                        try {
+                                            const { data } = await postData({
+                                                url: '/api/auth/upsert-favorite-video',
+                                                data: { auth0_UUID: user.sub, vimeoId: displayingArchive.vimeoId }
+                                            }).then(data => data)
+                                            // console.log('data:', data)
+                                        } catch (error) {
+                                            toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
+                                        }
                                     }
                                     }
                                     color={isAutoplay && highLightColor} />

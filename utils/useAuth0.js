@@ -1,5 +1,6 @@
 import { stripe } from '@/utils/stripe'
 import axios from 'axios'
+import _ from 'lodash'
 
 const getAuth0URL = (id) => {
     return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`
@@ -19,7 +20,7 @@ const auth0AccessToken = async () => {
             client_id: `${process.env.AUTH0_MTOM_CLIENTID}`,
             client_secret: `${process.env.AUTH0_MTOM_CLIENT_SECRET}`
         }
-    };
+    }
     const { access_token } = await axios(options)
         .then(res => res.data)
         .catch(err => { throw new Error(err) })
@@ -45,6 +46,8 @@ const patchUserMetadataToAuth0 = async (user_id, token, metadata) => {
     const data = await axios(option)
         .then(res => res.data)
         .catch(err => { throw new Error(err) })
+
+    return data
 }
 
 ////////////////////////////////////////////////
@@ -71,9 +74,9 @@ const upsertSubscriptionRecord = async (event) => {
     const { id: subscription_Id, customer: customer_Id } = event
 
     try {
-        // const customerData = await stripe.customers.retrieve(customer_Id);
+        // const customerData = await stripe.customers.retrieve(customer_Id)
         // console.log('customerData:', customerData)
-        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
         const metadata = {
             Subscription_Detail: { subscription_Id, criteria_OnePay_price, }
@@ -85,7 +88,7 @@ const upsertSubscriptionRecord = async (event) => {
         console.log('Error in upsertSubscriptionRecord:', error)
         throw new Error(err)
     }
-};
+}
 
 //// Send Charge (Payment Amount) record to Auth0
 const upsertChargeRecord = async (event) => {
@@ -98,7 +101,7 @@ const upsertChargeRecord = async (event) => {
     if (status === 'charge') amount = event.amount_refunded * -1
 
     try {
-        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
         const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
 
@@ -124,7 +127,7 @@ const upsertOnePayRecord = async (event) => {
     const { amount, customer: customer_Id, created, } = event
 
     try {
-        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id);
+        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
 
         // if it's subscription charge.succeeded, it returns here
@@ -146,7 +149,38 @@ const upsertOnePayRecord = async (event) => {
         console.log('Error in upsertOnePayRecord:', error)
         throw new Error(err)
     }
-};
+}
+
+//// Send Favorite Video Id record to Auth0
+const upsertFavoriteVideo = async (auth0_UUID, vimeoId) => {
+
+    try {
+        const auth0Token = await auth0AccessToken()
+        const { user_metadata: { User_Detail: { favorite_video } } } = await getUserMetadata(auth0_UUID, auth0Token)
+
+        const currentFavoriteVideos = favorite_video ?? []
+        console.log('currentFavoriteVideos:', currentFavoriteVideos)
+        let metadata = {}
+
+        // if vimeoId is saved in Auth0, it will be removed from it
+        if (currentFavoriteVideos.includes(vimeoId)) {
+            _.remove(currentFavoriteVideos, (id) => id === vimeoId)
+            console.log('Remove from currentFavoriteVideos:', currentFavoriteVideos)
+            metadata = { User_Detail: { favorite_video: currentFavoriteVideos } }
+        } else {
+            // if vimeoId isn't saved in Auth0, it will be added to it
+            metadata = { User_Detail: { favorite_video: [vimeoId, ...currentFavoriteVideos] } }
+        }
+
+        const data = await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
+        return data
+
+    } catch (error) {
+        console.log('Error in upsertFavoriteVideo:', error)
+        throw new Error(err)
+    }
+}
+
 ////////////////////////////////////////////////
 
 
@@ -155,4 +189,5 @@ export {
     upsertSubscriptionRecord,
     upsertChargeRecord,
     upsertOnePayRecord,
-};
+    upsertFavoriteVideo,
+}

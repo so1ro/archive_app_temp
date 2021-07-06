@@ -174,7 +174,7 @@ export default function Video({
                                 </List>
                             </Box>
                             <HStack overflow="hidden" textAlign='right' spacing={2} justifySelf={{ base: 'start', md: 'end' }} alignItems='flex-start' pt={1}>
-                                <FavoriteHeartIcon
+                                {route === 'archive' && <FavoriteHeartIcon
                                     width={iconSize} height={iconSize} cursor='pointer'
                                     color={favoriteVideo.includes(displayingArchive.vimeoId) && highLightColor}
                                     onClick={async () => {
@@ -189,7 +189,7 @@ export default function Video({
                                         } catch (error) {
                                             toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
                                         }
-                                    }} />
+                                    }} />}
                                 <RepeatIcon
                                     width={iconSize} height={iconSize} cursor='pointer'
                                     onClick={() => {

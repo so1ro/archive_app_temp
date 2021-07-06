@@ -21,6 +21,9 @@ export const UserMetadataProvider = (props) => {
   // Temporary check isSubscribing for after Payment and check via returning URL
   const [{ temporaryPaidCheck }, setTemporaryPaidCheck] = useState<{ temporaryPaidCheck: boolean }>({ temporaryPaidCheck: false })
 
+  // State for Saved Data
+  const [{ favoriteVideo }, setFavoriteVideo] = useState<{ favoriteVideo: [] }>({ favoriteVideo: [] })
+
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
       setIsMetadataLoading({ isMetadataLoading: true })
@@ -95,6 +98,12 @@ export const UserMetadataProvider = (props) => {
               const resumes_at = fromUnixTime(Subscription_Detail.pause_collection.resumes_at)
               Subscription_Detail.pause_collection.resumes_at = format(resumes_at, 'yyyy年 M月 d日 k時',)
             }
+
+            // if favorite_video is saved on Auth0
+            if (user_metadata.User_Detail.favorite_video) {
+              setFavoriteVideo({ favoriteVideo: user_metadata.User_Detail.favorite_video })
+            }
+
           }
         } catch (error) {
           setErrorMetadata({ error_metadata: error.message })
@@ -106,7 +115,7 @@ export const UserMetadataProvider = (props) => {
       }
       getUserMetadata();
     }
-  }, [user]);
+  }, [user])
 
   const value = {
     User_Detail,
@@ -117,6 +126,8 @@ export const UserMetadataProvider = (props) => {
     error_metadata,
     isBeforeCancelDate,
     temporaryPaidCheck,
+    favoriteVideo,
+    setFavoriteVideo,
     setTemporaryPaidCheck,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;

@@ -6,6 +6,7 @@ import { useUser } from '@auth0/nextjs-auth0'
 import { format, parseISO } from "date-fns"
 import TimeFormat from 'hh-mm-ss'
 import { arrayProceedHandler, postData } from '@/utils/helpers'
+import _ from 'lodash'
 
 import {
     Box, Grid, List, ListItem, HStack, Link, Text, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useColorModeValue, Stack, useToast
@@ -22,6 +23,7 @@ import { ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 //Contentful
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
+import { useUserMetadata } from '@/context/useUserMetadata'
 
 export default function Video({
     selectedArchive,
@@ -40,6 +42,7 @@ export default function Video({
     } = useArchiveState()
     const toast = useToast()
     const { user } = useUser()
+    const { favoriteVideo, setFavoriteVideo } = useUserMetadata()
 
     // When refreshing browser, currentDisplayArchive is missing. 
     // Fallback here with router query.
@@ -81,7 +84,14 @@ export default function Video({
         }
     }
 
+    const favoriteHandler = (vimeoId) => {
+        const currentFavoriteVideo = favoriteVideo
+        favoriteVideo.includes(vimeoId) ? _.pull(currentFavoriteVideo, vimeoId) : currentFavoriteVideo.unshift(vimeoId)
+        setFavoriteVideo({ favoriteVideo: currentFavoriteVideo })
+    }
+
     // Miscellaneous
+    const favoriteButtonText = favoriteVideo.includes(displayingArchive.vimeoId) ? 'お気に入りから削除中...' : 'お気に入りに保存中...'
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const bgColor = useColorModeValue(bg_color.l, bg_color.d)
     const accordionCss = css`
@@ -176,16 +186,17 @@ export default function Video({
                                 <RepeatIcon
                                     width={5} height={5} mt={1}
                                     onClick={async () => {
-                                        toast({ duration: 3000, render: () => (<Toast text={'お気に入りに保存中...'} />) })
-                                        try {
-                                            const { data } = await postData({
-                                                url: '/api/auth/upsert-favorite-video',
-                                                data: { auth0_UUID: user.sub, vimeoId: displayingArchive.vimeoId }
-                                            }).then(data => data)
-                                            // console.log('data:', data)
-                                        } catch (error) {
-                                            toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
-                                        }
+                                        toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
+                                        favoriteHandler(displayingArchive.vimeoId)
+                                        // try {
+                                        //     const { data } = await postData({
+                                        //         url: '/api/auth/upsert-favorite-video',
+                                        //         data: { auth0_UUID: user.sub, vimeoId: displayingArchive.vimeoId }
+                                        //     }).then(data => data)
+                                        //     // console.log('data:', data)
+                                        // } catch (error) {
+                                        //     toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
+                                        // }
                                     }
                                     }
                                     color={isAutoplay && highLightColor} />

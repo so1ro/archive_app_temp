@@ -43,7 +43,8 @@ export default function ArchiveRoute({
         isMetadataLoading,
         subscription_state,
         One_Pay_Detail,
-        error_metadata } = useUserMetadata()
+        error_metadata,
+        favoriteVideo } = useUserMetadata()
     const {
         isSeaching,
         searchedArchiveResult,

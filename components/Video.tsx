@@ -24,6 +24,7 @@ import { ChevronLeftIcon, RepeatIcon } from '@chakra-ui/icons'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import { useUserMetadata } from '@/context/useUserMetadata'
+import { FavoriteHeartIcon } from '@/styles/icons'
 
 export default function Video({
     selectedArchive,
@@ -121,11 +122,12 @@ export default function Video({
             background: ${highLightColor};
         }
     `
+    const iconSize = { base: 6, md: 7 }
 
     return (
         <>
             <Stack direction={{ base: 'column' }} align='center' >
-                <Box w='full' maxW={{ base: '1280px' }}>
+                <Box w='full' maxW={{ base: '1000px', '2xl': '1280px' }}>
                     <HStack
                         mb={2} spacing='0' align='center' cursor='pointer' pt={2}
                         onClick={() => {
@@ -159,31 +161,22 @@ export default function Video({
 
                     <Box px={{ base: 4, 'xl': 0 }} py={4}>
                         <Grid
-                            templateColumns={{ base: "auto 40px" }}
-                            gap={{ base: 4, md: 1 }}
+                            templateColumns={{ base: "1fr", md: "auto 80px" }}
+                            gap={1}
                             pb={4}
                         >
                             <Box>
                                 <List m={0} p={0}>
-                                    <ListItem fontSize={{ base: 'xl', lg: '2xl' }}>{displayingArchive.title}</ListItem>
+                                    <ListItem fontSize={{ base: 'xl', lg: '2xl' }} mb={1}>{displayingArchive.title}</ListItem>
                                     <ListItem color="#585858" size="10px" fontSize={['sm']} >
                                         {publishedDate}
                                     </ListItem>
                                 </List>
                             </Box>
-                            <Box overflow="hidden" textAlign='right' >
-                                {/* Heart */}
-                                <RepeatIcon
-                                    width={5} height={5} mt={1}
-                                    onClick={() => {
-                                        setIsAutoplay({ isAutoplay: !isAutoplay })
-                                        toast({ duration: 3000, render: () => (<Toast text={!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'} />) })
-                                    }
-                                    }
-                                    color={isAutoplay && highLightColor} />
-                                {/* Heart */}
-                                <RepeatIcon
-                                    width={5} height={5} mt={1}
+                            <HStack overflow="hidden" textAlign='right' spacing={2} justifySelf={{ base: 'start', md: 'end' }} alignItems='flex-start' pt={1}>
+                                <FavoriteHeartIcon
+                                    width={iconSize} height={iconSize} cursor='pointer'
+                                    color={favoriteVideo.includes(displayingArchive.vimeoId) && highLightColor}
                                     onClick={async () => {
                                         toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
                                         favoriteHandler(displayingArchive.vimeoId)
@@ -196,10 +189,16 @@ export default function Video({
                                         } catch (error) {
                                             toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
                                         }
+                                    }} />
+                                <RepeatIcon
+                                    width={iconSize} height={iconSize} cursor='pointer'
+                                    onClick={() => {
+                                        setIsAutoplay({ isAutoplay: !isAutoplay })
+                                        toast({ duration: 3000, render: () => (<Toast text={!isAutoplay ? '自動再生がONになりました。' : '自動再生がOFFになりました。'} />) })
                                     }
                                     }
                                     color={isAutoplay && highLightColor} />
-                            </Box>
+                            </HStack>
                         </Grid>
                         {/* Timestamps */}
                         {displayingArchive.timestamp && <Box pb={4}>

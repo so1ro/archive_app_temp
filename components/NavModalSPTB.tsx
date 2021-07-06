@@ -48,7 +48,7 @@ export default function NavModalSPTB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        <VStack spacing={2}>
+                        <VStack spacing={5}>
                             {nav_links.map(link => (
                                 <ActiveLink href={link.href} root={link.root} key={link.key}>
                                     <MotionLink
@@ -60,7 +60,7 @@ export default function NavModalSPTB() {
                                     >{link.text}</MotionLink>
                                 </ActiveLink>
                             ))}
-                            <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} />
+                            {/* <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} /> */}
                         </VStack>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />

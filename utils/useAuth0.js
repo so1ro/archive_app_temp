@@ -156,7 +156,8 @@ const upsertFavoriteVideo = async (auth0_UUID, favoriteVideo) => {
 
     try {
         const auth0Token = await auth0AccessToken()
-        const metadata = { User_Detail: { favorite_video: favoriteVideo } }
+        const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const metadata = { User_Detail: { past_charged_fee, favorite_video: favoriteVideo } }
         const data = await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
         return data
 

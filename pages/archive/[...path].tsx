@@ -58,7 +58,14 @@ export default function ArchiveRoute({
     const filteredAscArchive = [...filteredDescArchive].sort((a, b) => compareDesc(parseISO(b.publishDate), parseISO(a.publishDate)))
     const filteredArchive = isArchiveDesc ? filteredDescArchive : filteredAscArchive
     const searchedArchive = searchedArchiveResult?.map(archive => archive.item)
-    const selectedArchive = !isSeaching ? filteredArchive : searchedArchive
+    let selectedArchive = !isSeaching ? filteredArchive : searchedArchive
+
+    if (router.asPath.includes(encodeURI('お気に入り'))) {
+        const favoriteArchive = favoriteVideo.map(v => (
+            filteredDescArchive.find(a => a.vimeoId === v)
+        ))
+        selectedArchive = favoriteArchive
+    }
 
     // Effect for setIsVideoMode
     useEffect(() => {
@@ -200,7 +207,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
     if (params.path.length === 1) {
         // archive/すべて
-        if (params.path[0] === 'すべて') filteredDescArchive = allArchives
+        if (params.path[0] === 'すべて' || params.path[0] === 'お気に入り') filteredDescArchive = allArchives
         // ex: archive/名人
         else filteredDescArchive = allArchives.filter(data => data.category?.includes(params.path[0]))
     }

@@ -122,7 +122,6 @@ export default function Video({
         }
     `
 
-
     return (
         <>
             <Stack direction={{ base: 'column' }} align='center' >
@@ -188,15 +187,15 @@ export default function Video({
                                     onClick={async () => {
                                         toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
                                         favoriteHandler(displayingArchive.vimeoId)
-                                        // try {
-                                        //     const { data } = await postData({
-                                        //         url: '/api/auth/upsert-favorite-video',
-                                        //         data: { auth0_UUID: user.sub, vimeoId: displayingArchive.vimeoId }
-                                        //     }).then(data => data)
-                                        //     // console.log('data:', data)
-                                        // } catch (error) {
-                                        //     toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
-                                        // }
+                                        try {
+                                            const { data } = await postData({
+                                                url: '/api/auth/upsert-favorite-video',
+                                                data: { auth0_UUID: user.sub, favoriteVideo }
+                                            }).then(data => data)
+                                            // console.log('data:', data)
+                                        } catch (error) {
+                                            toast({ duration: 3000, render: () => (<ToastError text={'お気に入りは保存されませんでした。'} />) })
+                                        }
                                     }
                                     }
                                     color={isAutoplay && highLightColor} />

@@ -152,26 +152,11 @@ const upsertOnePayRecord = async (event) => {
 }
 
 //// Send Favorite Video Id record to Auth0
-const upsertFavoriteVideo = async (auth0_UUID, vimeoId) => {
+const upsertFavoriteVideo = async (auth0_UUID, favoriteVideo) => {
 
     try {
         const auth0Token = await auth0AccessToken()
-        const { user_metadata: { User_Detail: { favorite_video } } } = await getUserMetadata(auth0_UUID, auth0Token)
-
-        const currentFavoriteVideos = favorite_video ?? []
-        console.log('currentFavoriteVideos:', currentFavoriteVideos)
-        let metadata = {}
-
-        // if vimeoId is saved in Auth0, it will be removed from it
-        if (currentFavoriteVideos.includes(vimeoId)) {
-            _.remove(currentFavoriteVideos, (id) => id === vimeoId)
-            console.log('Remove from currentFavoriteVideos:', currentFavoriteVideos)
-            metadata = { User_Detail: { favorite_video: currentFavoriteVideos } }
-        } else {
-            // if vimeoId isn't saved in Auth0, it will be added to it
-            metadata = { User_Detail: { favorite_video: [vimeoId, ...currentFavoriteVideos] } }
-        }
-
+        const metadata = { User_Detail: { favorite_video: favoriteVideo } }
         const data = await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
         return data
 

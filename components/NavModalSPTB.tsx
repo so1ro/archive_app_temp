@@ -1,5 +1,6 @@
-import Nav from '@/components/Nav';
-import ActiveLink from '@/components/ActiveLink';
+import { useUser } from '@auth0/nextjs-auth0'
+import Nav from '@/components/Nav'
+import ActiveLink from '@/components/ActiveLink'
 
 import {
     Modal,
@@ -9,24 +10,32 @@ import {
     Box,
     Stack,
     VStack,
+    Link,
+    Divider,
+    useToast,
+    Text,
 } from "@chakra-ui/react"
 import {
     useDisclosure,
     useColorMode,
     useColorModeValue,
 } from "@chakra-ui/react"
-import { MotionLink } from '@/components/Chakra_Framer/element';
-import { nav_link_variants } from '@/components/Chakra_Framer/variants';
+import { MotionLink, MotionBox } from '@/components/Chakra_Framer/element'
+import { nav_link_variants } from '@/components/Chakra_Framer/variants'
 
-import Btn_hamburg from '@/components/BtnHamburg';
-import SnsIcons from '@/components/SnsIcons';
-import { bg_color } from '@/styles/colorModeValue';
-import { nav_links } from '@/data/nav_links';
-
+import Btn_hamburg from '@/components/BtnHamburg'
+import SnsIcons from '@/components/SnsIcons'
+import { bg_color, highlight_color, text_color } from '@/styles/colorModeValue'
+import { nav_links } from '@/data/nav_links'
+import { Toast } from '@/components/Toast'
 
 export default function NavModalSPTB() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { user, error, isLoading } = useUser()
+    const toast = useToast()
+    const borderColor = useColorModeValue(text_color.l, text_color.d)
+    const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
         <Box d={{ base: "block", lg: "none" }}>
@@ -60,6 +69,52 @@ export default function NavModalSPTB() {
                                     >{link.text}</MotionLink>
                                 </ActiveLink>
                             ))}
+                            {isLoading ? '' :
+                                (user ?
+                                    <>
+                                        <Divider borderColor={borderColor} variant='dashed' />
+                                        <MotionBox
+                                            w='full'
+                                            textAlign='center'
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={nav_link_variants}>
+                                            <ActiveLink href='/account' root='account' key='account'>
+                                                <Link onClick={onClose} fontSize="xl">アカウント</Link>
+                                            </ActiveLink>
+                                        </MotionBox>
+                                        <ActiveLink href='/api/auth/logout' root={null} key='logout' >
+                                            <MotionLink
+                                                onClick={onClose}
+                                                initial="hidden"
+                                                animate="visible"
+                                                variants={nav_link_variants}
+                                                fontSize="xl"
+                                            >ログアウト</MotionLink>
+                                        </ActiveLink>
+                                    </> :
+                                    <>
+                                        <Divider borderColor={borderColor} variant='dashed' />
+                                        <MotionLink
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={nav_link_variants}
+                                            // fontSize={["10px", "11px"]}
+                                            href="/api/auth/login?param=signup"
+                                            // lineHeight='14px'
+                                            onClick={() => {
+                                                toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
+                                            }}>初めての方は<br /><Text color={highlighColor}>サインアップ</Text>
+                                        </MotionLink>
+                                        <MotionLink
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={nav_link_variants}
+                                            href="/api/auth/login" onClick={() => {
+                                                toast({ duration: 3000, render: () => (<Toast text={"ログインに移動中..."} />) })
+                                            }}>ログイン</MotionLink>
+                                    </>)
+                            }
                             {/* <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} /> */}
                         </VStack>
                     </Flex>

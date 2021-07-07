@@ -1,8 +1,12 @@
 import { motion, HTMLMotionProps } from "framer-motion"
 import { HTMLChakraProps, chakra } from "@chakra-ui/react"
-import { Stack, Button, Box } from "@chakra-ui/react"
+import { Stack } from "@chakra-ui/react"
+import { Box, BoxProps } from '@chakra-ui/layout';
 
 type Merge<P, T> = Omit<P, keyof T> & T;
+
+// MotionBox
+export const MotionBox = motion<BoxProps>(Box)
 
 // MotionLink - Modal Menu
 type MotionLinkProps = Merge<HTMLChakraProps<"a">, HTMLMotionProps<"a">>;

@@ -126,7 +126,7 @@ export default function Video({
 
     return (
         <>
-            <Stack direction={{ base: 'column' }} align='center' >
+            <Stack direction={{ base: 'column' }} align='center' pb={6}>
                 <Box w='full' maxW={{ base: '1000px', '2xl': '1280px' }}>
                     <HStack
                         mb={2} spacing='0' align='center' cursor='pointer' pt={2}

@@ -99,20 +99,20 @@ export default function NavModalSPTB() {
                                             initial="hidden"
                                             animate="visible"
                                             variants={nav_link_variants}
-                                            // fontSize={["10px", "11px"]}
-                                            href="/api/auth/login?param=signup"
-                                            // lineHeight='14px'
-                                            onClick={() => {
-                                                toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
-                                            }}>初めての方は<br /><Text color={highlighColor}>サインアップ</Text>
-                                        </MotionLink>
+                                            fontSize="xl"
+                                            href="/api/auth/login" onClick={() => {
+                                                toast({ duration: 3000, render: () => (<Toast text={"ログインに移動中..."} />) })
+                                            }}>ログイン</MotionLink>
                                         <MotionLink
                                             initial="hidden"
                                             animate="visible"
                                             variants={nav_link_variants}
-                                            href="/api/auth/login" onClick={() => {
-                                                toast({ duration: 3000, render: () => (<Toast text={"ログインに移動中..."} />) })
-                                            }}>ログイン</MotionLink>
+                                            // fontSize="xl"
+                                            href="/api/auth/login?param=signup"
+                                            onClick={() => {
+                                                toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
+                                            }}>初めての方は<br /><Text color={highlighColor}>サインアップ</Text>
+                                        </MotionLink>
                                     </>)
                             }
                             {/* <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} /> */}

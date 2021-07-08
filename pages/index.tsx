@@ -9,14 +9,15 @@ import { Container, VStack } from "@chakra-ui/react"
 import TopIntro from '@/components/TopIntro'
 import TopShop from '@/components/TopShop'
 import PageShell from '@/components/PageShell'
+import { dailyNum } from '@/utils/helpers'
 
 export default function Home(
   {
-    allHeroImg,
+    todayImgPair,
     introTextAvatar,
     productTextImage
   }: {
-    allHeroImg: AllHeroImgInterface[],
+    todayImgPair: AllHeroImgInterface[],
     introTextAvatar: TopIntroTextAvatar
     productTextImage: TopShopTextImage[]
   }) {
@@ -25,7 +26,7 @@ export default function Home(
 
   return (
     <>
-      <Hero allHeroImg={allHeroImg} />
+      <Hero todayImgPair={todayImgPair} />
       <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} >
         <TopIntro introTextAvatar={introTextAvatar} />
         <TopShop productTextImage={productTextImage} />
@@ -44,9 +45,13 @@ export const getStaticProps: GetStaticProps = async () => {
   const { topIntroCollection: { items: introTextAvatar } } = await fetchContentful(query_topIntro)
   const { topShopCollection: { items: productTextImage } } = await fetchContentful(query_topShop)
 
+  // Arrange Portrait First & Destructuring 
+  const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
+  const todayImgPair = portraitFirstAllImg[dailyNum(portraitFirstAllImg)]
+
   return {
     props: {
-      allHeroImg,
+      todayImgPair,
       introTextAvatar: introTextAvatar[0],
       productTextImage
     },

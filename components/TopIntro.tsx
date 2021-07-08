@@ -12,7 +12,8 @@ export default function TopIntro({ introTextAvatar }) {
                 <Image
                     src={introTextAvatar.avatar.url}
                     width='192px'
-                    height='192px' />
+                    height='192px'
+                    alt='カスミブラザーズ' />
             </Box>
             <Box fontSize={{ base: 'md', lg: 'xl' }}>
                 <Text maxW='600px'>{introTextAvatar.text}</Text>

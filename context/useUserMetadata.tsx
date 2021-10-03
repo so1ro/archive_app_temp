@@ -35,19 +35,19 @@ export const UserMetadataProvider = (props) => {
           }).then(data => data)
 
           // User_Detailを取得
-          if (user_metadata.User_Detail) {
+          if (user_metadata?.User_Detail) {
             const { User_Detail } = user_metadata
             setUserDetail({ User_Detail })
           }
 
           // ワンペイ永久購入済み One_Pay_Detailを取得
-          if (user_metadata.One_Pay_Detail) {
+          if (user_metadata?.One_Pay_Detail) {
             const { One_Pay_Detail } = user_metadata
             setOnePayPermanentDetail({ One_Pay_Detail })
           }
 
           // サブスクリプション購入済み Subscription_Detailを取得
-          if (user_metadata.Subscription_Detail) {
+          if (user_metadata?.Subscription_Detail) {
             const { Subscription_Detail: { subscription_Id, criteria_OnePay_price } } = user_metadata
 
             const { subscriptionsObj } = await postData({
@@ -100,7 +100,7 @@ export const UserMetadataProvider = (props) => {
             }
 
             // if favorite_video is saved on Auth0
-            if (user_metadata.User_Detail.favorite_video) {
+            if (user_metadata?.User_Detail.favorite_video) {
               setFavoriteVideo({ favoriteVideo: user_metadata.User_Detail.favorite_video })
             }
 
